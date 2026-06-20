@@ -23,7 +23,7 @@ function NavItem({ label }) {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.85 }}
             transition={{ duration: 0.18 }}
-            className="absolute inset-0  rounded-lg bg-black  "
+            className="absolute inset-0  rounded-lg bg-black   "
           />
         )}
       </AnimatePresence>
@@ -36,6 +36,45 @@ function NavItem({ label }) {
         {label}
       </motion.span>
     </div>
+  );
+}
+
+function CtaButton() {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <motion.button
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      whileHover={{ scale: 1.06, y: -1 }}
+      whileTap={{ scale: 0.97 }}
+      className="px-6 py-[9px] flex gap-2 justify-center items-center rounded-lg text-sm font-semibold text-black cursor-pointer
+        bg-[#D6ff01] border border-black/10
+        hover:bg-black hover:text-[#D6ff01] hover:border-[#D6ff01]
+        hover:shadow-[0_0_26px_rgba(214,255,1,0.4)]
+        transition-all duration-300"
+    >
+      Book A Free Meeting
+      <div className="relative w-[18px] h-[18px] overflow-hidden">
+        <motion.span
+          className="absolute inset-0 flex items-center justify-center"
+          animate={
+            hovered ? { x: 18, y: -18, opacity: 0 } : { x: 0, y: 0, opacity: 1 }
+          }
+          transition={{ duration: 0.22, ease: "easeInOut" }}
+        >
+          <MdArrowOutward size={18} />
+        </motion.span>
+        <motion.span
+          className="absolute inset-0 flex items-center justify-center"
+          animate={
+            hovered ? { x: 0, y: 0, opacity: 1 } : { x: -18, y: 18, opacity: 0 }
+          }
+          transition={{ duration: 0.22, ease: "easeInOut" }}
+        >
+          <MdArrowOutward size={18} />
+        </motion.span>
+      </div>
+    </motion.button>
   );
 }
 
@@ -55,7 +94,7 @@ export default function Navbar() {
         initial={{ y: -70, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className={`fixed top-3 left-0 right-0 z-50  transition-all  duration-500 bg-[#F2F1EE]
+        className={`fixed top-0 left-0 right-0 z-50  transition-all  duration-500 bg-[#F2F1EE]
           ${
             scrolled
               ? "shadow-[0_2px_0_rgba(214,255,1,0.6),0_8px_40px_rgba(0,0,0,0.1)]"
@@ -66,7 +105,7 @@ export default function Navbar() {
         <div />
 
         <div className="md:px-10">
-          <div className="md:max-w-5xl md:mx-auto bg-white md:rounded-2xl px-6">
+          <div className="md:max-w-5xl md:mx-auto bg-white mt-2 md:rounded-2xl px-6">
             <div className="flex items-center justify-between h-[70px]">
               {/* Logo */}
               <motion.div
@@ -104,22 +143,7 @@ export default function Navbar() {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="hidden md:block"
               >
-                <motion.button
-                  whileHover={{ scale: 1.06, y: -1 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="px-6 py-[9px]  flex gap-1 justify-center items-center  rounded-lg text-sm font-semibold text-black cursor-pointer
-                  bg-[#D6ff01] border border-black/10
-                  hover:bg-black hover:text-[#D6ff01] hover:border-[#D6ff01]
-                  hover:shadow-[0_0_26px_rgba(214,255,1,0.4)]
-                  transition-all duration-300"
-                >
-                  Book A Free Meeting
-                  <div className="mt-1">
-                    <span>
-                      <MdArrowOutward size={18} />
-                    </span>
-                  </div>
-                </motion.button>
+                <CtaButton />
               </motion.div>
 
               {/* Hamburger — mobile only */}
@@ -157,10 +181,10 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="fixed top-[72px] left-0 right-0 z-40 md:hidden bg-[#d7d4d4] md:px-10"
+            className="fixed top-[70px] left-0 right-0 z-40 md:hidden bg-[#d7d4d4] md:px-10"
           >
-            <div className="max-w-5xl mx-auto bg-white rounded-2xl border-t border-black/10 shadow-[0_20px_60px_rgba(0,0,0,0.1),0_8px_24px_rgba(214,255,1,0.15)]">
-              <ul className="flex flex-col list-none m-0 px-4 py-3 gap-1">
+            <div className="max-w-5xl mx-auto bg-white  border-t border-black/10 shadow-[0_20px_60px_rgba(0,0,0,0.1),0_8px_24px_rgba(214,255,1,0.15)]">
+              <ul className="flex flex-col list-none mt-3 px-4 py-3 gap-1">
                 {NAV_LINKS.map((link, i) => (
                   <motion.li
                     key={link}
@@ -198,12 +222,11 @@ export default function Navbar() {
                   >
                     Book A Free Meeting
                     <div className="flex mt-1 justify-center">
-                    <span>
-                      <MdArrowOutward size={18} />
-                    </span>
-                  </div>
+                      <span>
+                        <MdArrowOutward size={18} />
+                      </span>
+                    </div>
                   </button>
-                  
                 </motion.li>
               </ul>
             </div>
