@@ -156,26 +156,9 @@ function SecondaryCta({ children = "View Our Works" }) {
 
 export default function Home() {
   return (
-    <section className="relative w-full min-h-screen pt-[140px] pb-24 overflow-hidden bg-black">
-      {/* ---- decorative arc (fixed, does not move) + icons traveling on it ----
-          The arc itself never moves. Each icon instead animates THROUGH a
-          list of points sampled along the curve (left-top, down through the
-          middle, up to right-top), on an infinite linear loop — so the icons
-          appear to glide along the ring forever, while the ring stays put.
-          Different `delay` values spread the icons out along the path so
-          they don't all bunch up together.
-
-          CHANGED: the outer wrapper below is now clipped to a SHORT band
-          (h-[260px]) positioned so it only reveals the lower-middle part of
-          the curve — the part that sits below the "Agency that makes your"
-          heading. The arc/icon box itself stays full size and unchanged
-          (so curve math + animation are untouched); only the visible
-          "window" onto it has shrunk. Since the seam crossing (right edge ->
-          left edge, where Instagram + sparkle travel) happens at top: 3.1%,
-          near the very top of the 650px box, that crossing now falls above
-          this window and is fully clipped — never visible. */}
-      <div className="absolute left-1/2 -translate-x-1/2 top-[260px] w-[1100px] max-w-[150vw] h-[260px] overflow-hidden pointer-events-none">
-        <div className="absolute top-[-150px] left-0 w-full h-[650px]">
+    <section className="relative w-full min-h-screen pt-24 sm:pt-32 md:pt-[140px] pb-16 sm:pb-24 overflow-hidden bg-black">
+      <div className="absolute left-1/2 -translate-x-1/2 top-[200px] sm:top-[240px] md:top-[260px] w-full max-w-[95vw] sm:max-w-[110vw] md:w-[1100px] md:max-w-[150vw] h-[200px] sm:h-[230px] md:h-[260px] overflow-hidden pointer-events-none">
+        <div className="absolute top-[-80px] sm:top-[-120px] md:top-[-150px] left-0 w-full h-[650px]">
           <svg
             className="absolute inset-0 w-full h-full opacity-60"
             viewBox="0 0 1100 650"
@@ -235,14 +218,14 @@ export default function Home() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-            className="mt-7 font-semibold text-white
-              text-[42px] leading-[1.05] sm:text-[56px] md:text-[68px]"
+            className="mt-5 sm:mt-7 font-semibold text-white
+              text-[30px] leading-[1.1] xs:text-[36px] sm:text-[52px] md:text-[62px] lg:text-[68px]"
           >
             Agency that makes your
             <br />
             <span className="inline-flex items-center gap-3 align-middle">
               <span
-                className=" italic font-light  text-[#D6ff01]"
+                className="italic font-light text-[#D6ff01]"
                 style={{ fontFamily: "Instrument Serif , serif" }}
               >
                 videos & reels
@@ -257,14 +240,15 @@ export default function Home() {
                   stiffness: 200,
                 }}
                 whileHover={{ rotate: 8, scale: 1.08 }}
-                className="inline-flex items-center justify-center w-[44px] h-[44px] sm:w-[56px] sm:h-[56px]
-                  rounded-2xl text-[#D6ff01]  shadow-[0_8px_20px_rgba(255,90,31,0.35)]"
+                className="inline-flex items-center justify-center w-[32px] h-[32px] sm:w-[44px] sm:h-[44px] md:w-[56px] md:h-[56px]
+                  rounded-xl sm:rounded-2xl text-[#D6ff01] shadow-[0_8px_20px_rgba(255,90,31,0.35)]"
               >
-                <BsInstagram size={22} className="sm:hidden" />
-                <BsInstagram size={26} className="hidden sm:block" />
+                <BsInstagram size={16} className="sm:hidden" />
+                <BsInstagram size={22} className="hidden sm:block md:hidden" />
+                <BsInstagram size={26} className="hidden md:block" />
               </motion.span>
               <span
-                className="  font-light italic text-[#D6ff01]"
+                className="font-light italic text-[#D6ff01]"
                 style={{ fontFamily: "Instrument Serif , serif" }}
               >
                 viral
@@ -276,7 +260,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-7 px-3 py-1 bg-black/[0.06] text-[15px] sm:text-base text-white font-medium"
+            className="mt-5 sm:mt-7 px-3 py-1 text-[13px] sm:text-[15px] md:text-base text-white/80 font-medium"
           >
             Short-form video editing for Influencers, Creators and Brands
           </motion.p>
@@ -285,7 +269,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.55 }}
-            className="mt-9 flex flex-wrap items-center justify-center gap-3"
+            className="mt-7 sm:mt-9 flex flex-wrap items-center justify-center gap-3 w-full"
           >
             <PrimaryCta>Book A Free Meeting</PrimaryCta>
             <SecondaryCta>View Our Works</SecondaryCta>
