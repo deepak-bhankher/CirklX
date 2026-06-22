@@ -11,7 +11,7 @@ function About1() {
   const track = [...IMAGES, ...IMAGES];
 
   return (
-    <div className="flex flex-col min-h-screen bg-black items-center justify-center text-center px-6 pt-32 sm:pt-36 md:pt-40 pb-20 w-full mx-auto overflow-hidden">
+    <div data-theme="dark" className="flex flex-col min-h-screen bg-black items-center justify-center text-center px-6 pt-32 sm:pt-36 md:pt-40 pb-20 w-full mx-auto overflow-hidden">
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}

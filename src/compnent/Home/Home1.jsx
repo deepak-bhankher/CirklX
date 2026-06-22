@@ -35,7 +35,6 @@ const CURVE_POINTS = [
   { left: "1.8%", top: "3.1%" }, // loop back to the exact start point
 ];
 
-
 function FloatingBadge({
   points,
   icon,
@@ -84,58 +83,45 @@ function FloatingBadge({
   );
 }
 
+// ---- Light glass pill (matches the "Book Free Demo" reference) ----
 function PrimaryCta({ children = "Book A Free Meeting" }) {
-  const [hovered, setHovered] = useState(false);
   return (
     <motion.button
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      whileHover={{ scale: 1.05, y: -2 }}
-      whileTap={{ scale: 0.96 }}
-      className="px-7 py-[13px] flex gap-2 justify-center items-center rounded-lg text-[15px] font-semibold text-white cursor-pointer
-        bg-black border border-white hover:text-black hover:bg-[#D6ff01]
-        hover:shadow-[0_0_30px_rgba(0,0,0,0.25)]
-        transition-shadow duration-300"
+      whileHover={{ scale: 1.04, y: -3 }}
+      whileTap={{ scale: 0.97, y: 2 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+      className="relative px-7 py-3 flex gap-3 justify-center items-center rounded-full text-base font-semibold text-white cursor-pointer
+        bg-white/10 backdrop-blur-xl
+        border border-white/30
+        shadow-[0_8px_0_rgba(0,0,0,0.25),0_14px_28px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.3),inset_0_-1px_0_rgba(0,0,0,0.1),0_0_20px_rgba(255,255,255,0.1)]
+        hover:bg-white/18 hover:border-white/45
+        hover:shadow-[0_10px_0_rgba(0,0,0,0.25),0_18px_32px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.4),0_0_28px_rgba(255,255,255,0.15)]
+        active:shadow-[0_2px_0_rgba(0,0,0,0.25),0_4px_10px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.2)]
+        active:translate-y-[4px]
+        transition-all duration-150"
     >
       {children}
-      <div className="relative w-[18px] h-[18px] overflow-hidden">
-        <motion.span
-          className="absolute inset-0 flex items-center justify-center"
-          animate={
-            hovered ? { x: 18, y: -18, opacity: 0 } : { x: 0, y: 0, opacity: 1 }
-          }
-          transition={{ duration: 0.22, ease: "easeInOut" }}
-        >
-          <MdArrowOutward size={18} />
-        </motion.span>
-        <motion.span
-          className="absolute inset-0 flex items-center justify-center"
-          animate={
-            hovered ? { x: 0, y: 0, opacity: 1 } : { x: -18, y: 18, opacity: 0 }
-          }
-          transition={{ duration: 0.22, ease: "easeInOut" }}
-        >
-          <MdArrowOutward size={18} />
-        </motion.span>
-      </div>
+      <MdArrowOutward size={17} />
     </motion.button>
   );
 }
 
-function SecondaryCta({ children = "View Our Works" }) {
+// ---- Dark glass pill (matches the "Get Started Free" reference) ----
+function SecondaryCta({ children = "Get Started Free" }) {
   return (
     <motion.button
-      whileHover={{
-        scale: 1.05,
-        y: -2,
-        backgroundColor: "#000000",
-        color: "#ffffff",
-      }}
-      whileTap={{ scale: 0.96 }}
-      className="px-7 py-[13px] rounded-lg text-[15px] font-semibold text-black cursor-pointer
-        bg-white hover:border-white border border-black/10
-        shadow-[0_2px_10px_rgba(0,0,0,0.04)]
-        transition-colors duration-300"
+      whileHover={{ scale: 1.04, y: -3 }}
+      whileTap={{ scale: 0.97, y: 2 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
+      className="relative px-8 py-4 flex gap-3 justify-center items-center rounded-full text-base font-semibold text-white cursor-pointer
+        bg-gradient-to-b from-[#3a3a3a] to-[#0a0a0a]
+        backdrop-blur-xl
+        border border-black/60
+        shadow-[0_8px_0_rgba(0,0,0,0.45),0_14px_28px_rgba(0,0,0,0.35),inset_0_1px_0_rgba(255,255,255,0.25),inset_0_-2px_4px_rgba(0,0,0,0.4)]
+        hover:shadow-[0_10px_0_rgba(0,0,0,0.45),0_18px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.35),inset_0_-2px_4px_rgba(0,0,0,0.4)]
+        active:shadow-[0_2px_0_rgba(0,0,0,0.45),0_4px_10px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.2)]
+        active:translate-y-[4px]
+        transition-all duration-150"
     >
       {children}
     </motion.button>
@@ -144,7 +130,22 @@ function SecondaryCta({ children = "View Our Works" }) {
 
 export default function Home1() {
   return (
-    <section className="relative w-full min-h-screen pt-24 sm:pt-32 md:pt-[140px] pb-16 sm:pb-24 overflow-hidden bg-black">
+    <section
+      data-theme="dark"
+      className="relative w-full min-h-screen pt-24 sm:pt-32 md:pt-[140px] pb-16 sm:pb-24 overflow-hidden"
+    >
+      {/* Background video */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+      >
+        <source src="/video.mp4" type="video/mp4" />
+      </video>
+      {/* Dark overlay so text stays readable */}
+      <div className="absolute inset-0" />
       <div className="absolute left-1/2 -translate-x-1/2 top-[200px] sm:top-[240px] md:top-[260px] w-full max-w-[95vw] sm:max-w-[110vw] md:w-[1100px] md:max-w-[150vw] h-[200px] sm:h-[230px] md:h-[260px] overflow-hidden pointer-events-none">
         <div className="absolute top-[-80px] sm:top-[-120px] md:top-[-150px] left-0 w-full h-[650px]">
           <svg

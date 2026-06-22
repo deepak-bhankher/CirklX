@@ -1,7 +1,13 @@
+import Work1 from "../compnent/Work/Work1";
+import Work2 from "../compnent/Work/Work2";
+import Work3 from "../compnent/Work/Work3";
+
 export default function Work() {
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center">
-      <h1 className="text-white text-4xl font-semibold">Our Work</h1>
-    </div>
+    <>
+      <Work1 />
+      <Work2 />
+      <Work3 />
+    </>
   );
 }
