@@ -6,6 +6,7 @@ import Home from "./Pages/Home";
 import Service from "./Pages/Service";
 import Work from "./Pages/Work";
 import Contact from "./Pages/Contact";
+import Footer from "./compnent/Footer";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -27,6 +28,7 @@ const App = () => {
         <Route path="/work" element={<Work />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
+      <Footer/>
     </BrowserRouter>
   );
 };

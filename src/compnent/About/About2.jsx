@@ -63,7 +63,7 @@ function About2() {
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="flex flex-col items-start text-left"
           >
-            <span className="inline-flex items-center rounded-full border border-black/15 px-4 py-1.5 text-xs font-semibold tracking-wide text-black/70 mb-6">
+            <span className="inline-flex items-center rounded-lg transition-all duration-300 cursor-pointer hover:bg-black hover:text-[#D6ff01] border border-black/15 px-4 py-1.5 text-xs font-semibold tracking-wide text-black/70 mb-6">
               OUR STORY
             </span>
 
