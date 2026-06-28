@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaInstagram, FaPinterest, FaStar } from "react-icons/fa";
 import { MdArrowOutward } from "react-icons/md";
@@ -6,6 +6,26 @@ import { BsInstagram } from "react-icons/bs";
 import { FaFacebook } from "react-icons/fa";
 import { RiSparkling2Fill } from "react-icons/ri";
 import { Link } from "react-router-dom";
+
+// Small helper hook to get a responsive icon size for the orbiting
+// social icons, so they don't look oversized on small mobile screens.
+function useResponsiveIconSize() {
+  const [iconSize, setIconSize] = useState(44);
+
+  useEffect(() => {
+    function updateSize() {
+      const w = window.innerWidth;
+      if (w < 480) setIconSize(32);
+      else if (w < 768) setIconSize(38);
+      else setIconSize(44);
+    }
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
+  return iconSize;
+}
 
 const CURVE_POINTS = [
   { left: "1.8%", top: "3.1%" },
@@ -235,6 +255,8 @@ function SecondaryGlassCta({ children, withArrow = false }) {
 }
 
 export default function Home1() {
+  const iconSize = useResponsiveIconSize();
+
   return (
     <section
       data-theme="dark"
@@ -254,12 +276,13 @@ export default function Home1() {
       {/* Dark overlay so text stays readable */}
       <div className="absolute inset-0 bg-black/40" />
 
-      <div className="absolute left-1/2 -translate-x-1/2 top-[200px] sm:top-[240px] md:top-[260px] w-full max-w-[95vw] sm:max-w-[110vw] md:w-[1100px] md:max-w-[150vw] h-[600px] sm:h-[630px] md:h-[660px] overflow-hidden pointer-events-none">
-        <div className="absolute top-[-80px] sm:top-[-120px] md:top-[-150px] left-0 w-full h-[650px]">
+      <div className="absolute left-1/2 -translate-x-1/2 top-[110px] sm:top-[240px] md:top-[260px] w-full max-w-[95vw] sm:max-w-[110vw] md:w-[1100px] md:max-w-[150vw] h-[410px] sm:h-[630px] md:h-[660px] overflow-hidden pointer-events-none">
+        <div className="absolute top-[20px] sm:top-[-120px] md:top-[-150px] left-0 w-full h-[380px] sm:h-[650px] md:h-[650px]">
           <svg
             className="absolute inset-0 w-full h-full opacity-60"
             viewBox="0 0 1100 650"
             fill="none"
+            preserveAspectRatio="none"
           >
             <path
               d="M20 20 C 20 500, 280 620, 550 620 C 820 620, 1080 500, 1080 20"
@@ -332,7 +355,7 @@ export default function Home1() {
                   <GlassIconCard
                     icon={it.icon}
                     tone={it.tone}
-                    size={44}
+                    size={iconSize}
                     depth={iconIdx % 2 === 0 ? 1 : 0}
                     opacity={1}
                     rotate={0}
