@@ -211,14 +211,12 @@ function Home5() {
         </div>
 
         {/* ---- Plan cards ---- */}
-        <div className="mt-12 bg-white rounded-3xl shadow-[0_2px_24px_rgba(0,0,0,0.06)] overflow-hidden">
-          <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-black/[0.07]">
-            {PLANS.map((plan, i) => (
-              <div key={plan.name} className="p-6 sm:p-8">
-                <PlanCard plan={plan} index={i} yearly={yearly} />
-              </div>
-            ))}
-          </div>
+        <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-5">
+          {PLANS.map((plan, i) => (
+            <div key={plan.name} className="bg-white rounded-3xl shadow-[0_2px_24px_rgba(0,0,0,0.06)] p-6 sm:p-8">
+              <PlanCard plan={plan} index={i} yearly={yearly} />
+            </div>
+          ))}
         </div>
       </div>
     </section>

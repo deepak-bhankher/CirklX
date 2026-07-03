@@ -379,6 +379,9 @@ function Footer() {
                 </motion.a>
               ))}
             </div>
+            <motion.div className="mt-2">
+              <PrimaryCta>Let's Talk</PrimaryCta>
+            </motion.div>
           </div>
 
           {/* Nav links col */}
@@ -443,9 +446,7 @@ function Footer() {
               </span>
               <span className="leading-relaxed">Hisar, Haryana,<br />India — 125001</span>
             </div>
-            <motion.div className="mt-2">
-              <PrimaryCta>Let&apos;s Talk</PrimaryCta>
-            </motion.div>
+          
           </div>
         </div>
       </div>
