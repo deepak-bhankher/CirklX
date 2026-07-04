@@ -109,8 +109,7 @@ function GlassIconCard({ icon, tone = "default", size = 56 }) {
           background: "linear-gradient(135deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.04) 40%, transparent 65%)",
           mixBlendMode: "screen",
         }}
-      />
-
+      />                
       {/* icon */}
       <div className="relative z-10 drop-shadow-lg">{icon}</div>
 
@@ -432,7 +431,7 @@ function Footer() {
                   <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8Z" stroke="#D6FF01" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </span>
-              +91 12345 67890
+              +91 80532 00325
             </a>
             {/* Address */}
             <div className="flex items-start gap-2.5 text-sm text-white/45">
@@ -474,7 +473,7 @@ function Footer() {
             <span className="w-px h-3 bg-white/15" />
             <div className="flex items-center gap-1">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#D6FF01] opacity-70" />
-              <span className="text-xs text-white/25 tracking-wide">Built for creators</span>
+              <span className="text-xs text-white/25 tracking-wide">Blog</span>
             </div>
           </div>
         </div>
