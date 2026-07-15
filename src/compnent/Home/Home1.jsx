@@ -6,6 +6,7 @@ import { BsInstagram } from "react-icons/bs";
 import { FaFacebook } from "react-icons/fa";
 import { RiSparkling2Fill } from "react-icons/ri";
 import { Link } from "react-router-dom";
+import { CiVideoOn } from "react-icons/ci";
 
 // Small helper hook to get a responsive icon size for the orbiting
 // social icons, so they don't look oversized on small mobile screens.
@@ -249,11 +250,14 @@ function SecondaryGlassCta({ children, withArrow = false }) {
       background="rgb(16,16,16)"
       glowOpacity={0.4}
     >
-      {children}
+      <span className="flex items-center gap-2">
+        {children}
+
+     <CiVideoOn size={28} />
+      </span>
     </GlassButtonBase>
   );
 }
-
 export default function Home1() {
   const iconSize = useResponsiveIconSize();
 
@@ -284,9 +288,24 @@ export default function Home1() {
             fill="none"
             preserveAspectRatio="none"
           >
+            <defs>
+              {/* Gradient so the curve line fades away smoothly at both
+                  the top-left (where icons emerge) and top-right (where
+                  icons go back in) ends, instead of cutting off abruptly.
+                  The fade zone is wide/gradual for a premium look, and
+                  starts fading well before it reaches the very top. */}
+              <linearGradient id="curveFade" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
+                <stop offset="18%" stopColor="#ffffff" stopOpacity="1" />
+                <stop offset="50%" stopColor="#ffffff" stopOpacity="1" />
+                <stop offset="82%" stopColor="#ffffff" stopOpacity="1" />
+                <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+              </linearGradient>
+            </defs>
             <path
               d="M20 20 C 20 500, 280 620, 550 620 C 820 620, 1080 500, 1080 20"
-              stroke="#ffffff55"
+              stroke="url(#curveFade)"
+              strokeOpacity="0.33"
               strokeWidth="1"
             />
           </svg>
@@ -412,10 +431,10 @@ export default function Home1() {
                   type: "spring",
                   stiffness: 200,
                 }}
-                whileHover={{ rotate: 8, scale: 1.08 }}
+                
                 className="relative inline-flex items-center justify-center w-[32px] h-[32px] sm:w-[44px] sm:h-[44px] md:w-[56px] md:h-[56px]
                   rounded-xl sm:rounded-2xl overflow-hidden
-                  border border-white/15
+                  border border-white/15 hover:scale-110 transition-all duration-300 hover:rotate-12
                   shadow-[0_0_22px_rgba(255,90,31,0.5),0_8px_20px_rgba(0,0,0,0.45)]"
                 style={{
                   background: "rgba(110,110,110,0.45)",

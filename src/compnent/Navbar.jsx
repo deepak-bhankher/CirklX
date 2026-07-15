@@ -57,41 +57,14 @@ function NavItem({ label, path, isDark }) {
   const [hovered, setHovered] = useState(false);
   const active = hovered || isActive;
   const defaultColor = isDark ? "#ffffff" : "#15140F";
+  const underlineColor = isDark ? "#ffffff" : "#15140F";
 
   return (
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="relative px-2 lg:px-4 py-2 cursor-pointer overflow-hidden rounded-lg"
+      className="relative px-2 lg:px-4 py-2 cursor-pointer"
     >
-      <AnimatePresence>
-        {active && (
-          <motion.span
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.15 }}
-            className="absolute inset-0 rounded-lg backdrop-blur-md"
-            style={
-              isDark
-                ? {
-                    background: "rgba(255,255,255,0.12)",
-                    backdropFilter: "blur(12px)",
-                    WebkitBackdropFilter: "blur(12px)",
-                    border: "1px solid rgba(255,255,255,0.25)",
-                    boxShadow: "0 4px 16px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.35)",
-                  }
-                : {
-                    background: "rgba(0,0,0,0.07)",
-                    backdropFilter: "blur(12px)",
-                    WebkitBackdropFilter: "blur(12px)",
-                    border: "1px solid rgba(0,0,0,0.12)",
-                    boxShadow: "0 4px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.6)",
-                  }
-            }
-          />
-        )}
-      </AnimatePresence>
       <motion.span
         animate={{ color: active ? (isDark ? "#ffffff" : "#000000") : defaultColor }}
         transition={{ duration: 0.2 }}
@@ -99,6 +72,13 @@ function NavItem({ label, path, isDark }) {
       >
         {label}
       </motion.span>
+      <motion.span
+        initial={false}
+        animate={{ scaleX: active ? 1 : 0, opacity: active ? 1 : 0 }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+        style={{ backgroundColor: underlineColor, originX: 0.5 }}
+        className="absolute left-2 right-2 lg:left-4 lg:right-4 -bottom-0.5 h-[1.5px] rounded-full"
+      />
     </div>
   );
 }
