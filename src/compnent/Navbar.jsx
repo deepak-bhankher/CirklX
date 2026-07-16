@@ -57,7 +57,7 @@ function NavItem({ label, path, isDark }) {
   const [hovered, setHovered] = useState(false);
   const active = hovered || isActive;
   const defaultColor = isDark ? "#ffffff" : "#15140F";
-  const underlineColor = isDark ? "#ffffff" : "#15140F";
+  const underlineColor = isDark ? "#D6ff01" : "#15140F";
 
   return (
     <div

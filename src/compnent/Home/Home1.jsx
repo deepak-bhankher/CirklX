@@ -6,10 +6,9 @@ import { BsInstagram } from "react-icons/bs";
 import { FaFacebook } from "react-icons/fa";
 import { RiSparkling2Fill } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import { CiVideoOn } from "react-icons/ci";
+import { MdSlowMotionVideo } from "react-icons/md";
 
-// Small helper hook to get a responsive icon size for the orbiting
-// social icons, so they don't look oversized on small mobile screens.
+
 function useResponsiveIconSize() {
   const [iconSize, setIconSize] = useState(44);
 
@@ -265,7 +264,7 @@ function SecondaryGlassCta({ children, withArrow = false }) {
       <span className="flex items-center gap-2">
         {children}
 
-     <CiVideoOn size={28} />
+    <MdSlowMotionVideo size={20} />
       </span>
     </GlassButtonBase>
   );
@@ -292,7 +291,7 @@ export default function Home1() {
       {/* Dark overlay so text stays readable */}
       <div className="absolute inset-0 bg-black/40" />
 
-      <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-[380px] sm:top-[240px] md:top-[260px] w-full max-w-[95vw] sm:max-w-[110vw] md:w-[1100px] md:max-w-[150vw] h-[220px] sm:h-[630px] md:h-[660px] overflow-hidden pointer-events-none">
+      <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-[280px] sm:top-[120px] md:top-[130px] w-full max-w-[95vw] sm:max-w-[110vw] md:w-[1100px] md:max-w-[150vw] h-[220px] sm:h-[630px] md:h-[660px] overflow-hidden pointer-events-none">
         <div className="absolute top-[16px] sm:top-[-120px] md:top-[-150px] left-0 w-full h-[190px] sm:h-[650px] md:h-[650px]">
           <svg
             className="absolute inset-0 w-full h-full opacity-60"
@@ -424,7 +423,7 @@ export default function Home1() {
               shadow-[0_2px_10px_rgba(0,0,0,0.04)] text-sm font-medium text-black/80"
           >
             <FaStar className="text-[#2ecc40]" size={13} />
-            4.9/5 Reviews on TrustPilot
+           4.9/5 - Hisar`s #1 SMM Agency
           </motion.div>
 
           <motion.h1
@@ -441,7 +440,7 @@ export default function Home1() {
                 className="italic font-light text-[#D6ff01] mr-2"
                 style={{ fontFamily: "Instrument Serif , serif" }}
               >
-                videos & reels
+                 reels & content
               </span>
               <motion.span
                 initial={{ opacity: 0, scale: 0.5, rotate: -15 }}
@@ -455,8 +454,7 @@ export default function Home1() {
                 
                 className="relative inline-flex items-center justify-center w-[32px] h-[32px] sm:w-[44px] sm:h-[44px] md:w-[56px] md:h-[56px]
                   rounded-xl sm:rounded-2xl overflow-hidden
-                  border border-white/15 hover:scale-110 transition-all duration-300 hover:rotate-12
-                  shadow-[0_0_22px_rgba(255,90,31,0.5),0_8px_20px_rgba(0,0,0,0.45)]"
+                  border border-white/15 hover:scale-110 transition-all duration-300 hover:rotate-12"
                 style={{
                   background: "rgba(110,110,110,0.45)",
                   backdropFilter: "blur(8px)",
@@ -467,7 +465,7 @@ export default function Home1() {
                   className="absolute inset-0"
                   style={{
                     background:
-                      "radial-gradient(circle at 50% 65%, rgba(255,90,31,0.55), transparent 70%)",
+                      "radial-gradient(circle at 50% 65%, rgba(255,255,255,0.5), transparent 70%)",
                   }}
                 />
                 {/* Diagonal glass sheen — same direction as PrimaryGlassCta */}
@@ -507,6 +505,7 @@ export default function Home1() {
                 className="font-light italic text-[#D6ff01] ml-2"
                 style={{ fontFamily: "Instrument Serif , serif" }}
               >
+                go 
                 viral
               </span>
             </span>
@@ -518,7 +517,7 @@ export default function Home1() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="mt-5 sm:mt-7 px-3 py-1 text-[13px] sm:text-[15px] md:text-base text-white/80 font-medium"
           >
-            Short-form video editing for Influencers, Creators and Brands
+        Scroll-stopping reels & short-form video editing for Influencers,Creators & Brands across Haryana.
           </motion.p>
 
           <motion.div
