@@ -1,30 +1,31 @@
 import { motion } from "framer-motion";
 import { AiOutlineYoutube } from "react-icons/ai";
 import { AiOutlineInstagram } from "react-icons/ai";
-import { AiOutlineTikTok } from "react-icons/ai";
+import { TbBrandAdobePhotoshop } from "react-icons/tb";
 
 // First 3 cards: big centered platform icon + 2-line title.
 // Each card now carries an `accent` rgba used for the glow shadow under
 // the glass sheen, tone-matched to the icon's own gradient.
 const PLATFORM_CARDS = [
-  {
-    title: ["Youtube", "Shots"],
-    iconBg: "bg-gradient-to-br from-red-500 to-red-700",
-    accent: "rgba(220,38,38,0.45)",
-    icon: <AiOutlineYoutube size={52} className="text-white" />,
-  },
+ 
   {
     title: ["Instagram", "Reels"],
     iconBg: "bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400",
     accent: "rgba(236,72,153,0.45)",
     icon: <AiOutlineInstagram size={52} className="text-white" />,
   },
-  {
-    title: ["TikTok", "Videos"],
-    iconBg: "bg-[#010101]",
-    accent: "rgba(0,0,0,0.35)",
-    icon: <AiOutlineTikTok size={52} className="text-white" />,
+   {
+    title: ["Youtube", "Shots"],
+    iconBg: "bg-gradient-to-br from-red-500 to-red-700",
+    accent: "rgba(220,38,38,0.45)",
+    icon: <AiOutlineYoutube size={52} className="text-white" />,
   },
+ {
+  title: ["Graphic", "Design"],
+  iconBg: "bg-gradient-to-br from-[#001E36] via-[#002B4F] to-[#31A8FF]",
+  accent: "rgba(49,168,255,0.35)",
+  icon: <TbBrandAdobePhotoshop size={52} className="text-[#31A8FF]" />,
+},
 ];
 
 // Last 2 cards: small icon badge top-left + 2-line title bottom.
@@ -83,13 +84,6 @@ const SERVICE_CARDS = [
   },
 ];
 
-// Reusable glass-effect icon badge: keeps the card's own colored
-// gradient background, then layers a frosted glass sheen on top — a
-// soft top-rim highlight tinted to the icon's accent color, a diagonal
-// glass sheen (screen blend), and a gentle bottom shadow for depth —
-// the same construction as the hero's GlassIconCard, sized for these
-// square badges and tuned for the light cream section background
-// (slightly stronger glow since there's no dark backdrop to bloom into).
 function GlassBadge({ children, iconBg, accent, sizeClass, radiusClass }) {
   return (
     <div

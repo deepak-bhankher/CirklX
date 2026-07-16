@@ -28,6 +28,52 @@ function useResponsiveIconSize() {
   return iconSize;
 }
 
+// Drives the size of the instagram badge inside the headline. Previously
+// this used stacked Tailwind breakpoint classes (xs:/sm:/md:) to swap
+// between four differently-sized icons, but the project's Tailwind config
+// doesn't define a custom `xs` breakpoint — so `xs:hidden` was silently
+// ignored and that icon never actually hid, causing two icons (the
+// "always visible" one and the correctly-breakpointed one) to render on
+// top of each other on larger screens. A single resize-driven size avoids
+// depending on any breakpoint config entirely.
+function useHeadlineIconSize() {
+  const [size, setSize] = useState(56);
+
+  useEffect(() => {
+    function updateSize() {
+      const w = window.innerWidth;
+      if (w < 400) setSize(14);
+      else if (w < 640) setSize(16);
+      else if (w < 768) setSize(22);
+      else setSize(26);
+    }
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
+  return size;
+}
+
+function useHeadlineBadgeBoxSize() {
+  const [size, setSize] = useState(56);
+
+  useEffect(() => {
+    function updateSize() {
+      const w = window.innerWidth;
+      if (w < 400) setSize(28);
+      else if (w < 640) setSize(32);
+      else if (w < 768) setSize(44);
+      else setSize(56);
+    }
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+
+  return size;
+}
+
 const CURVE_POINTS = [
   { left: "1.8%", top: "3.1%" },
   { left: "2.3%", top: "20.4%" },
@@ -272,11 +318,13 @@ function SecondaryGlassCta({ children, withArrow = false }) {
 }
 export default function Home1() {
   const iconSize = useResponsiveIconSize();
+  const headlineIconSize = useHeadlineIconSize();
+  const headlineBadgeBoxSize = useHeadlineBadgeBoxSize();
 
   return (
     <section
       data-theme="dark"
-      className="relative w-full h-dvh min-h-dvh pt-28 sm:pt-32 md:pt-[140px] pb-10 sm:pb-24 overflow-hidden"
+      className="relative w-full h-dvh min-h-dvh pt-36 xs:pt-32 sm:pt-32 md:pt-[140px] pb-10 sm:pb-24 lg:pb-32 overflow-hidden"
     >
       {/* Background video */}
       <video
@@ -292,8 +340,8 @@ export default function Home1() {
       {/* Dark overlay so text stays readable */}
       <div className="absolute inset-0 bg-black/40" />
 
-      <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-[380px] sm:top-[240px] md:top-[260px] w-full max-w-[95vw] sm:max-w-[110vw] md:w-[1100px] md:max-w-[150vw] h-[220px] sm:h-[630px] md:h-[660px] overflow-hidden pointer-events-none">
-        <div className="absolute top-[16px] sm:top-[-120px] md:top-[-150px] left-0 w-full h-[190px] sm:h-[650px] md:h-[650px]">
+      <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-[380px] sm:top-[240px] md:top-[260px] lg:top-[220px] xl:top-[190px] w-full max-w-[95vw] sm:max-w-[110vw] md:w-[1100px] md:max-w-[150vw] lg:w-[1320px] lg:max-w-[92vw] xl:w-[1480px] xl:max-w-[95vw] h-[220px] sm:h-[630px] md:h-[660px] lg:h-[760px] xl:h-[840px] overflow-hidden pointer-events-none">
+        <div className="absolute top-[16px] sm:top-[-120px] md:top-[-150px] lg:top-[-180px] xl:top-[-200px] left-0 w-full h-[190px] sm:h-[650px] md:h-[650px] lg:h-[760px] xl:h-[840px]">
           <svg
             className="absolute inset-0 w-full h-full opacity-60"
             viewBox="0 0 1100 650"
@@ -427,18 +475,17 @@ export default function Home1() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-            className="mt-5 sm:mt-7 font-semibold text-white
-              text-[30px] leading-[1.1] xs:text-[36px] sm:text-[52px] md:text-[62px] lg:text-[68px]"
+            className="mt-5 sm:mt-7 font-semibold text-white text-center
+              text-[28px] leading-[1.25] xs:text-[36px] xs:leading-[1.15] sm:text-[52px] sm:leading-[1.1] md:text-[62px] lg:text-[68px]"
           >
-            Agency that makes your
-            <br />
-            <span className="inline-flex items-center align-middle">
+            Agency that makes your{" "}
+            <span className="inline">
               <span
-                className="italic font-light text-[#D6ff01] mr-2"
+                className="italic font-light text-[#D6ff01]"
                 style={{ fontFamily: "Instrument Serif , serif" }}
               >
-                  reels & content
-              </span>
+                reels & content
+              </span>{" "}
               <motion.span
                 initial={{ opacity: 0, scale: 0.5, rotate: -15 }}
                 animate={{ opacity: 1, scale: 1, rotate: 0 }}
@@ -448,12 +495,13 @@ export default function Home1() {
                   type: "spring",
                   stiffness: 200,
                 }}
-                
-                className="relative inline-flex items-center justify-center w-[32px] h-[32px] sm:w-[44px] sm:h-[44px] md:w-[56px] md:h-[56px]
-                  rounded-xl sm:rounded-2xl overflow-hidden
+                className="relative inline-flex items-center justify-center align-middle
+                  rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden mx-0.5
                   border border-white/15 hover:scale-110 transition-all duration-300 hover:rotate-12
                   shadow-[0_0_22px_rgba(255,255,255,0.),0_8px_20px_rgba(255,255,255,0.4)]"
                 style={{
+                  width: headlineBadgeBoxSize,
+                  height: headlineBadgeBoxSize,
                   background: "rgba(110,110,110,0.45)",
                   backdropFilter: "blur(8px)",
                 }} 
@@ -475,7 +523,7 @@ export default function Home1() {
                   }}
                 />
                 {/* Bright top rim */}
-                <span className="absolute inset-0 rounded-xl sm:rounded-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]" />
+                <span className="absolute inset-0 rounded-lg sm:rounded-xl md:rounded-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.45)]" />
                 {/* Soft dark fade at the bottom for depth */}
                 <span
                   className="absolute inset-x-0 bottom-0 h-2/5"
@@ -486,24 +534,15 @@ export default function Home1() {
                 />
 
                 <BsInstagram
-                  size={16}
-                  className="relative z-10 text-[#D6ff01] sm:hidden"
+                  size={headlineIconSize}
+                  className="relative z-10 text-[#D6ff01]"
                 />
-                <BsInstagram
-                  size={22}
-                  className="relative z-10 text-[#D6ff01] hidden sm:block md:hidden"
-                />
-                <BsInstagram
-                  size={26}
-                  className="relative z-10 text-[#D6ff01] hidden md:block"
-                />
-              </motion.span>
-
+              </motion.span>{" "}
               <span
-                className="font-light italic text-[#D6ff01] ml-2"
+                className="font-light italic text-[#D6ff01]"
                 style={{ fontFamily: "Instrument Serif , serif" }}
               >
-               go viral
+                go viral
               </span>
             </span>
           </motion.h1>
