@@ -276,7 +276,7 @@ export default function Home1() {
   return (
     <section
       data-theme="dark"
-      className="relative w-full sm:min-h-screen pt-24 sm:pt-32 md:pt-[140px] pb-16 sm:pb-24 overflow-hidden"
+      className="relative w-full h-screen pt-24 sm:pt-32 md:pt-[140px] pb-16 sm:pb-24 overflow-hidden"
     >
       {/* Background video */}
       <video
