@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { FaInstagram, FaPinterest, FaStar } from "react-icons/fa";
+import { FaInstagram, FaPinterest, FaStar, FaYoutube } from "react-icons/fa";
 import { MdArrowOutward } from "react-icons/md";
 import { BsInstagram } from "react-icons/bs";
 import { FaFacebook } from "react-icons/fa";
@@ -69,14 +69,16 @@ function GlassIconCard({
 }) {
   const toneStyles =
     tone === "instagram"
-      ? { accent: "#FF5A1F", accent2: "rgba(255,90,31,0.45)" }
+      ? { accent: "#FF5A1F", accent2: "rgba(255,90,31,0.5)", tint: "rgba(255,90,31,0.16)" }
       : tone === "facebook"
-        ? { accent: "#1877F2", accent2: "rgba(24,119,242,0.45)" }
+        ? { accent: "#1877F2", accent2: "rgba(24,119,242,0.5)", tint: "rgba(24,119,242,0.16)" }
         : tone === "pinterest"
-          ? { accent: "#D0002B", accent2: "rgba(208,0,43,0.45)" }
+          ? { accent: "#D0002B", accent2: "rgba(208,0,43,0.5)", tint: "rgba(208,0,43,0.16)" }
+          : tone === "youtube"
+            ? { accent: "#FF0000", accent2: "rgba(255,0,0,0.5)", tint: "rgba(255,0,0,0.16)" }
           : tone === "spark"
-            ? { accent: "#ffffff", accent2: "rgba(255,255,255,0.35)" }
-            : { accent: "#D6ff01", accent2: "rgba(214,255,1,0.35)" };
+            ? { accent: "#D6ff01", accent2: "rgba(214,255,1,0.5)", tint: "rgba(214,255,1,0.16)" }
+            : { accent: "#D6ff01", accent2: "rgba(214,255,1,0.4)", tint: "rgba(214,255,1,0.12)" };
 
   return (
     <motion.div
@@ -86,32 +88,39 @@ function GlassIconCard({
         height: size,
         opacity,
         transform: `translate(-50%, -50%) translateZ(0) rotate(${rotate}deg)`,
-        filter: depth > 0 ? "saturate(1.05)" : "saturate(0.95)",
+        filter: "saturate(1.15)",
         ...style,
       }}
       initial={false}
       animate={false}
     >
+      {/* Opaque backing so the flow-curve line (and anything else) never
+          shows through the glass under the icon — the glass layers below
+          are stacked on top of this solid base, so the icon still looks
+          glassy but the line stays hidden exactly where the icon sits. */}
+      <div
+        className="absolute inset-0 rounded-2xl"
+        style={{ background: "rgba(18,18,20,0.94)" }}
+      />
       <div
         className="absolute inset-0 rounded-2xl"
         style={{
-          background:
-            "linear-gradient(180deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.08) 55%, rgba(255,255,255,0.03) 100%)",
+          background: `linear-gradient(160deg, rgba(255,255,255,0.32) 0%, ${toneStyles.tint} 45%, rgba(255,255,255,0.06) 100%)`,
           backdropFilter: "blur(10px)",
           WebkitBackdropFilter: "blur(10px)",
-          border: "1px solid rgba(255,255,255,0.22)",
+          border: `1px solid ${toneStyles.accent2}`,
           boxShadow:
             depth > 0
-              ? `0 18px 40px rgba(0,0,0,0.55), 0 0 28px ${toneStyles.accent2}`
-              : `0 12px 26px rgba(0,0,0,0.42), 0 0 18px ${toneStyles.accent2}`,
+              ? `0 10px 24px rgba(0,0,0,0.22), 0 0 26px ${toneStyles.accent2}`
+              : `0 8px 18px rgba(0,0,0,0.16), 0 0 16px ${toneStyles.accent2}`,
         }}
       />
 
-      {/* top rim + glow */}
+      {/* top rim + glow, tinted by the icon's own accent color */}
       <div
         className="absolute inset-x-0 top-0 h-1/2 rounded-t-2xl"
         style={{
-          background: `radial-gradient(60% 90% at 50% -10%, ${toneStyles.accent2} 0%, rgba(255,255,255,0.15) 40%, transparent 70%)`,
+          background: `radial-gradient(65% 95% at 50% -10%, ${toneStyles.accent2} 0%, ${toneStyles.tint} 45%, transparent 75%)`,
           borderTopLeftRadius: 12,
           borderTopRightRadius: 12,
         }}
@@ -122,7 +131,7 @@ function GlassIconCard({
         className="absolute inset-0 rounded-2xl"
         style={{
           background:
-            "linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.10) 45%, transparent 70%)",
+            "linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.12) 45%, transparent 70%)",
           mixBlendMode: "screen",
         }}
       />
@@ -130,13 +139,16 @@ function GlassIconCard({
       {/* icon */}
       <div className="relative z-10">{icon}</div>
 
-      {/* subtle bottom dark fade */}
+      {/* soft tinted base for depth, no harsh black */}
       <div
         className="absolute inset-x-0 bottom-0 h-1/2 rounded-b-2xl"
         style={{
-          background: "linear-gradient(to top, rgba(0,0,0,0.42), transparent)",
+          background: `linear-gradient(to top, ${toneStyles.tint}, transparent)`,
         }}
       />
+
+      {/* thin bright inner rim to keep the glass edge crisp */}
+      <div className="absolute inset-0 rounded-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] pointer-events-none" />
     </motion.div>
   );
 }
@@ -318,25 +330,34 @@ export default function Home1() {
             const icons = [
               {
                 tone: "pinterest",
-                icon: <FaPinterest size={18} />,
+                icon: <FaPinterest size={18} className="text-red-500" />,
               },
               {
                 tone: "spark",
-                icon: <RiSparkling2Fill size={17} className="text-black" />,
+                icon: <RiSparkling2Fill size={17} className="text-emerald-500" />,
               },
               {
                 tone: "instagram",
-                icon: <FaInstagram size={18} className="text-[#FF5A1F]" />,
+                icon: <FaInstagram size={18} className="text-[#cc4b13]" />,
               },
               {
                 tone: "facebook",
                 icon: <FaFacebook size={18} className="text-[#1877F2]" />,
               },
+              {
+                tone: "youtube",
+                icon: <FaYoutube size={18} className="text-red-700" />,
+              },
             ];
 
             return icons.map((it, iconIdx) => {
               const duration = 7;
-              const delay = iconIdx * 1.2;
+              // Evenly space every icon around the loop instead of a fixed
+              // 1.2s step — with a fixed step, adding a 5th icon (youtube)
+              // left an uneven gap so it trailed right behind pinterest.
+              // Dividing the full loop duration by the icon count keeps
+              // the spacing equal no matter how many icons are flowing.
+              const delay = iconIdx * (duration / icons.length);
 
               return (
                 <motion.div
