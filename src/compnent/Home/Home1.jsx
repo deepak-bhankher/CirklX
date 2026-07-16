@@ -276,7 +276,7 @@ export default function Home1() {
   return (
     <section
       data-theme="dark"
-      className="relative w-full h-screen pt-24 sm:pt-32 md:pt-[140px] pb-16 sm:pb-24 overflow-hidden"
+      className="relative w-full sm:min-h-screen pt-24 sm:pt-32 md:pt-[140px] pb-16 sm:pb-24 overflow-hidden"
     >
       {/* Background video */}
       <video
@@ -330,7 +330,7 @@ export default function Home1() {
             const icons = [
               {
                 tone: "pinterest",
-                icon: <FaPinterest size={18} className="text-red-500" />,
+                icon: <FaPinterest size={18} className="text-red-200" />,
               },
               {
                 tone: "spark",
@@ -414,8 +414,8 @@ export default function Home1() {
         </div>
       </div>
 
-      <div className="relative z-10 md:px-10">
-        <div className="md:max-w-5xl md:mx-auto px-6 text-center flex flex-col items-center">
+      <div className="relative z-10 md:px-10 h-full flex items-center">
+        <div className="md:max-w-5xl md:mx-auto px-6 text-center flex flex-col items-center w-full">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
