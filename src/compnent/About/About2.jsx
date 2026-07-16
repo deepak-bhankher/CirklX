@@ -20,7 +20,7 @@ function BrandMarquee() {
   const track = [...BRANDS, ...BRANDS];
 
   return (
-    <div className="relative w-full overflow-hidden py-10 sm:py-12">
+    <div className="relative w-full overflow-hidden py-8 sm:py-12">
       <p className="text-center text-xs sm:text-sm text-black/50 font-medium mb-6 sm:mb-8">
         Trusted by 10,000+ founders &amp; business owners
       </p>
@@ -53,7 +53,7 @@ function About2() {
     <section className="w-full bg-[#F4F2ED]">
       <BrandMarquee />
 
-      <div className="max-w-6xl mx-auto px-6 sm:px-10 pb-20 sm:pb-28">
+      <div className="max-w-6xl mx-auto px-6 sm:px-16 pb-20 sm:pb-28">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* ---- Left: story text ---- */}
           <motion.div

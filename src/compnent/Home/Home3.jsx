@@ -1,28 +1,27 @@
-
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView, animate } from "framer-motion";
 
 const STATS = [
   {
-    to: 140,
+    to: 5,
     prefix: "",
     suffix: "M+",
     title: "Total Views for Clients",
-    desc: "Operating in more than countries to support underserved communities",
+    desc: "Generated across Reels, Shorts & Posts for brands and creators we've worked with.",
   },
   {
-    to: 8,
+    to: 2.5,
     prefix: "",
-    suffix: "k+",
+    suffix: "k  +",
     title: "Videos Edited for Clients",
-    desc: "On a mission to uplift underserved communities in over countries worldwide.",
+    desc: "Cut, styled, and optimized to perform — built for how people actually scroll today.",
   },
   {
-    to: 32,
+    to: 40,
     prefix: "",
-    suffix: "M+",
-    title: "Revenue Generated for Clients",
-    desc: "Partnering with communities in over 50 countries to create lasting, inclusive change.",
+    suffix: "+",
+    title: "Brands & Creators Served",
+    desc: "From local Hisar businesses to creators — trusted to grow their presence online.",
   },
 ];
 
@@ -86,12 +85,9 @@ function Home3() {
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
           className="text-center text-2xl sm:text-3xl md:text-[2.1rem] font-medium text-[#15140F] leading-snug max-w-3xl mx-auto"
         >
-          We're a <span className="text-[#FF5722] font-semibold">short-form</span>{" "}
-          video editing agency helping creators and brands turn raw clips into{" "}
-          <span className="text-[#FF5722] font-semibold">viral Reels</span>,
-          Shorts, and{" "}
-          <span className="text-[#FF5722] font-semibold">TikToks</span> — fast,
-          engaging, and tailored to trends that perform.
+          We're a <span className="text-red-400">social media marketing </span> agency helping brands and creators turn
+          raw content into <span className="text-red-400">viral Reels</span>, engaging Shorts, and scroll-stopping
+          posts — fast, <span className="text-red-400">trend-driven</span>, and built to grow your following.
         </motion.h2>
 
         {/* ---- Stats ---- */}
@@ -102,7 +98,11 @@ function Home3() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 + i * 0.15, ease: "easeOut" }}
+              transition={{
+                duration: 0.5,
+                delay: 0.3 + i * 0.15,
+                ease: "easeOut",
+              }}
               className="text-left"
             >
               <p className="text-4xl sm:text-5xl font-extrabold text-[#15140F] leading-none mb-4 tracking-tight">

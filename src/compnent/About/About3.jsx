@@ -30,7 +30,7 @@ const values = [
 
 function About3() {
   return (
-    <section className="bg-gray-50 py-20 px-6 md:px-12">
+    <section className="bg-gray-50 py-20 px-16 md:px-32">
       <div className="max-w-6xl mx-auto text-center mb-14">
         <motion.div
           initial={{ opacity: 0, y: 16 }}

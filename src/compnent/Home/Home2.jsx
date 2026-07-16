@@ -3,20 +3,20 @@ import { motion } from "framer-motion";
 const STEPS = [
   {
     number: "01", // first step has no visible number badge in the reference
-    title: "Give us your raw footage, it can be DSLR or iPhone",
-    desc: "We maintain a bench of pre-vetted video editors ready to be trained and placed within 2-weeks on average.",
+    title: "We Plan & Shoot Your Content",
+    desc: "Every reel starts with a strategy. We study your brand and trends, then shoot professional content — on-location or studio — built to perform.",
     image: "Home1.png",
   },
   {
     number: "02",
-    title: "Our team instantly starts editing your videos",
-    desc: "No delays, no guesswork—our bench of video editors is vetted, trained, and ready to join your team in 2 weeks or less.",
+    title: "Our Editors Bring It to Life",
+    desc: "Raw footage becomes scroll-stopping reels — cut, styled, and optimized for Instagram, YouTube Shorts & Facebook, with fast turnaround.",
     image: "Home2.png",
   },
   {
     number: "03",
-    title: "Upload & start seeing results from day one",
-    desc: "Streamline your hiring process with our pre-qualified video editors, available for training and placement within a 2-week timeframe. No extra steps, no waiting around.",
+    title: "We Upload & Track Growth",
+    desc: "We post at the right time with the right hashtags, then track views and engagement to keep improving your results.",
     image: "Home3.png",
   },
 ];
@@ -28,7 +28,7 @@ function StepCard({ step, index, isLast }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.55, delay: index * 0.15, ease: "easeOut" }}
-      className={`relative flex flex-col px-6 sm:px-8 py-2 ${
+      className={`relative flex flex-col px-8 sm:px-16 py-2 ${
         !isLast ? "sm:border-r sm:border-black/10" : ""
       } ${index > 0 ? "border-t sm:border-t-0 border-black/10 pt-10 sm:pt-2" : ""}`}
     >
@@ -82,8 +82,8 @@ function StepCard({ step, index, isLast }) {
 
 function Home2() {
   return (
-    <section className="w-full bg-[#F4F2ED] py-20 sm:py-24 px-6">
-      <div className="max-w-6xl mx-auto">
+    <section className="w-full bg-[#F4F2ED] py-16 sm:py-20 px-6">
+      <div className="max-w-7xl mx-auto">
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -94,7 +94,7 @@ function Home2() {
           Trusted by 10,000+ founders &amp; business owners
         </motion.p>
       </div>
-      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-y-0">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-2">
         {STEPS.map((step, i) => (
           <StepCard
             key={i}
