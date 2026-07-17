@@ -70,12 +70,21 @@ const ICON_SPACING_DEG = 90;
 
 function GlassIconCard({ icon, tone = "default", size = 56 }) {
   const toneMap = {
-    instagram: { accent: "rgba(214,41,118,0.55)", glow: "rgba(214,41,118,0.3)" },
-    facebook:  { accent: "rgba(24,119,242,0.55)",  glow: "rgba(24,119,242,0.3)" },
-    tiktok:    { accent: "rgba(255,255,255,0.35)", glow: "rgba(255,255,255,0.15)" },
-    youtube:   { accent: "rgba(255,0,0,0.55)",     glow: "rgba(255,0,0,0.3)" },
+    instagram: {
+      accent: "rgba(214,41,118,0.55)",
+      glow: "rgba(214,41,118,0.3)",
+    },
+    facebook: { accent: "rgba(24,119,242,0.55)", glow: "rgba(24,119,242,0.3)" },
+    tiktok: {
+      accent: "rgba(255,255,255,0.35)",
+      glow: "rgba(255,255,255,0.15)",
+    },
+    youtube: { accent: "rgba(255,0,0,0.55)", glow: "rgba(255,0,0,0.3)" },
   };
-  const { accent, glow } = toneMap[tone] ?? { accent: "rgba(214,255,1,0.4)", glow: "rgba(214,255,1,0.2)" };
+  const { accent, glow } = toneMap[tone] ?? {
+    accent: "rgba(214,255,1,0.4)",
+    glow: "rgba(214,255,1,0.2)",
+  };
 
   return (
     <div
@@ -86,7 +95,8 @@ function GlassIconCard({ icon, tone = "default", size = 56 }) {
       <div
         className="absolute inset-0 rounded-2xl"
         style={{
-          background: "linear-gradient(160deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.03) 100%)",
+          background:
+            "linear-gradient(160deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.03) 100%)",
           backdropFilter: "blur(14px)",
           WebkitBackdropFilter: "blur(14px)",
           border: "1px solid rgba(255,255,255,0.16)",
@@ -106,10 +116,11 @@ function GlassIconCard({ icon, tone = "default", size = 56 }) {
       <div
         className="absolute inset-0 rounded-2xl pointer-events-none"
         style={{
-          background: "linear-gradient(135deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.04) 40%, transparent 65%)",
+          background:
+            "linear-gradient(135deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.04) 40%, transparent 65%)",
           mixBlendMode: "screen",
         }}
-      />                
+      />
       {/* icon */}
       <div className="relative z-10 drop-shadow-lg">{icon}</div>
 
@@ -135,7 +146,8 @@ function ArcTrack() {
         className="absolute inset-x-0 top-0 z-10 pointer-events-none"
         style={{
           height: "48px",
-          background: "linear-gradient(to bottom, #15140F 0%, transparent 100%)",
+          background:
+            "linear-gradient(to bottom, #15140F 0%, transparent 100%)",
         }}
       />
       {/* soft bottom fade */}
@@ -195,11 +207,7 @@ function ArcTrack() {
                     transform: `translate(-50%, -50%) rotate(${-angle}deg)`,
                   }}
                 >
-                  <GlassIconCard
-                    icon={icon.node}
-                    tone={icon.tone}
-                    size={64}
-                  />
+                  <GlassIconCard icon={icon.node} tone={icon.tone} size={64} />
                 </div>
               </div>
             );
@@ -270,8 +278,9 @@ function Footer() {
           transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
           className="mt-6 text-sm sm:text-base text-white/50 max-w-md mx-auto"
         >
-          We maintain a bench of pre-vetted video editors ready to be trained
-          and placed within 2-weeks on average.
+          From planning to shoot to scroll-stopping reels — let's build content
+          that actually grows your following. Book a free call, no commitment
+          needed.
         </motion.p>
 
         <motion.div
@@ -291,12 +300,17 @@ function Footer() {
       {/* ---- Footer Links + Contact + Social ---- */}
       <div className="relative z-10 border-t border-white/[0.07] mt-2">
         <div className="max-w-5xl mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-3 gap-12">
-
           {/* Brand col */}
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
-              <img src="/white.png" alt="CirklX" className="w-7 h-7 object-contain" />
-              <span className="font-bold text-white text-[17px] tracking-tight">CirklX</span>
+              <img
+                src="/white.png"
+                alt="CirklX"
+                className="w-7 h-7 object-contain"
+              />
+              <span className="font-bold text-white text-[17px] tracking-tight">
+                CirklX
+              </span>
             </div>
             <p className="text-white/35 text-xs leading-relaxed max-w-[200px]">
               Premium video editing for creators who want to go viral.
@@ -309,7 +323,14 @@ function Footer() {
                   label: "Instagram",
                   node: (
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-                      <rect x="2.5" y="2.5" width="19" height="19" rx="6" fill="url(#igF)" />
+                      <rect
+                        x="2.5"
+                        y="2.5"
+                        width="19"
+                        height="19"
+                        rx="6"
+                        fill="url(#igF)"
+                      />
                       <defs>
                         <linearGradient id="igF" x1="0" y1="0" x2="24" y2="24">
                           <stop offset="0%" stopColor="#feda75" />
@@ -317,7 +338,13 @@ function Footer() {
                           <stop offset="100%" stopColor="#4f5bd5" />
                         </linearGradient>
                       </defs>
-                      <circle cx="12" cy="12" r="4.2" stroke="white" strokeWidth="2" />
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="4.2"
+                        stroke="white"
+                        strokeWidth="2"
+                      />
                       <circle cx="17.2" cy="6.8" r="1.3" fill="white" />
                     </svg>
                   ),
@@ -327,7 +354,10 @@ function Footer() {
                   label: "Facebook",
                   node: (
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-                      <path d="M14 8.5h-1.3c-.7 0-1.2.5-1.2 1.3v1.4H14l-.3 2H11.5V18h-2v-4.8H8v-2h1.5V9.5C9.5 7.7 10.7 6.5 12.4 6.5H14v2Z" fill="#1877F2" />
+                      <path
+                        d="M14 8.5h-1.3c-.7 0-1.2.5-1.2 1.3v1.4H14l-.3 2H11.5V18h-2v-4.8H8v-2h1.5V9.5C9.5 7.7 10.7 6.5 12.4 6.5H14v2Z"
+                        fill="#1877F2"
+                      />
                     </svg>
                   ),
                 },
@@ -336,7 +366,10 @@ function Footer() {
                   label: "Twitter / X",
                   node: (
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-                      <path d="M4 4h4l3.5 5L15 4h4l-6 8 6 8h-4l-3.5-5L8 20H4l6-8L4 4Z" fill="white" />
+                      <path
+                        d="M4 4h4l3.5 5L15 4h4l-6 8 6 8h-4l-3.5-5L8 20H4l6-8L4 4Z"
+                        fill="white"
+                      />
                     </svg>
                   ),
                 },
@@ -345,7 +378,10 @@ function Footer() {
                   label: "TikTok",
                   node: (
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-                      <path d="M16.5 3c.3 2 1.7 3.6 3.7 3.9v2.7c-1.4.1-2.7-.3-3.7-1v6.6c0 3-2.4 5.3-5.4 5.3S5.7 18.2 5.7 15.2c0-2.9 2.2-5.2 5.1-5.3v2.8c-1.3.1-2.3 1.2-2.3 2.5 0 1.4 1.1 2.5 2.5 2.5s2.6-1.1 2.6-2.5V3h2.9Z" fill="white" />
+                      <path
+                        d="M16.5 3c.3 2 1.7 3.6 3.7 3.9v2.7c-1.4.1-2.7-.3-3.7-1v6.6c0 3-2.4 5.3-5.4 5.3S5.7 18.2 5.7 15.2c0-2.9 2.2-5.2 5.1-5.3v2.8c-1.3.1-2.3 1.2-2.3 2.5 0 1.4 1.1 2.5 2.5 2.5s2.6-1.1 2.6-2.5V3h2.9Z"
+                        fill="white"
+                      />
                     </svg>
                   ),
                 },
@@ -354,7 +390,14 @@ function Footer() {
                   label: "YouTube",
                   node: (
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-                      <rect x="2" y="5" width="20" height="14" rx="4" fill="#FF0000" />
+                      <rect
+                        x="2"
+                        y="5"
+                        width="20"
+                        height="14"
+                        rx="4"
+                        fill="#FF0000"
+                      />
                       <path d="M10 9l5 3-5 3V9Z" fill="white" />
                     </svg>
                   ),
@@ -385,7 +428,9 @@ function Footer() {
 
           {/* Nav links col */}
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-white/30 mb-1">Navigation</p>
+            <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-white/30 mb-1">
+              Navigation
+            </p>
             {[
               { name: "Home", path: "/" },
               { name: "About", path: "/about" },
@@ -405,17 +450,36 @@ function Footer() {
 
           {/* Contact col */}
           <div className="flex flex-col gap-3">
-            <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-white/30 mb-1">Get In Touch</p>
+            <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-white/30 mb-1">
+              Get In Touch
+            </p>
             <a
               href="mailto:hello@cirklx.com"
               className="flex items-center gap-2.5 text-sm text-white/45 hover:text-[#D6FF01] transition-colors duration-200"
             >
-              <span className="w-7 h-7 flex items-center justify-center rounded-lg flex-shrink-0"
-                style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}
+              <span
+                className="w-7 h-7 flex items-center justify-center rounded-lg flex-shrink-0"
+                style={{
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                }}
               >
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
-                  <rect x="2" y="4" width="20" height="16" rx="3" stroke="#D6FF01" strokeWidth="1.8" />
-                  <path d="M2 8l10 7 10-7" stroke="#D6FF01" strokeWidth="1.8" strokeLinecap="round" />
+                  <rect
+                    x="2"
+                    y="4"
+                    width="20"
+                    height="16"
+                    rx="3"
+                    stroke="#D6FF01"
+                    strokeWidth="1.8"
+                  />
+                  <path
+                    d="M2 8l10 7 10-7"
+                    stroke="#D6FF01"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                  />
                 </svg>
               </span>
               hello@cirklx.com
@@ -424,28 +488,55 @@ function Footer() {
               href="tel:+911234567890"
               className="flex items-center gap-2.5 text-sm text-white/45 hover:text-[#D6FF01] transition-colors duration-200"
             >
-              <span className="w-7 h-7 flex items-center justify-center rounded-lg flex-shrink-0"
-                style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}
+              <span
+                className="w-7 h-7 flex items-center justify-center rounded-lg flex-shrink-0"
+                style={{
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                }}
               >
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
-                  <path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8Z" stroke="#D6FF01" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  <path
+                    d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8Z"
+                    stroke="#D6FF01"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </span>
               +91 80532 00325
             </a>
             {/* Address */}
             <div className="flex items-start gap-2.5 text-sm text-white/45">
-              <span className="w-7 h-7 flex items-center justify-center rounded-lg flex-shrink-0 mt-0.5"
-                style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}
+              <span
+                className="w-7 h-7 flex items-center justify-center rounded-lg flex-shrink-0 mt-0.5"
+                style={{
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                }}
               >
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Z" stroke="#D6FF01" strokeWidth="1.8" />
-                  <circle cx="12" cy="9" r="2.5" stroke="#D6FF01" strokeWidth="1.8" />
+                  <path
+                    d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Z"
+                    stroke="#D6FF01"
+                    strokeWidth="1.8"
+                  />
+                  <circle
+                    cx="12"
+                    cy="9"
+                    r="2.5"
+                    stroke="#D6FF01"
+                    strokeWidth="1.8"
+                  />
                 </svg>
               </span>
-              <span className="leading-relaxed">Hisar, Haryana,<br />India — 125001</span>
+              <span className="leading-relaxed">
+                Hisar, Haryana,
+                <br />
+                India — 125001
+              </span>
             </div>
-          
           </div>
         </div>
       </div>

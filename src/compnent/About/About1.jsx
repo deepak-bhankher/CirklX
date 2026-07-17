@@ -11,7 +11,10 @@ function About1() {
   const track = [...IMAGES, ...IMAGES];
 
   return (
-    <div data-theme="dark" className="flex flex-col min-h-screen bg-black items-center justify-center text-center px-6 pt-32 sm:pt-36 md:pt-40 pb-20 w-full mx-auto overflow-hidden">
+    <div
+      data-theme="dark"
+      className="flex flex-col min-h-screen bg-black items-center justify-center text-center px-6 pt-32 sm:pt-36 md:pt-40 pb-20 w-full mx-auto overflow-hidden"
+    >
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -37,10 +40,11 @@ function About1() {
         transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
         className="text-base sm:text-lg text-white/70"
       >
-        At CirklX, we help creators and brands transform ordinary <br /> videos
-        into scroll-stopping, high-converting short-form
-        <br />
-        content for Reels, Shorts, and TikTok.
+        At CirklX, we're Hisar's social media marketing agency helping brands<br/>
+        and creators turn everyday content into scroll-stopping Reels and<br/>
+        Shorts. From planning and shooting to editing and posting — we handle<br/>
+        your entire content journey, backed by strategy that actually grows your
+        following.
       </motion.p>
 
       <motion.div
