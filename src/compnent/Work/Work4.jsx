@@ -248,7 +248,7 @@ export default function Work4() {
       data-theme="dark"
       className="relative w-full bg-black overflow-hidden py-20 sm:py-28"
     >
-      <div className="relative w-full max-w-[1200px] mx-auto px-4 sm:px-6">
+      <div className="relative w-full max-w-6xl mx-auto px-4 sm:px-6 md:px-10">
         {/* ====================================================
             DESKTOP / TABLET (md and up): horizontal mind-map
             ==================================================== */}

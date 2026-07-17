@@ -76,7 +76,7 @@ function TeamCard({ member }) {
 
 function About4() {
   return (
-    <section className=" py-20 px-6 md:px-12">
+    <section className=" py-20 px-4 md:px-10">
       <div className="max-w-6xl mx-auto text-center mb-14">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -106,7 +106,7 @@ function About4() {
         initial="hidden"
         whileInView="show"
         viewport={{ once: true }}
-        className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto"
+        className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto"
       >
         {teamMembers.map((member) => (
           <TeamCard key={member.id} member={member} />

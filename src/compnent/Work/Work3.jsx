@@ -193,7 +193,7 @@ function Work3() {
   };
 
   return (
-    <section className="w-full bg-[#F4F2ED] py-16 sm:py-20 md:py-24 px-4 sm:px-6">
+    <section className="w-full bg-[#F4F2ED] py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-10">
       {/* Heading */}
       <div className="max-w-3xl mx-auto text-center mb-10 sm:mb-14">
         <motion.div
@@ -226,7 +226,7 @@ function Work3() {
       </div>
 
       {/* Carousel */}
-      <div className="max-w-4xl mx-auto overflow-hidden">
+      <div className="max-w-5xl mx-auto overflow-hidden">
         <AnimatePresence initial={false} custom={direction} mode="wait">
           <motion.div
             key={index}

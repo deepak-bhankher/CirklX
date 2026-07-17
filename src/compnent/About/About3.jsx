@@ -29,7 +29,7 @@ const values = [
 
 function About3() {
   return (
-    <section className="bg-gray-50 py-14 sm:py-16 md:py-20 px-5 sm:px-8 md:px-16 lg:px-24 xl:px-32">
+    <section className="bg-gray-50 py-14 sm:py-16 md:py-20 px-4 sm:px-6 md:px-10 ">
       <div className="max-w-6xl mx-auto text-center mb-10 sm:mb-14">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -54,7 +54,7 @@ function About3() {
         </motion.h2>
       </div>
 
-      <ul className="grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
+      <ul className="grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
         {values.map((val, i) => (
           <motion.li
             key={i}
