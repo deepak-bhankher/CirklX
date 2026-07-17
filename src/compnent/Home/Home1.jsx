@@ -28,14 +28,6 @@ function useResponsiveIconSize() {
   return iconSize;
 }
 
-// Drives the size of the instagram badge inside the headline. Previously
-// this used stacked Tailwind breakpoint classes (xs:/sm:/md:) to swap
-// between four differently-sized icons, but the project's Tailwind config
-// doesn't define a custom `xs` breakpoint — so `xs:hidden` was silently
-// ignored and that icon never actually hid, causing two icons (the
-// "always visible" one and the correctly-breakpointed one) to render on
-// top of each other on larger screens. A single resize-driven size avoids
-// depending on any breakpoint config entirely.
 function useHeadlineIconSize() {
   const [size, setSize] = useState(56);
 
@@ -478,7 +470,7 @@ export default function Home1() {
             className="mt-5 sm:mt-7 font-semibold text-white text-center
               text-[28px] leading-[1.25] xs:text-[36px] xs:leading-[1.15] sm:text-[52px] sm:leading-[1.1] md:text-[62px] lg:text-[68px]"
           >
-            Agency that makes your{" "}
+            Agency that makes your{" "} <br/>
             <span className="inline">
               <span
                 className="italic font-light text-[#D6ff01]"

@@ -6,7 +6,7 @@ const PLANS = [
   {
     name: "Trial Pack",
     tagline: "Perfect for first-timers",
-    price: "3,000",
+    price: "2999",
     period: "/week",
     badge: null,
     features: [
@@ -21,7 +21,7 @@ const PLANS = [
   {
     name: "Growth Pack",
     tagline: "For brands ready to grow consistently",
-    price: "15,000",
+    price: "14999",
     period: "/month",
     badge: { label: "Most Popular", tone: "popular" },
     features: [
@@ -38,7 +38,7 @@ const PLANS = [
   {
     name: "Pro Pack",
     tagline: "For brands scaling long-term",
-    price: "40,000",
+    price: "39999",
     period: "/3 months",
     badge: { label: "Best Value — Save ₹5,000", tone: "value" },
     features: [
@@ -179,7 +179,7 @@ function Home5() {
             <div
               key={plan.name}
               className={`relative bg-white rounded-3xl shadow-[0_2px_24px_rgba(0,0,0,0.06)] p-6 sm:p-8
-                ${plan.badge ? "ring-2 ring-[#D6ff01] sm:scale-[1.03]" : ""}`}
+                ${plan.badge?.tone === "popular" ? "ring-2 ring-[#D6ff01] sm:scale-[1.03]" : ""}`}
             >
               <Badge badge={plan.badge} />
               <PlanCard plan={plan} index={i} />

@@ -3,29 +3,40 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const FAQS = [
   {
-    question: "How can I donate to your organization?",
+    question: "What does CirklX actually do?",
     answer:
-      "You can donate directly through our website using a card, UPI, or bank transfer — it only takes a minute.",
+      "We're a full-service social media marketing agency in Hisar. We plan, shoot, edit, and post content — Reels, Shorts & Posts — and manage your entire social media presence so your brand grows consistently.",
   },
   {
-    question: "Where does my donation go?",
+    question:
+      "Do you only work with businesses, or do you work with individual creators too?",
     answer:
-      "Every rupee is allocated to active programs, with a small portion covering essential operational costs.",
+      "Yes, we work with both! Whether you're a brand looking for full SMM support or an individual creator who just needs content shot, edited, and posted — we've got a package that fits.",
   },
   {
-    question: "Is my donation tax-deductible?",
+    question: "How long does it take to see results?",
     answer:
-      "Yes, all donations are eligible for tax deductions and you'll receive a receipt for your records.",
+      "Most clients start seeing improved engagement within the first 2–4 weeks. Real follower and reach growth typically builds month over month as we refine your content strategy.",
   },
   {
-    question: "Can I support a specific cause or project?",
+    question: "Do I need to arrange my own shoot setup or equipment?",
     answer:
-      "Absolutely — you can choose a specific project at checkout, or reach out and we'll guide you to one that fits.",
+      "Not at all. Our team handles planning, shoot direction, and equipment — DSLR or phone, we make it work. You just need to be available for the shoot day.",
   },
   {
-    question: "How do I know my donation is making a difference?",
+    question: "Which platforms do you manage?",
     answer:
-      "We share regular impact reports and updates so you can see exactly how your contribution is being used.",
+      "We specialize in Instagram, YouTube Shorts, and Facebook — the platforms driving the most reach and engagement for brands right now.",
+  },
+  {
+    question: "What's included in the monthly package vs the trial pack?",
+    answer:
+      "The Trial Pack (₹3,000/week) is great for testing us out with 3 videos + 2 graphics. The Growth Pack (₹15,000/month) includes full SMM, SMO, SEO support, and 15 videos + 5 graphics — built for consistent, long-term growth.",
+  },
+  {
+    question: "Can I request a specific type of content or campaign theme?",
+    answer:
+      "Absolutely. All our packages include planning calls where you can share your goals, campaign ideas, or specific content requests — we build the strategy around what you need.",
   },
 ];
 
