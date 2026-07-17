@@ -7,11 +7,11 @@ const FAQS = [
     answer:
       "We're a full-service social media marketing agency in Hisar. We plan, shoot, edit, and post content — Reels, Shorts & Posts — and manage your entire social media presence so your brand grows consistently.",
   },
+
   {
-    question:
-      "Do you only work with businesses, or do you work with individual creators too?",
+    question: "Which platforms do you manage?",
     answer:
-      "Yes, we work with both! Whether you're a brand looking for full SMM support or an individual creator who just needs content shot, edited, and posted — we've got a package that fits.",
+      "We specialize in Instagram, YouTube Shorts, and Facebook — the platforms driving the most reach and engagement for brands right now.",
   },
   {
     question: "How long does it take to see results?",
@@ -19,24 +19,25 @@ const FAQS = [
       "Most clients start seeing improved engagement within the first 2–4 weeks. Real follower and reach growth typically builds month over month as we refine your content strategy.",
   },
   {
-    question: "Do I need to arrange my own shoot setup or equipment?",
-    answer:
-      "Not at all. Our team handles planning, shoot direction, and equipment — DSLR or phone, we make it work. You just need to be available for the shoot day.",
-  },
-  {
-    question: "Which platforms do you manage?",
-    answer:
-      "We specialize in Instagram, YouTube Shorts, and Facebook — the platforms driving the most reach and engagement for brands right now.",
-  },
-  {
     question: "What's included in the monthly package vs the trial pack?",
     answer:
       "The Trial Pack (₹3,000/week) is great for testing us out with 3 videos + 2 graphics. The Growth Pack (₹15,000/month) includes full SMM, SMO, SEO support, and 15 videos + 5 graphics — built for consistent, long-term growth.",
   },
   {
+    question: "Do I need to arrange my own shoot setup or equipment?",
+    answer:
+      "Not at all. Our team handles planning, shoot direction, and equipment — DSLR or phone, we make it work. You just need to be available for the shoot day.",
+  },
+  {
     question: "Can I request a specific type of content or campaign theme?",
     answer:
       "Absolutely. All our packages include planning calls where you can share your goals, campaign ideas, or specific content requests — we build the strategy around what you need.",
+  },
+  {
+    question:
+      "Do you only work with businesses, or do you work with individual creators too?",
+    answer:
+      "Yes, we work with both! Whether you're a brand looking for full SMM support or an individual creator who just needs content shot, edited, and posted — we've got a package that fits.",
   },
 ];
 
