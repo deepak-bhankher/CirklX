@@ -17,7 +17,7 @@ const STATS = [
     desc: "Cut, styled, and optimized to perform — built for how people actually scroll today.",
   },
   {
-    to: 40,
+    to: 100,
     prefix: "",
     suffix: "+",
     title: "Brands & Creators Served",
