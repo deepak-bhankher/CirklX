@@ -72,16 +72,19 @@ function About2() {
             </h2>
 
             <p className="text-sm sm:text-base text-black/60 leading-relaxed mb-5">
-              CirklX was born out of frustration. We saw talented creators
-              pouring hours into recording videos—but struggling to edit
-              them quickly or creatively enough to compete in today's
-              fast-paced content world.
+              CirklX started in February 2026 in Hisar, with a simple belief —
+              every brand and creator deserves content that actually gets
+              noticed, not just posted. What began as one person's vision
+              quickly grew into a full creative team, each person owning a piece
+              of the puzzle: strategy, shooting, and editing.
             </p>
 
             <p className="text-sm sm:text-base text-black/60 leading-relaxed">
-              So, we built a solution: fast, trendy, psychology-backed
-              editing made for mobile-first platforms like Instagram,
-              TikTok, and YouTube Shorts.
+              Today, CirklX is built on three pillars — planning and management,
+              production and direction, and editing and creative execution —
+              working together to turn ordinary content into scroll-stopping
+              Reels and Shorts. No outsourcing, no guesswork — just a dedicated
+              team that treats your brand's growth like our own.
             </p>
           </motion.div>
 
