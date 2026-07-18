@@ -1,61 +1,59 @@
 import React from "react";
 import { motion } from "framer-motion";
-import {
-  MonitorSmartphone,
-  Compass,
-  LayoutTemplate,
-  PenTool,
-  Lightbulb,
-  Columns3,
-  UserRound,
-  Palette,
-  Grid2x2,
-  ArrowRight,
-} from "lucide-react";
+import { FaGoogle } from "react-icons/fa";
+import { FaShopify } from "react-icons/fa";
+import { RiGeminiFill } from "react-icons/ri";
+import { FaPhotoVideo } from "react-icons/fa";
+import { SiBrandfetch } from "react-icons/si";
+import { HiMiniPhoto } from "react-icons/hi2";
+import { TbVideoPlus } from "react-icons/tb";
+import { AiFillSwitcher } from "react-icons/ai";
+import { FiPenTool } from "react-icons/fi";
+import { FaArrowRight } from "react-icons/fa";
 
 const services = [
   {
-    icon: MonitorSmartphone,
+    icon: FaGoogle,
     title: "Google My Business (GMB)",
-    desc: " Management Own your spot on Google Maps We set up and optimize your GMB profile — reviews, photos, posts, and local keywords — so customers find you first when searching nearby.",
+    desc: "Management Own your spot on Google Maps We set up and optimize your GMB profile — reviews, photos, posts, and local keywords — so customers find you first when searching nearby.",
   },
   {
-    icon: Compass,
+    icon: FaShopify,
     title: "Shopify Website Development",
-     desc: "Your store, built to convert Custom Shopify stores designed for speed, mobile shopping, and easy checkout — built to turn visitors into paying customers.",
+    desc: "Your store, built to convert Custom Shopify stores designed for speed, mobile shopping, and easy checkout — built to turn visitors into paying customers.",
   },
   {
-    icon: LayoutTemplate,
+    icon: RiGeminiFill,
     title: "AI-Powered Videos",
     desc: "The future of content, today AI-generated and AI-enhanced videos — faster production, unique visuals, and content styles that stand out from typical edits.",
   },
   {
-    icon: PenTool,
+    icon: FiPenTool,
     title: "Graphic Design",
     desc: "Visuals that stop the scroll Posts, carousels, banners, and brand visuals — designed to match your brand identity and grab attention instantly.",
   },
   {
-    icon: Lightbulb,
+    icon: FaPhotoVideo,
     title: "Video Editing",
     desc: "Raw footage, reel-ready results Fast, trend-driven editing with hooks, captions, transitions, and sound — turning your footage into scroll-stopping content.",
   },
   {
-    icon: Columns3,
+    icon: SiBrandfetch ,
     title: "Branding",
     desc: "Build a brand people remember Logo, color palette, tone of voice, and visual identity — we craft a brand that's consistent, recognizable, and built to last.",
   },
   {
-    icon: UserRound,
+    icon:HiMiniPhoto  ,
     title: "Product Photoshoot",
     desc: "Make your products impossible to ignore Professional product photography that highlights every detail — perfect for e-commerce, catalogs, and social media.",
   },
   {
-    icon: Palette,
+    icon: AiFillSwitcher,
     title: "UI/UX Design",
     desc: "Design that feels as good as it looks Website and app interfaces designed for smooth navigation and better user experience — because good design keeps people coming back.",
   },
   {
-    icon: Grid2x2,
+    icon: TbVideoPlus ,
     title: "Video Shoot",
     desc: "Content starts with a great shoot Professional video shoots — DSLR or mobile — for brand content, influencer collabs, product features, and social media reels.",
   },
@@ -143,7 +141,7 @@ export default function Service4() {
                   className="inline-flex items-center gap-1.5 text-sm font-medium text-black/80 hover:text-black transition-colors"
                 >
                   Learn more
-                  <ArrowRight className="w-4 h-4 text-[#B9D600] transition-transform duration-300 group-hover:translate-x-1" />
+                  <FaArrowRight className="w-4 h-4 text-[#B9D600] transition-transform duration-300 group-hover:translate-x-1" />
                 </a>
               </div>
             </motion.div>
