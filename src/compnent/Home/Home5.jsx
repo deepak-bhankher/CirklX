@@ -6,7 +6,7 @@ const PLANS = [
   {
     name: "Trial Pack",
     tagline: "Perfect for first-timers",
-    price: "2999",
+    price: "2,999",
     period: "/week",
     badge: null,
     features: [
@@ -21,7 +21,7 @@ const PLANS = [
   {
     name: "Growth Pack",
     tagline: "For brands ready to grow consistently",
-    price: "14999",
+    price: "14,999",
     period: "/month",
     badge: { label: "Most Popular", tone: "popular" },
     features: [
@@ -38,7 +38,7 @@ const PLANS = [
   {
     name: "Pro Pack",
     tagline: "For brands scaling long-term",
-    price: "39999",
+    price: "39,999",
     period: "/3 months",
     badge: { label: "Best Value — Save ₹5,000", tone: "value" },
     features: [

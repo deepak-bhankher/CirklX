@@ -33,19 +33,19 @@ function About1() {
         </div>
       </motion.h2>
 
-      <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
-        className="text-base sm:text-lg text-white/70"
-      >
-        At CirklX, we're Hisar's social media marketing agency helping brands<br/>
-        and creators turn everyday content into scroll-stopping Reels and<br/>
-        Shorts. From planning and shooting to editing and posting — we handle<br/>
-        your entire content journey, backed by strategy that actually grows your
-        following.
-      </motion.p>
+    <motion.p
+  initial={{ opacity: 0, y: 20 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
+  className="text-base sm:text-lg text-white/70 max-w-xl mx-auto"
+>
+  At CirklX, we're Hisar's social media marketing agency helping brands
+  and creators turn everyday content into scroll-stopping Reels and
+  Shorts. From planning and shooting to editing and posting — we handle
+  your entire content journey, backed by strategy that actually grows your
+  following.
+</motion.p>
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
