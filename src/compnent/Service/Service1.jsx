@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 function Service1() {
   return (
-    <section className="w-full h-dvh min-h-dvh bg-[#F4F2ED] pt-20 sm:pt-24 md:pt-28 pb-16 sm:pb-20 md:pb-24 px-4 sm:px-6 flex items-center">
+    <section className="w-full lg:h-dvh lg:min-h-dvh bg-[#F4F2ED] pt-20 sm:pt-24 md:pt-28 pb-16 sm:pb-20 md:pb-24 px-4 sm:px-6 flex items-center">
       <div className="max-w-2xl mx-auto text-center">
         <motion.div
           initial={{ opacity: 0, y: -10 }}

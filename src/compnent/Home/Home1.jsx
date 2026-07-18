@@ -460,7 +460,7 @@ export default function Home1() {
               shadow-[0_2px_10px_rgba(0,0,0,0.04)] text-sm font-medium text-black/80"
           >
             <FaStar className="text-[#2ecc40]" size={13} />
-            4.9/5 - Hisar`s #SMM Agency
+            4.9/5 - Hisar`s #1 SMM Agency
           </motion.div>
 
           <motion.h1
