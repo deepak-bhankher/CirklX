@@ -9,7 +9,7 @@ const SERVICES = [
     imagePosition: "right",
     iconBg: "bg-gradient-to-br from-orange-500 to-red-600",
     icon: (
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="white">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="white">
         <path d="M9.5 8.5v7l6-3.5-6-3.5Z" />
       </svg>
     ),
@@ -79,7 +79,7 @@ function ServiceCardContent({ service }) {
   const imageFirst = service.imagePosition === "left";
 
   const textBlock = (
-    <div className="flex flex-col justify-center p-8 sm:p-10 md:p-12">
+    <div className="flex flex-col justify-center h-full p-8 sm:p-10 md:p-12">
       <div
         className={`flex items-center justify-center w-14 h-14 rounded-2xl mb-6 ${service.iconBg} shadow-[0_8px_20px_rgba(0,0,0,0.15)]`}
       >
@@ -96,7 +96,7 @@ function ServiceCardContent({ service }) {
   );
 
   const imageBlock = (
-    <div className="relative w-full h-56 sm:h-auto min-h-[260px] sm:min-h-[340px]">
+    <div className="relative w-full h-56 sm:h-full">
       <img
         src={service.image}
         alt={service.title}
@@ -106,7 +106,9 @@ function ServiceCardContent({ service }) {
   );
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2">
+    // Fixed height so every card (regardless of text length) is identical size —
+    // this is what stops the next stacked card from "peeking" through.
+    <div className="grid grid-cols-1 sm:grid-cols-2 sm:h-[520px]">
       {imageFirst ? (
         <>
           {imageBlock}
@@ -142,8 +144,13 @@ function StackingCard({ service, index, total }) {
     >
       <div className="h-full flex items-center justify-center px-4 sm:px-6">
         <motion.div
-          style={isLast ? undefined : { scale }}
-          className="w-full max-w-5xl bg-white rounded-3xl shadow-[0_8px_40px_rgba(0,0,0,0.10)] overflow-hidden origin-top"
+          style={{
+            ...(isLast ? {} : { scale }),
+            // Fixes a Chrome bug where border-radius + overflow-hidden + a
+            // transform (scale) glitch/clip incorrectly at the corners.
+            WebkitMaskImage: "-webkit-radial-gradient(white, black)",
+          }}
+          className="w-full max-w-5xl bg-white rounded-3xl shadow-[0_8px_40px_rgba(0,0,0,0.10)] overflow-hidden origin-top isolate"
         >
           <ServiceCardContent service={service} />
         </motion.div>
