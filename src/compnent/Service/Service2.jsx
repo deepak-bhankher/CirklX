@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const SERVICES = [
   {
-    title: "Youtube Shorts",
+    title: "Social Media Marketing (SMM)",
     image: "/service1.png",
     imagePosition: "right",
     iconBg: "bg-gradient-to-br from-orange-500 to-red-600",
@@ -13,10 +13,10 @@ const SERVICES = [
         <path d="M9.5 8.5v7l6-3.5-6-3.5Z" />
       </svg>
     ),
-    desc: "We craft high-retention YouTube Shorts with cinematic hooks, smooth cuts, and trending audio that keep viewers watching till the very last second.",
+    desc: "Grow your following, the smart way End-to-end management of your Instagram, Facebook & YouTube — content planning, posting, and engagement strategies built to grow real followers and real reach.",
   },
   {
-    title: "Instagram Reels",
+    title: "Social Media Optimization (SMO)",
     image: "/service2.png",
     imagePosition: "left",
     iconBg: "bg-gradient-to-br from-pink-500 via-red-500 to-yellow-400",
@@ -35,10 +35,10 @@ const SERVICES = [
         <circle cx="17.2" cy="6.8" r="1.1" fill="white" />
       </svg>
     ),
-    desc: "Scroll-stopping Reels with psychology-backed hooks, viral transitions, and platform-native editing that turns views into real followers and customers.",
+    desc: "Make every profile work harder We optimize your bios, hashtags, posting times, and content structure so your profiles get discovered by the right audience, organically.",
   },
   {
-    title: "TikTok Videos",
+    title: "Search Engine Optimization (SEO)",
     image: "/service3.png",
     imagePosition: "right",
     iconBg: "bg-black",
@@ -47,7 +47,7 @@ const SERVICES = [
         <path d="M16.5 3c.3 2 1.7 3.6 3.7 3.9v2.7c-1.4.1-2.7-.3-3.7-1v6.6c0 3-2.4 5.3-5.4 5.3S5.7 18.2 5.7 15.2c0-2.9 2.2-5.2 5.1-5.3v2.8c-1.3.1-2.3 1.2-2.3 2.5 0 1.4 1.1 2.5 2.5 2.5s2.6-1.1 2.6-2.5V3h2.9Z" />
       </svg>
     ),
-    desc: "Fast-paced TikTok edits built for the algorithm — snappy pacing, trending sounds, and bold captions that push your content to the For You page.",
+    desc: "Get found before your competitors do On-page and local SEO to help your website and business rank higher on Google — more visibility, more traffic, more customers.",
   },
 ];
 
