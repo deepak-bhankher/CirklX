@@ -82,7 +82,7 @@ function Work1() {
         >
           We've generated
           <br />
-          <span
+          <span 
             className="italic font-light"
             style={{ fontFamily: "'Instrument Serif', serif" }}
           >
