@@ -1,35 +1,31 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView, animate } from "framer-motion";
 
-// Each stat's `to` is the numeric target, `prefix`/`suffix` wrap it back
-// into the original display format (e.g. "$" + 32 + "M+" -> "$32M+").
+
 const STATS = [
-  {
-    to: 140,
+ {
+    to: 5,
     prefix: "",
     suffix: "M+",
     title: "Total Views for Clients",
-    desc: "Operating in more than countries to support underserved communities",
+    desc: "Generated across Reels, Shorts & Posts for brands and creators we've worked with.",
   },
   {
-    to: 8,
+    to: 2.5,
     prefix: "",
-    suffix: "k+",
+    suffix: "k  +",
     title: "Videos Edited for Clients",
-    desc: "we're committed to empowering underserved communities through.",
+    desc: "Cut, styled, and optimized to perform — built for how people actually scroll today.",
   },
   {
-    to: 32,
+    to: 100,
     prefix: "",
-    suffix: "M+",
-    title: "Revenue Generated for Clients",
-    desc: "we provide vital support to communities often left behind.",
+    suffix: "+",
+    title: "Brands & Creators Served",
+    desc: "From local Hisar businesses to creators — trusted to grow their presence online.",
   },
 ];
 
-// Counts up from 0 to `to` once the element scrolls into view, then holds
-// at the final value. `useInView` triggers the count only the first time
-// it becomes visible (no re-triggering on scroll back up/down).
 function CountUp({ to, prefix = "", suffix = "", duration = 1.6 }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
@@ -45,9 +41,9 @@ function CountUp({ to, prefix = "", suffix = "", duration = 1.6 }) {
     return () => controls.stop();
   }, [isInView, to, duration]);
 
-  // Round once for display; keeps the trailing digits from flickering
-  // through decimals while still animating smoothly underneath.
-  const display = Number.isInteger(to) ? Math.round(value) : value.toFixed(1);
+ 
+
+ const display = Number.isInteger(to) ? Math.round(value) : value.toFixed(1);
 
   return (
     <span ref={ref}>
