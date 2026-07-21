@@ -1,210 +1,54 @@
 import { useRef, useState } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { ArrowUpRight, MapPin, Star } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import DestinationsGrid from "./DestinationsGrid";
 
 const ACCENT = "#D6ff01";
 
 const DESTINATIONS = [
-  {
-    id: 1,
-    country: "Turkey",
-    city: "Istanbul",
-    flag: "🇹🇷",
-    hotels: "991",
-    packages: "42",
-    rating: "4.8",
-    image:
-      "https://images.unsplash.com/photo-1641128324972-af3212f0f6bd?q=70&w=600&auto=format&fit=crop",
-    tag: "Historical",
-    featured: false,
-  },
-  {
-    id: 2,
-    country: "Indonesia",
-    city: "Bali",
-    flag: "🇮🇩",
-    hotels: "1,345",
-    packages: "24",
-    rating: "4.9",
-    image:
-      "https://images.unsplash.com/photo-1531592937781-344ad608fabf?q=70&w=600&auto=format&fit=crop",
-    tag: "Tropical",
-    featured: false,
-  },
-  {
-    id: 3,
-    country: "Dubai",
-    city: "UAE",
-    flag: "🇦🇪",
-    hotels: "2,345",
-    packages: "54",
-    rating: "4.9",
-    image:
-      "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=70&w=600&auto=format&fit=crop",
-    tag: "Luxury",
-    featured: true,
-  },
-  {
-    id: 4,
-    country: "Vietnam",
-    city: "Ha Long",
-    flag: "🇻🇳",
-    hotels: "2,178",
-    packages: "32",
-    rating: "4.7",
-    image:
-      "https://images.unsplash.com/photo-1528127269322-539801943592?q=70&w=600&auto=format&fit=crop",
-    tag: "Adventure",
-    featured: false,
-  },
-  {
-    id: 5,
-    country: "Morocco",
-    city: "Marrakech",
-    flag: "🇲🇦",
-    hotels: "768",
-    packages: "19",
-    rating: "4.6",
-    image:
-      "https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?q=70&w=600&auto=format&fit=crop",
-    tag: "Cultural",
-    featured: false,
-  },
-  {
-    id: 6,
-    country: "Japan",
-    city: "Kyoto",
-    flag: "🇯🇵",
-    hotels: "1,120",
-    packages: "38",
-    rating: "4.9",
-    image:
-      "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=70&w=600&auto=format&fit=crop",
-    tag: "Serene",
-    featured: false,
-  },
-  {
-    id: 7,
-    country: "Greece",
-    city: "Santorini",
-    flag: "🇬🇷",
-    hotels: "890",
-    packages: "28",
-    rating: "4.8",
-    image:
-      "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?q=70&w=600&auto=format&fit=crop",
-    tag: "Scenic",
-    featured: false,
-  },
+  { id: 1, city: "Istanbul", image: "work1.jpeg" },
+  { id: 2, city: "Bali", image: "work2.jpeg" },
+  { id: 3, city: "UAE", image: "work3.jpeg" },
+  { id: 4, city: "Ha Long", image: "work4.jpeg" },
+  { id: 5, city: "Marrakech", image: "work5.jpeg" },
+  { id: 6, city: "Kyoto", image: "work6.jpeg" },
+  { id: 7, city: "Santorini", image: "work7.jpeg" },
+  { id: 8, city: "Santorini", image: "work8.jpeg" },
+  { id: 9, city: "Santorini", image: "work9.jpeg" },
+  { id: 10, city: "Santorini", image: "work10.jpeg" },
+  { id: 11, city: "Santorini", image: "work11.jpeg" },
+  { id: 12, city: "Santorini", image: "work12.jpeg" },
+  { id: 13, city: "Santorini", image: "work13.jpeg" },
+  { id: 14, city: "Santorini", image: "work14.jpeg" },
+  { id: 15, city: "Santorini", image: "work15.jpeg" },
 ];
 
-/* ── Single Card ─────────────────────────────────────────────── */
+/* ── Single Card — image only + small username below ────────── */
 function DestinationCard({ d }) {
   return (
-    <div
-      className="group relative shrink-0 overflow-hidden rounded-[28px] cursor-pointer"
-      style={{
-        width: "280px",
-        height: "380px",
-        // Static shadow only — animating box-shadow every frame was a
-        // big jank source, so "featured" now comes from a fixed,
-        // slightly stronger shadow + border instead of a pulsing one.
-        boxShadow: d.featured
-          ? `0 32px 64px -16px rgba(0,0,0,0.75), 0 0 0 1px rgba(214,255,1,0.18)`
-          : `0 20px 48px -14px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06)`,
-        transform: "translateZ(0)",
-      }}
-    >
-      {/* Image */}
-      <img
-        src={d.image}
-        alt={d.country}
-        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-        loading="lazy"
-        decoding="async"
-        draggable={false}
-      />
-
-      {/* Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-
-      {/* Top badges */}
-      <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          {d.featured && (
-            <span
-              className="text-[9px] font-black tracking-[0.16em] uppercase px-2.5 py-1 rounded-full text-black"
-              style={{ background: ACCENT }}
-            >
-              Hot
-            </span>
-          )}
-          {/* solid bg instead of backdrop-blur — blurring whatever sits
-              underneath a continuously-scrolling row is the single most
-              expensive thing a marquee can do */}
-          <span className="text-[9px] font-semibold tracking-widest uppercase px-2.5 py-1 rounded-full text-white/75 bg-[#1a1a1a] border border-white/10">
-            {d.tag}
-          </span>
-        </div>
-
-        {/* Arrow chip — appears on hover, opacity/scale only (cheap, GPU-only) */}
-        <div
-          className="w-8 h-8 rounded-full flex items-center justify-center
-            bg-[#1a1a1a] border border-white/15
-            opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100
-            transition-all duration-300"
-          style={{ color: ACCENT }}
-        >
-          <ArrowUpRight size={14} strokeWidth={2.5} />
-        </div>
+    <div className="group shrink-0 flex flex-col items-center gap-2.5" style={{ width: "280px" }}>
+      <div
+        className="relative overflow-hidden rounded-[28px]"
+        style={{
+          width: "280px",
+          height: "380px",
+          boxShadow: `0 20px 48px -14px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06)`,
+          transform: "translateZ(0)",
+        }}
+      >
+        <img
+          src={d.image}
+          alt={d.country}
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+          loading="lazy"
+          decoding="async"
+          draggable={false}
+        />
       </div>
 
-      {/* Bottom content */}
-      <div className="absolute inset-x-0 bottom-0 p-5">
-        {/* Rating + City */}
-        <div className="flex items-center gap-2 mb-2.5">
-          <div
-            className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold"
-            style={{ background: "rgba(214,255,1,0.12)", color: ACCENT }}
-          >
-            <Star size={8} fill="currentColor" />
-            {d.rating}
-          </div>
-          <div className="flex items-center gap-1 text-white/35 text-[10px]">
-            <MapPin size={8} />
-            {d.city}
-          </div>
-        </div>
-
-        {/* Country name */}
-        <h3 className="text-xl font-bold text-white tracking-tight leading-none mb-1">
-          {d.country} <span className="text-lg">{d.flag}</span>
-        </h3>
-        <p className="text-[11px] text-white/40 font-medium mb-4">
-          {d.hotels} Hotels &middot; {d.packages} Packages
-        </p>
-
-        {/* CTA — solid dark surface, no backdrop-filter, no shimmer overlay.
-            Still reads as a glass pill via border + tint, costs nothing
-            at runtime since it never has to sample what's behind it. */}
-        <div
-          className="flex items-center justify-between
-            rounded-2xl pl-4 pr-1.5 py-1.5
-            border border-white/10 bg-[#161616]
-            transition-colors duration-300
-            group-hover:border-white/20 group-hover:bg-[#1d1d1d]"
-        >
-          <span className="text-xs font-semibold text-white">Explore Now</span>
-          <span
-            className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rounded-2xl"
-            style={{ background: ACCENT, color: "#000" }}
-          >
-            <ArrowUpRight size={13} strokeWidth={2.5} />
-          </span>
-        </div>
-      </div>
+      <span className="text-[11px] font-medium text-white/40 tracking-wide">
+        {d.city}
+      </span>
     </div>
   );
 }
@@ -251,12 +95,7 @@ export default function Work5() {
         data-theme="dark"
         className="relative w-full bg-[#070707] overflow-hidden py-24 sm:py-32"
       >
-        {/* ── Background glows ──
-            No longer tied to scroll progress. A parallax `y` transform on
-            a 1000px blurred blob forces the browser to repaint a huge
-            blurred region on every scroll tick — that combined with the
-            marquee running underneath was the main source of lag. These
-            are now fixed, paint once, and stay out of the hot path. */}
+        {/* ── Background glows ── */}
         <div className="absolute inset-0 pointer-events-none">
           <div
             className="absolute -top-60 left-1/2 -translate-x-1/2 w-[1000px] h-[700px] rounded-full blur-[140px]"
@@ -275,7 +114,7 @@ export default function Work5() {
           />
         </div>
 
-        {/* ── Grid (static, cheap — single repeating gradient, no blur) ── */}
+        {/* ── Grid ── */}
         <div
           className="absolute inset-0 pointer-events-none opacity-[0.018]"
           style={{
@@ -398,8 +237,7 @@ export default function Work5() {
             }}
           />
 
-          {/* Track — plain CSS @keyframes animation, not a JS rAF loop,
-              so it runs on the compositor thread and won't block scroll. */}
+          {/* Track */}
           <div
             className="marquee-track flex gap-5 sm:gap-6 py-4 px-3"
             style={{ width: "max-content" }}
