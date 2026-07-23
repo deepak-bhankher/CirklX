@@ -28,7 +28,7 @@ const STATS = [
 
 function CountUp({ to, prefix = "", suffix = "", duration = 1.6 }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const isInView = useInView(ref, { once: true, margin: "0px 0px 100px 0px" });
   const [value, setValue] = useState(0);
 
   useEffect(() => {
