@@ -15,38 +15,73 @@ const NAV_LINKS = [
 ];
 
 function useDarkSection() {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(true);
+  const { pathname } = useLocation();
 
   useEffect(() => {
+    let darkSections = []; // cached — sirf resize/route change pe re-query hoga
+    let ticking = false;   // rAF throttle flag
+
+    function queryDarkSections() {
+      darkSections = Array.from(document.querySelectorAll('[data-theme="dark"]'));
+    }
+
     function checkSection() {
       const nav = document.querySelector("nav");
       const navBottom = nav ? nav.getBoundingClientRect().bottom : 70;
       const checkY = navBottom;
 
-      const darkSections = document.querySelectorAll('[data-theme="dark"]');
       let foundDark = false;
-      darkSections.forEach((section) => {
-        const rect = section.getBoundingClientRect();
+      for (let i = 0; i < darkSections.length; i++) {
+        const rect = darkSections[i].getBoundingClientRect();
         if (rect.top <= checkY && rect.bottom >= checkY) {
           foundDark = true;
+          break; // pehla match milte hi ruk jao, baaki check karne ki zarurat nahi
         }
-      });
-      setIsDark(foundDark);
+      }
+
+      setIsDark((prev) => (prev === foundDark ? prev : foundDark)); // same value pe re-render skip
+      ticking = false;
     }
 
-    // run on scroll, resize, and immediately
-    window.addEventListener("scroll", checkSection, { passive: true });
-    window.addEventListener("resize", checkSection, { passive: true });
+    // Scroll ko requestAnimationFrame se throttle karo —
+    // ab checkSection() max 1 baar per frame hi chalega, har scroll pixel pe nahi
+    function onScroll() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(checkSection);
+      }
+    }
+
+    function onResize() {
+      queryDarkSections(); // layout badla to sections dobara naap lo
+      checkSection();
+    }
+
+    queryDarkSections();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
+
     checkSection();
 
-    // also re-check after paint in case sections render late
-    const raf = requestAnimationFrame(checkSection);
+    // Route change ke baad DOM/video turant paint nahi hota,
+    // isliye thoda delay dekar dobara query + check karo
+    const raf = requestAnimationFrame(() => {
+      queryDarkSections();
+      checkSection();
+    });
+    const timeout = setTimeout(() => {
+      queryDarkSections();
+      checkSection();
+    }, 150);
+
     return () => {
-      window.removeEventListener("scroll", checkSection);
-      window.removeEventListener("resize", checkSection);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
       cancelAnimationFrame(raf);
+      clearTimeout(timeout);
     };
-  }, []);
+  }, [pathname]);
 
   return isDark;
 }
