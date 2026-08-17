@@ -316,7 +316,7 @@ export default function Home1() {
   return (
     <section
       data-theme="dark"
-      className="relative w-full lg:h-dvh lg:min-h-dvh pt-28 sm:pt-32 md:pt-[140px] pb-16 sm:pb-24 lg:pb-32 overflow-hidden"
+      className="relative w-full lg:h-dvh lg:min-h-dvh pt-32 sm:pt-36 md:pt-[140px] pb-24 sm:pb-28 lg:pb-32 overflow-hidden"
     >
       {/* Background video */}
       <video
@@ -452,7 +452,7 @@ export default function Home1() {
       </div>
 
       <div className="relative z-10 md:px-10 h-full flex items-center">
-        <div className="md:max-w-5xl md:mx-auto px-6 text-center flex flex-col items-center w-full">
+        <div className="md:max-w-5xl md:mx-auto px-6 text-center flex flex-col items-center w-full gap-1 sm:gap-0">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -468,7 +468,7 @@ export default function Home1() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-            className="mt-5 sm:mt-7 font-semibold text-white text-center
+            className="mt-6 sm:mt-7 font-semibold text-white text-center
               text-[28px] leading-[1.25] xs:text-[36px] xs:leading-[1.15] sm:text-[52px] sm:leading-[1.1] md:text-[62px] lg:text-[68px]"
           >
             Agency that makes your{" "} <br/>
@@ -544,7 +544,7 @@ export default function Home1() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-5 sm:mt-7 px-3 py-1 text-[13px] sm:text-[15px] md:text-base text-white/80 font-medium"
+            className="mt-6 sm:mt-8 px-3 py-1 text-[13px] sm:text-[15px] md:text-base text-white/80 font-medium leading-relaxed"
           >
           Scroll-stopping reels & short-form video editing for Influencers,Creators & Brands across Haryana.
           </motion.p>
@@ -553,7 +553,7 @@ export default function Home1() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.55 }}
-            className="mt-7 sm:mt-9 flex flex-wrap items-center justify-center gap-3 w-full"
+            className="mt-8 sm:mt-10 flex flex-wrap items-center justify-center gap-3 w-full pb-4 sm:pb-0"
           >
             <PrimaryGlassCta withArrow>
               <Link to="/contact">Book A Free Meeting</Link>
