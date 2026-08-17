@@ -137,7 +137,7 @@ function ReelCard({ reel, index, registerVideo, onPlay, onPause }) {
           src={reel.video}
           preload="none"
           loop
-          muted
+       muted
           playsInline
           onPause={handlePauseEvent}
           onPlay={() => setIsPlaying(true)}

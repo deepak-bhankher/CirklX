@@ -218,10 +218,10 @@ function Contact1() {
                 EMAIL US
               </p>
               <a
-                href="mailto:hello@cirklx.com"
+                href="mailto:cirklX.agency@gmail.com"
                 className="text-sm font-semibold text-[#15140F] hover:text-black underline underline-offset-2 transition-colors duration-200"
               >
-                hello@cirklx.com
+                cirklX.agency@gmail.com
               </a>
             </div>
             <IconBadge size="w-11 h-11">

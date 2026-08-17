@@ -4,7 +4,7 @@ const teamMembers = [
   {
     id: 1,
     image: "/team1.jpg",
-    name: "Arif Raihan",
+    name: "Krishan Bansal",
     role: "Lead Editor",
     description:
       "Creates viral short-form videos with cinematic storytelling and smooth motion graphics.",
@@ -12,7 +12,7 @@ const teamMembers = [
   {
     id: 2,
     image: "/team2.jpg",
-    name: "Tanvir Ahmed",
+    name: "Naveen Nagar",
     role: "Creative Director",
     description:
       "Turns simple ideas into high-converting social media content loved by brands.",
@@ -20,7 +20,7 @@ const teamMembers = [
   {
     id: 3,
     image: "/team3.jpg",
-    name: "Abdul Qadir",
+    name: "Govind Sharma",
     role: "Client Success",
     description:
       "Keeps every project on track while making sure clients are always happy.",
