@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { FaInstagram, FaPinterest, FaStar, FaYoutube } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaInstagram, FaPinterest, FaStar, FaYoutube, FaTiktok } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import { MdArrowOutward } from "react-icons/md";
 import { BsInstagram } from "react-icons/bs";
 import { FaFacebook } from "react-icons/fa";
@@ -308,10 +309,31 @@ function SecondaryGlassCta({ children, withArrow = false }) {
     </GlassButtonBase>
   );
 }
+
+// Icons that cycle inside the headline glass badge — Insta -> Facebook -> Twitter -> TikTok,
+// switching every 2 seconds.
+const HEADLINE_ICONS = [
+  { key: "insta", Icon: BsInstagram },
+  { key: "facebook", Icon: FaFacebook },
+  { key: "twitter", Icon: FaXTwitter },
+  { key: "tiktok", Icon: FaTiktok },
+];
+
 export default function Home1() {
   const iconSize = useResponsiveIconSize();
   const headlineIconSize = useHeadlineIconSize();
   const headlineBadgeBoxSize = useHeadlineBadgeBoxSize();
+
+  const [headlineIconIndex, setHeadlineIconIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHeadlineIconIndex((prev) => (prev + 1) % HEADLINE_ICONS.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const CurrentHeadlineIcon = HEADLINE_ICONS[headlineIconIndex].Icon;
 
   return (
     <section
@@ -526,10 +548,22 @@ export default function Home1() {
                   }}
                 />
 
-                <BsInstagram
-                  size={headlineIconSize}
-                  className="relative z-10 text-[#D6ff01]"
-                />
+                {/* Cycling social icon: Instagram -> Facebook -> Twitter -> TikTok, every 2s */}
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={HEADLINE_ICONS[headlineIconIndex].key}
+                    initial={{ opacity: 0, scale: 0.6, rotate: -20 }}
+                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                    exit={{ opacity: 0, scale: 0.6, rotate: 20 }}
+                    transition={{ duration: 0.35, ease: "easeOut" }}
+                    className="relative z-10 flex items-center justify-center"
+                  >
+                    <CurrentHeadlineIcon
+                      size={headlineIconSize}
+                      className="text-[#D6ff01]"
+                    />
+                  </motion.div>
+                </AnimatePresence>
               </motion.span>{" "}
               <span
                 className="font-light italic text-[#D6ff01]"
