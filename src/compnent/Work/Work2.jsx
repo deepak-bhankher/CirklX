@@ -3,16 +3,16 @@ import { motion, useAnimationControls } from "framer-motion";
 
 // Each reel: video src + thumbnail image + instagram handle.
 const REELS = [
-  { video: "/video1.mp4", thumb: "/thumb1.png", handle: "@logicgpt" },
-  { video: "/video2.mp4", thumb: "/thumb3.png", handle: "@mr_techog" },
-  { video: "/video3.mp4", thumb: "/thumb4.png", handle: "@logicgpt" },
-  { video: "/video4.mp4", thumb: "/thumb2.png", handle: "@mr_techog" },
-  { video: "/video5.mp4", thumb: "/thumb3.png", handle: "@uditgpt" },
-  { video: "/video6.mp4", thumb: "/thumb6.png", handle: "@dr.himanshu_grover_" },
-  { video: "/video7.mp4", thumb: "/thumb7.png", handle: "@fit.niya" },
-  { video: "/video8.mp4", thumb: "/thumb5.png", handle: "@dr.himanshu_grover_" },
-  { video: "/video9.mp4", thumb: "/thumb9.png", handle: "@houseofbinti" },
-  { video: "/video10.mp4", thumb: "thumb8.png", handle: "@fit.niya" },
+  { video: "/video1.mp4", thumb: "/thumb1.png", handle: "@logicgpt", followers: "403k" },
+  { video: "/video2.mp4", thumb: "/thumb3.png", handle: "@mr_techog", followers: "215k" },
+  { video: "/video3.mp4", thumb: "/thumb4.png", handle: "@logicgpt", followers: "403k" },
+  { video: "/video4.mp4", thumb: "/thumb2.png", handle: "@mr_techog", followers: "215k" },
+  { video: "/video5.mp4", thumb: "/thumb3.png", handle: "@uditgpt", followers: "732k" },
+  { video: "/video6.mp4", thumb: "/thumb6.png", handle: "@dr.himanshu_grover_", followers: "657k" },
+  { video: "/video7.mp4", thumb: "/thumb7.png", handle: "@fit.niya", followers: "73.1k" },
+  { video: "/video8.mp4", thumb: "/thumb5.png", handle: "@dr.himanshu_grover_", followers: "657k" },
+  { video: "/video9.mp4", thumb: "/thumb9.png", handle: "@houseofbinti", followers: "23.6k" },
+  { video: "/video10.mp4", thumb: "thumb8.png", handle: "@fit.niya", followers: "73.1k" },
 ];
 
 // Instagram glyph badge
@@ -46,14 +46,13 @@ function MuteIcon({ muted }) {
 
 function ReelCard({ reel, index, registerVideo, onPlay, onPause }) {
   const videoRef = useRef(null);
-  // "started" = video element ab DOM me mount ho chuka hai (lazy mount)
   const [started, setStarted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [progress, setProgress] = useState(0);
   const [thumbLoaded, setThumbLoaded] = useState(false);
+  const hoverRef = useRef(false);
 
-  // Video mount hone ke baad hi ref registered hota hai + turant autoplay
   useEffect(() => {
     if (started && videoRef.current) {
       registerVideo(index, videoRef.current);
@@ -61,10 +60,29 @@ function ReelCard({ reel, index, registerVideo, onPlay, onPause }) {
     }
   }, [started, index, registerVideo]);
 
+  const handleMouseEnter = () => {
+    hoverRef.current = true;
+    if (!started) {
+      onPlay(index);
+      setStarted(true);
+    } else {
+      const vid = videoRef.current;
+      if (vid && vid.paused) {
+        onPlay(index);
+        vid.play();
+      }
+    }
+  };
+
+  const handleMouseLeave = () => {
+    hoverRef.current = false;
+    const vid = videoRef.current;
+    if (vid && !vid.paused) vid.pause();
+  };
+
   const togglePlay = (e) => {
     e.stopPropagation();
     if (!started) {
-      // Pehli baar click → video ko lazily mount karo, marquee bhi rok do
       onPlay(index);
       setStarted(true);
       return;
@@ -95,15 +113,18 @@ function ReelCard({ reel, index, registerVideo, onPlay, onPause }) {
   const handlePauseEvent = () => {
     setIsPlaying(false);
     onPause(index);
-    // Video pause hote hi wapas thumbnail pe switch — heavy decode free ho jata hai
-    setStarted(false);
-    setProgress(0);
-    registerVideo(index, null);
+    if (!hoverRef.current) {
+      setStarted(false);
+      setProgress(0);
+      registerVideo(index, null);
+    }
   };
 
   return (
     <motion.div
       onClick={togglePlay}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       whileHover={{ y: -6 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
       className={`group relative flex-shrink-0 w-[220px] sm:w-[260px] md:w-[280px] aspect-[3/4] rounded-[22px] overflow-hidden bg-[#0c0c0c] cursor-pointer
@@ -178,10 +199,13 @@ function ReelCard({ reel, index, registerVideo, onPlay, onPause }) {
         <MuteIcon muted={isMuted} />
       </motion.button>
 
-      {/* Bottom-left: instagram icon + username */}
+      {/* Bottom-left: instagram icon + username + followers */}
       <div className="absolute inset-x-0 bottom-0 p-4 flex items-center gap-2">
         <InstagramIcon />
-        <p className="text-sm font-semibold text-white tracking-tight drop-shadow-sm">{reel.handle}</p>
+        <div className="flex flex-col">
+          <p className="text-sm font-semibold text-white tracking-tight drop-shadow-sm leading-tight">{reel.handle}</p>
+          <p className="text-[11px] text-white/55 font-medium leading-tight">{reel.followers} followers</p>
+        </div>
       </div>
 
       {/* Thin progress bar — only meaningful once playback starts */}

@@ -316,7 +316,7 @@ export default function Home1() {
   return (
     <section
       data-theme="dark"
-      className="relative w-full h-dvh min-h-dvh pt-36 xs:pt-32 sm:pt-32 md:pt-[140px] pb-10 sm:pb-24 lg:pb-32 overflow-hidden"
+      className="relative w-full lg:h-dvh lg:min-h-dvh pt-28 sm:pt-32 md:pt-[140px] pb-16 sm:pb-24 lg:pb-32 overflow-hidden"
     >
       {/* Background video */}
       <video
@@ -325,12 +325,13 @@ export default function Home1() {
         loop
         playsInline
         disablePictureInPicture
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover object-center"
+        style={{ minHeight: "100%", minWidth: "100%" }}
       >
         <source src="/video.mp4" type="video/mp4" />
       </video>
       {/* Dark overlay so text stays readable */}
-      <div className="absolute inset-0 bg-black/40" />
+      <div className="absolute inset-0 bg-black/20 sm:bg-black/40" />
 
       <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-[380px] sm:top-[240px] md:top-[260px] lg:top-[220px] xl:top-[190px] w-full max-w-[95vw] sm:max-w-[110vw] md:w-[1100px] md:max-w-[150vw] lg:w-[1320px] lg:max-w-[92vw] xl:w-[1480px] xl:max-w-[95vw] h-[220px] sm:h-[630px] md:h-[660px] lg:h-[760px] xl:h-[840px] overflow-hidden pointer-events-none">
         <div className="absolute top-[16px] sm:top-[-120px] md:top-[-150px] lg:top-[-180px] xl:top-[-200px] left-0 w-full h-[190px] sm:h-[650px] md:h-[650px] lg:h-[760px] xl:h-[840px]">

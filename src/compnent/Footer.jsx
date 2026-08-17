@@ -482,7 +482,7 @@ function Footer() {
                   />
                 </svg>
               </span>
-              hello@cirklx.com
+              cirklX.agency@gmail.com
             </a>
             <a
               href="tel:+911234567890"

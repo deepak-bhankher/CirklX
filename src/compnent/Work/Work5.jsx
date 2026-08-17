@@ -6,21 +6,21 @@ import DestinationsGrid from "./DestinationsGrid";
 const ACCENT = "#D6ff01";
 
 const DESTINATIONS = [
-  { id: 1, city: "Istanbul", image: "work1.jpeg" },
-  { id: 2, city: "Bali", image: "work2.jpeg" },
-  { id: 3, city: "UAE", image: "work3.jpeg" },
-  { id: 4, city: "Ha Long", image: "work4.jpeg" },
-  { id: 5, city: "Marrakech", image: "work5.jpeg" },
-  { id: 6, city: "Kyoto", image: "work6.jpeg" },
-  { id: 7, city: "Santorini", image: "work7.jpeg" },
-  { id: 8, city: "Santorini", image: "work8.jpeg" },
-  { id: 9, city: "Santorini", image: "work9.jpeg" },
-  { id: 10, city: "Santorini", image: "work10.jpeg" },
-  { id: 11, city: "Santorini", image: "work11.jpeg" },
-  { id: 12, city: "Santorini", image: "work12.jpeg" },
-  { id: 13, city: "Santorini", image: "work13.jpeg" },
-  { id: 14, city: "Santorini", image: "work14.jpeg" },
-  { id: 15, city: "Santorini", image: "work15.jpeg" },
+  { id: 1,  name: "Gearix", image: "work1.jpeg" },
+  { id: 2,  name: "Easter Collection", image: "work2.jpeg" },
+  { id: 3,  name: "Geeta Syrup", image: "work3.jpeg" },
+  { id: 4,  name: "Easter Decor", image: "work4.jpeg" },
+  { id: 5,  name: "Burger Wings ", image: "work5.jpeg" },
+  { id: 6,  name: "Geeta Syrup", image: "work6.jpeg" },
+  { id: 7,  name: "Gearix", image: "work7.jpeg" },
+  { id: 8,  name: "Geeta Syrup", image: "work8.jpeg" },
+  { id: 9,  name: "Geeta Syrup", image: "work9.jpeg" },
+  { id: 10, name: "Burger Wings", image: "work10.jpeg" },
+  { id: 11, name: "Easter", image: "work11.jpeg" },
+  { id: 12, name: "Geeta Syrup", image: "work12.jpeg" },
+  { id: 13, name: "Gearix", image: "work13.jpeg" },
+  { id: 14, name: "Easter", image: "work14.jpeg" },
+  { id: 15, name: "Burger Wings", image: "work15.jpeg" },
 ];
 
 /* ── Single Card — image only + small username below ────────── */
@@ -38,7 +38,7 @@ function DestinationCard({ d }) {
       >
         <img
           src={d.image}
-          alt={d.country}
+          alt={d.name}
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
           loading="lazy"
           decoding="async"
@@ -47,7 +47,7 @@ function DestinationCard({ d }) {
       </div>
 
       <span className="text-[11px] font-medium text-white/40 tracking-wide">
-        {d.city}
+        {d.name}
       </span>
     </div>
   );

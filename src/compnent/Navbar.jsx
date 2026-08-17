@@ -58,9 +58,15 @@ function useDarkSection() {
       checkSection();
     }
 
+    function onSectionsUpdated() {
+      queryDarkSections();
+      checkSection();
+    }
+
     queryDarkSections();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize, { passive: true });
+    window.addEventListener("sections-updated", onSectionsUpdated);
 
     checkSection();
 
@@ -78,6 +84,7 @@ function useDarkSection() {
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
+      window.removeEventListener("sections-updated", onSectionsUpdated);
       cancelAnimationFrame(raf);
       clearTimeout(timeout);
     };

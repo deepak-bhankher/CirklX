@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, X } from "lucide-react";
 
@@ -229,6 +230,10 @@ function ItemCard({ item, isBranding, isGraphics }) {
 }
 
 export default function DestinationsGrid({ onClose }) {
+  useEffect(() => {
+    window.dispatchEvent(new Event("sections-updated"));
+  }, []);
+
   return (
       <motion.section
         initial={{ opacity: 0, y: 50 }}
