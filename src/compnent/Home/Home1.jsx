@@ -96,6 +96,30 @@ const CURVE_POINTS = [
   { left: "1.8%", top: "3.1%" }, // loop back to the exact start point
 ];
 
+// Mobile-only arc: much shallower + wider than the desktop one, sampled from
+// the SVG path "M10 12 C 60 100, 130 128, 200 130 C 270 128, 340 100, 390 12"
+// inside a 400x140 viewBox, so the icons sit exactly on the drawn line.
+const MOBILE_CURVE_POINTS = [
+  { left: "2.5%", top: "8.6%" },
+  { left: "7.4%", top: "30.2%" },
+  { left: "12.7%", top: "48.1%" },
+  { left: "18.4%", top: "62.5%" },
+  { left: "24.4%", top: "73.8%" },
+  { left: "30.6%", top: "82.1%" },
+  { left: "37.0%", top: "87.9%" },
+  { left: "43.4%", top: "91.4%" },
+  { left: "50.0%", top: "92.9%" },
+  { left: "56.6%", top: "91.4%" },
+  { left: "63.0%", top: "87.9%" },
+  { left: "69.4%", top: "82.1%" },
+  { left: "75.6%", top: "73.8%" },
+  { left: "81.6%", top: "62.5%" },
+  { left: "87.3%", top: "48.1%" },
+  { left: "92.6%", top: "30.2%" },
+  { left: "97.5%", top: "8.6%" },
+  { left: "2.5%", top: "8.6%" }, // loop back to the exact start point
+];
+
 function GlassIconCard({
   icon,
   tone = "default",
@@ -190,6 +214,118 @@ function GlassIconCard({
       <div className="absolute inset-0 rounded-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.5)] pointer-events-none" />
     </motion.div>
   );
+}
+
+/**
+ * Icons that continuously flow along a curve.
+ *
+ * Pehle ye logic sirf desktop wale block ke andar inline tha. Ab isko ek
+ * component me nikal diya hai taaki mobile wala curve bhi bilkul same
+ * animation reuse kar sake — sirf points, box size aur glyph size alag.
+ * Desktop par jo values pehle thi wahi defaults hain, isliye desktop ka
+ * output byte-for-byte same rehta hai.
+ */
+function FlowingIcons({
+  points,
+  boxSize,
+  glyphSize = 18,
+  duration = 7,
+  fadeZone = 5,
+}) {
+  const icons = [
+    {
+      tone: "pinterest",
+      icon: <FaPinterest size={glyphSize} className="text-red-500" />,
+    },
+    {
+      tone: "spark",
+      icon: <RiSparkling2Fill size={glyphSize - 1} className="text-emerald-500" />,
+    },
+    {
+      tone: "instagram",
+      icon: <FaInstagram size={glyphSize} className="text-[#cc4b13]" />,
+    },
+    {
+      tone: "facebook",
+      icon: <FaFacebook size={glyphSize} className="text-[#1877F2]" />,
+    },
+    {
+      tone: "youtube",
+      icon: <FaYoutube size={glyphSize} className="text-red-700" />,
+    },
+  ];
+
+  // ---- ASLI FIX ----
+  // Points array ke end me point 0 ka duplicate tha ("loop back to start").
+  // Uski wajah se icon right-top se left-top tak ek normal animated segment
+  // ki tarah travel karta tha — yaani poori screen ke upar se right-to-left
+  // jaata hua saaf dikhta tha.
+  //
+  // Framer Motion khud hi `repeat: Infinity` par aakhri keyframe se pehle
+  // keyframe par instantly jump karta hai (bina interpolate kiye), isliye wo
+  // duplicate point chahiye hi nahi tha. Use hata dene se wapasi 0ms me hoti
+  // hai, aur dono sire par opacity exact 0 hone ki wajah se aankh ko kuch
+  // dikhta hi nahi — icon right par poori tarah gayab, phir left se nikalta hai.
+  const pts =
+    points.length > 1 &&
+    points[points.length - 1].left === points[0].left &&
+    points[points.length - 1].top === points[0].top
+      ? points.slice(0, -1)
+      : points;
+
+  const last = pts.length - 1;
+
+  // Curve ke dono sire par exact 0 opacity, beech me full.
+  const opacityFrames = pts.map((_, i) => {
+    const distFromStart = i;
+    const distFromEnd = last - i;
+    if (distFromStart < fadeZone) return Math.pow(distFromStart / fadeZone, 1.5);
+    if (distFromEnd < fadeZone) return Math.pow(distFromEnd / fadeZone, 1.5);
+    return 1;
+  });
+
+  return icons.map((it, iconIdx) => {
+    // Evenly space every icon around the loop instead of a fixed
+    // 1.2s step — with a fixed step, adding a 5th icon (youtube)
+    // left an uneven gap so it trailed right behind pinterest.
+    // Dividing the full loop duration by the icon count keeps
+    // the spacing equal no matter how many icons are flowing.
+    const delay = iconIdx * (duration / icons.length);
+
+    return (
+      <motion.div
+        key={it.tone}
+        className="absolute left-0 top-0"
+        initial={{ opacity: 0 }}
+        animate={{
+          left: pts.map((p) => p.left),
+          top: pts.map((p) => p.top),
+          opacity: opacityFrames,
+        }}
+        transition={{
+          duration,
+          repeat: Infinity,
+          repeatType: "loop",
+          ease: "linear",
+          delay,
+        }}
+        style={{
+          transform: "translate(-50%, -50%) translateZ(0)",
+          willChange: "transform, left, top, opacity",
+          zIndex: 30,
+        }}
+      >
+        <GlassIconCard
+          icon={it.icon}
+          tone={it.tone}
+          size={boxSize}
+          depth={iconIdx % 2 === 0 ? 1 : 0}
+          opacity={1}
+          rotate={0}
+        />
+      </motion.div>
+    );
+  });
 }
 
 function AnimatedArrow({ hovered, size = 16 }) {
@@ -355,6 +491,7 @@ export default function Home1() {
       {/* Dark overlay so text stays readable */}
       <div className="absolute inset-0 bg-black/20 sm:bg-black/40" />
 
+      {/* ===== DESKTOP / TABLET (md and up) — untouched ===== */}
       <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-[380px] sm:top-[240px] md:top-[260px] lg:top-[220px] xl:top-[190px] w-full max-w-[95vw] sm:max-w-[110vw] md:w-[1100px] md:max-w-[150vw] lg:w-[1320px] lg:max-w-[92vw] xl:w-[1480px] xl:max-w-[95vw] h-[220px] sm:h-[630px] md:h-[660px] lg:h-[760px] xl:h-[840px] overflow-hidden pointer-events-none">
         <div className="absolute top-[16px] sm:top-[-120px] md:top-[-150px] lg:top-[-180px] xl:top-[-200px] left-0 w-full h-[190px] sm:h-[650px] md:h-[650px] lg:h-[760px] xl:h-[840px]">
           <svg
@@ -385,91 +522,13 @@ export default function Home1() {
               Rotation ko ab fixed step me di hui style se lock rakha hai (as per feedback rotation nahi chahiye).
               Opacity ab ek bada fadeZone aur ease curve use karta hai taaki fade smooth/gradual lage,
               ek dum se gayab hone jaisa na lage. */}
-          {(() => {
-            const icons = [
-              {
-                tone: "pinterest",
-                icon: <FaPinterest size={18} className="text-red-500" />,
-              },
-              {
-                tone: "spark",
-                icon: <RiSparkling2Fill size={17} className="text-emerald-500" />,
-              },
-              {
-                tone: "instagram",
-                icon: <FaInstagram size={18} className="text-[#cc4b13]" />,
-              },
-              {
-                tone: "facebook",
-                icon: <FaFacebook size={18} className="text-[#1877F2]" />,
-              },
-              {
-                tone: "youtube",
-                icon: <FaYoutube size={18} className="text-red-700" />,
-              },
-            ];
-
-            return icons.map((it, iconIdx) => {
-              const duration = 7;
-              // Evenly space every icon around the loop instead of a fixed
-              // 1.2s step — with a fixed step, adding a 5th icon (youtube)
-              // left an uneven gap so it trailed right behind pinterest.
-              // Dividing the full loop duration by the icon count keeps
-              // the spacing equal no matter how many icons are flowing.
-              const delay = iconIdx * (duration / icons.length);
-
-              return (
-                <motion.div
-                  key={it.tone}
-                  className="absolute left-0 top-0"
-                  initial={{ opacity: 0 }}
-                  animate={{
-                    left: CURVE_POINTS.map((p) => p.left),
-                    top: CURVE_POINTS.map((p) => p.top),
-                    opacity: CURVE_POINTS.map((_, i) => {
-                      const n = CURVE_POINTS.length;
-                      // Fade both at the start (left-top, just appearing)
-                      // and at the end (right-top, just before the loop
-                      // restarts). Matching fade zones on both ends mean
-                      // the icon is never abruptly visible/invisible —
-                      // it fades out completely before the loop resets,
-                      // then fades back in just as gradually, so the
-                      // "jump" from right-top back to left-top happens
-                      // while the icon is invisible.
-                      const fadeZone = 5;
-                      const distFromStart = i;
-                      const distFromEnd = n - 1 - i;
-                      if (distFromStart < fadeZone)
-                        return Math.pow(distFromStart / fadeZone, 1.5);
-                      if (distFromEnd < fadeZone)
-                        return Math.pow(distFromEnd / fadeZone, 1.5);
-                      return 1;
-                    }),
-                  }}
-                  transition={{
-                    duration,
-                    repeat: Infinity,
-                    ease: "linear",
-                    delay,
-                  }}
-                  style={{
-                    transform: "translate(-50%, -50%) translateZ(0)",
-                    willChange: "transform, left, top, opacity",
-                    zIndex: 30,
-                  }}
-                >
-                  <GlassIconCard
-                    icon={it.icon}
-                    tone={it.tone}
-                    size={iconSize}
-                    depth={iconIdx % 2 === 0 ? 1 : 0}
-                    opacity={1}
-                    rotate={0}
-                  />
-                </motion.div>
-              );
-            });
-          })()}
+          <FlowingIcons
+            points={CURVE_POINTS}
+            boxSize={iconSize}
+            glyphSize={18}
+            duration={7}
+            fadeZone={5}
+          />
         </div>
       </div>
 
@@ -595,6 +654,58 @@ export default function Home1() {
             <SecondaryGlassCta>
               <Link to="/contact">View Our Works</Link>
             </SecondaryGlassCta>
+          </motion.div>
+
+          {/* ===== MOBILE ONLY (below md) — flowing icons curve under the CTAs =====
+              Ye block sirf mobile/small screens par render hota hai. Desktop wale
+              absolute curve ko chhua nahi gaya, isliye md+ ka UI bilkul same hai.
+              Yaha curve normal document flow me hai (absolute nahi), isliye ye
+              buttons ke neeche baithta hai aur kisi text ke upar overlap nahi karta.
+              -mx-6 se ye page ke horizontal padding ko cancel karke edge-to-edge
+              jaata hai, jaisa reference screenshot me dikh raha hai. */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.7 }}
+            className="md:hidden relative -mx-6 mt-2 w-[calc(100%+3rem)] h-[150px] sm:h-[180px] pointer-events-none overflow-visible"
+          >
+            <svg
+              className="absolute inset-0 w-full h-full opacity-60"
+              viewBox="0 0 400 140"
+              fill="none"
+              preserveAspectRatio="none"
+            >
+              <defs>
+                <linearGradient
+                  id="curveFadeMobile"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="0%"
+                >
+                  <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
+                  <stop offset="18%" stopColor="#ffffff" stopOpacity="1" />
+                  <stop offset="50%" stopColor="#ffffff" stopOpacity="1" />
+                  <stop offset="82%" stopColor="#ffffff" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M10 12 C 60 100, 130 128, 200 130 C 270 128, 340 100, 390 12"
+                stroke="url(#curveFadeMobile)"
+                strokeOpacity="0.4"
+                strokeWidth="1"
+                vectorEffect="non-scaling-stroke"
+              />
+            </svg>
+
+            <FlowingIcons
+              points={MOBILE_CURVE_POINTS}
+              boxSize={iconSize}
+              glyphSize={15}
+              duration={8}
+              fadeZone={4}
+            />
           </motion.div>
         </div>
       </div>
