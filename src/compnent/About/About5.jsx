@@ -25,8 +25,8 @@ function ApplyButton() {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.96 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
-      className="rounded-lg bg-[#D6ff01] text-black px-5 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold 
-        hover:bg-black hover:text-[#D6ff01] transition-all  cursor-pointer hover:shadow-lg  duration-300"
+     className="shrink-0 whitespace-nowrap rounded-lg bg-[#D6ff01] text-black px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold
+  hover:bg-black hover:text-[#D6ff01] transition-all cursor-pointer hover:shadow-lg duration-300"
     >
       Apply Now
     </motion.button>

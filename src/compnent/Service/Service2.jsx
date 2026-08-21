@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 
@@ -51,6 +51,22 @@ const SERVICES = [
   },
 ];
 
+// Sirf screen width check karta hai. Mobile par stacking/scale band rakhne ke
+// liye — koi size, spacing ya content isse nahi badalta.
+function useIsDesktop(minWidth = 640) {
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia(`(min-width: ${minWidth}px)`);
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, [minWidth]);
+
+  return isDesktop;
+}
+
 function PrimaryCta() {
   return (
     <motion.button
@@ -78,8 +94,12 @@ function PrimaryCta() {
 function ServiceCardContent({ service }) {
   const imageFirst = service.imagePosition === "left";
 
+  // order-1 / order-2 sirf mobile par lagta hai, isliye har card par pehle
+  // content aata hai aur uske baad image — chahe imagePosition kuch bhi ho.
+  // sm:order-none se desktop par DOM order wapas chalu ho jaata hai, matlab
+  // left/right ka purana layout bilkul waisa hi rehta hai.
   const textBlock = (
-    <div className="flex flex-col justify-center h-full p-8 sm:p-10 md:p-12">
+    <div className="order-1 sm:order-none flex flex-col justify-center h-full p-8 sm:p-10 md:p-12">
       <div
         className={`flex items-center justify-center w-14 h-14 rounded-2xl mb-6 ${service.iconBg} shadow-[0_8px_20px_rgba(0,0,0,0.15)]`}
       >
@@ -95,16 +115,18 @@ function ServiceCardContent({ service }) {
     </div>
   );
 
-  const imageBlock = (
-    <div className="relative w-full h-56 sm:h-full">
-      <img
-        src={service.image}
-        alt={service.title}
-        className="absolute inset-0 w-full h-full object-cover"
-      />
-    </div>
-  );
-
+  // Mobile par image normal flow me hai (h-auto + object-contain), isliye
+  // poori image dikhti hai — kahin se cut nahi hoti. sm+ par wapas absolute
+  // object-cover, bilkul purana desktop behaviour.
+ const imageBlock = (
+  <div className="order-2 sm:order-none relative w-full pb-8 sm:pb-0 sm:h-full">
+    <img
+      src={service.image}
+      alt={service.title}
+      className="mx-auto block h-auto w-auto max-w-full max-h-[300px] rounded-2xl object-contain sm:max-h-none sm:absolute sm:inset-0 sm:w-full sm:h-full sm:object-cover"
+    />
+  </div>
+);
   return (
     // Fixed height so every card (regardless of text length) is identical size —
     // this is what stops the next stacked card from "peeking" through.
@@ -127,6 +149,7 @@ function ServiceCardContent({ service }) {
 function StackingCard({ service, index, total }) {
   const ref = useRef(null);
   const isLast = index === total - 1;
+  const isDesktop = useIsDesktop();
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -136,16 +159,21 @@ function StackingCard({ service, index, total }) {
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.88]);
 
   return (
-    // Each wrapper is exactly 100vh tall — one "page" per card
+    // sm+ : har wrapper exactly 100vh — ek "page" per card, sticky stacking
+    // (bilkul jaisa laptop par pehle tha).
+    // Mobile: sticky aur h-screen dono off — cards seedhe ek ke neeche ek
+    // scroll hote hain, koi overlap nahi.
     <div
       ref={ref}
-      className="h-screen sticky top-0"
+      className="pb-5 sm:pb-0 sm:h-screen sm:sticky sm:top-0"
       style={{ zIndex: index + 1 }}
     >
-      <div className="h-full flex items-center justify-center px-4 sm:px-6">
+      <div className="sm:h-full flex items-center justify-center px-4 sm:px-6">
         <motion.div
           style={{
-            ...(isLast ? {} : { scale }),
+            // Scale sirf desktop par — mobile par card sticky nahi hai, wahan
+            // scale lagti to scroll karte hi card sikudta hua dikhta.
+            ...(isDesktop && !isLast ? { scale } : {}),
             // Fixes a Chrome bug where border-radius + overflow-hidden + a
             // transform (scale) glitch/clip incorrectly at the corners.
             WebkitMaskImage: "-webkit-radial-gradient(white, black)",
@@ -161,7 +189,7 @@ function StackingCard({ service, index, total }) {
 
 function Service2() {
   return (
-    <section className="w-full">
+    <section className="w-full py-6 sm:py-0">
       {SERVICES.map((service, i) => (
         <StackingCard
           key={service.title}

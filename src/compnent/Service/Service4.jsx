@@ -77,9 +77,7 @@ export default function Service4() {
   return (
     <section className="relative bg-white py-20 md:py-28 px-4 sm:px-6 md:px-10 overflow-hidden">
       {/* faint ghost text backdrop */}
-      <span className="pointer-events-none select-none absolute top-6 left-1/2 -translate-x-1/2 text-[13vw] md:text-[9vw] font-extrabold text-black/[0.04] tracking-tight whitespace-nowrap">
-        SERVICESss
-      </span>
+
 
       <div className="relative max-w-5xl mx-auto">
         {/* eyebrow */}
