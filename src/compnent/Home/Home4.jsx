@@ -7,35 +7,38 @@ import { TbBrandAdobePhotoshop } from "react-icons/tb";
 // Each card now carries an `accent` rgba used for the glow shadow under
 // the glass sheen, tone-matched to the icon's own gradient.
 const PLATFORM_CARDS = [
- 
   {
     title: ["Instagram", "Reels"],
     iconBg: "bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400",
     accent: "rgba(236,72,153,0.45)",
     icon: <AiOutlineInstagram size={52} className="text-white" />,
   },
-   {
+  {
     title: ["Youtube", "Shots"],
     iconBg: "bg-gradient-to-br from-red-500 to-red-700",
     accent: "rgba(220,38,38,0.45)",
     icon: <AiOutlineYoutube size={52} className="text-white" />,
   },
- {
-  title: ["Graphic", "Design"],
-  iconBg: "bg-gradient-to-br from-[#001E36] via-[#002B4F] to-[#31A8FF]",
-  accent: "rgba(49,168,255,0.35)",
-  icon: <TbBrandAdobePhotoshop size={52} className="text-[#31A8FF]" />,
-},
+  {
+    title: ["Graphic", "Design"],
+    iconBg: "bg-gradient-to-br from-[#001E36] via-[#002B4F] to-[#31A8FF]",
+    accent: "rgba(49,168,255,0.35)",
+    icon: <TbBrandAdobePhotoshop size={52} className="text-[#31A8FF]" />,
+  },
 ];
 
-// Last 2 cards: small icon badge top-left + 2-line title bottom.
+// Last 2 cards: mobile par badge bada + centered (platform cards jaisa),
+// sm+ par purana chhota badge top-left. Isliye SVGs ab fixed width/height
+// ke bajaye responsive Tailwind classes use karte hain.
+const SERVICE_ICON_CLASS = "w-[52px] h-[52px] sm:w-[26px] sm:h-[26px]";
+
 const SERVICE_CARDS = [
   {
-    title: ["Video Edits", "& Content Creation"],
+    title: ["Video Edits"],
     iconBg: "bg-gradient-to-br from-violet-500 to-indigo-600",
     accent: "rgba(109,40,217,0.4)",
     icon: (
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="none">
+      <svg viewBox="0 0 24 24" className={SERVICE_ICON_CLASS} fill="none">
         <rect
           x="2"
           y="5"
@@ -61,11 +64,11 @@ const SERVICE_CARDS = [
     ),
   },
   {
-    title: ["Motion Graphics", "& Animation Design"],
+    title: ["Motion Graphics"],
     iconBg: "bg-gradient-to-br from-emerald-400 to-teal-600",
     accent: "rgba(16,185,129,0.4)",
     icon: (
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="none">
+      <svg viewBox="0 0 24 24" className={SERVICE_ICON_CLASS} fill="none">
         <circle cx="12" cy="12" r="3" fill="white" />
         <path
           d="M12 3v3M12 18v3M3 12h3M18 12h3"
@@ -134,11 +137,13 @@ function PlatformCard({ card, index }) {
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
       whileHover={{ y: -4 }}
-      className="flex flex-col justify-between bg-white rounded-3xl p-8 sm:p-10 min-h-[340px] sm:min-h-[380px]
+      className="flex flex-col justify-center sm:justify-between bg-white rounded-3xl p-8 sm:p-10 min-h-[240px] sm:min-h-[380px]
         shadow-[0_2px_16px_rgba(0,0,0,0.03)] hover:shadow-[0_10px_32px_rgba(0,0,0,0.08)]
         transition-shadow duration-300"
     >
-      <div className="flex-1 flex items-center justify-center">
+      {/* Mobile: icon aur title paas-paas, dono card ke beech me centered.
+          sm+: icon flex-1 leta hai aur title neeche chipak jaata hai — purana behaviour. */}
+      <div className="flex items-center justify-center mb-4 sm:mb-0 sm:flex-1">
         <motion.div
           initial={{ opacity: 0, scale: 0.7 }}
           whileInView={{ opacity: 1, scale: 1 }}
@@ -159,9 +164,10 @@ function PlatformCard({ card, index }) {
           </GlassBadge>
         </motion.div>
       </div>
-      <h3 className="text-2xl sm:text-[1.7rem] font-medium text-[#15140F] leading-tight">
-        {card.title[0]}
-        <br />
+      <h3 className="text-2xl sm:text-[1.7rem] font-medium text-[#15140F] leading-tight text-center sm:text-left">
+        {card.title[0]}{" "}
+        {/* Mobile par title ek hi line me — line break sirf sm+ par. */}
+        <br className="hidden sm:inline" />
         {card.title[1]}
       </h3>
     </motion.div>
@@ -176,7 +182,7 @@ function ServiceCard({ card, index }) {
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5, delay: 0.3 + index * 0.1, ease: "easeOut" }}
       whileHover={{ y: -4 }}
-      className="relative flex flex-col justify-between bg-white rounded-3xl p-8 sm:p-10 min-h-[220px] sm:min-h-[260px] overflow-hidden
+      className="relative flex flex-col justify-center sm:justify-between bg-white rounded-3xl p-8 sm:p-10 min-h-[240px] sm:min-h-[260px] overflow-hidden
         shadow-[0_2px_16px_rgba(0,0,0,0.03)] hover:shadow-[0_10px_32px_rgba(0,0,0,0.08)]
         transition-shadow duration-300"
     >
@@ -185,29 +191,34 @@ function ServiceCard({ card, index }) {
         className={`absolute -top-8 -right-8 w-36 h-36 rounded-full opacity-[0.07] ${card.iconBg}`}
       />
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0.7 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        transition={{
-          duration: 0.4,
-          delay: 0.3 + index * 0.1 + 0.1,
-          ease: "easeOut",
-        }}
-      >
-        <GlassBadge
-          iconBg={card.iconBg}
-          accent={card.accent}
-          sizeClass="w-14 h-14"
-          radiusClass="rounded-2xl"
+      {/* Mobile: badge card ke beech me centered aur title ke bilkul paas.
+          sm+: wapas top-left, purani jagah par. */}
+      <div className="flex items-center justify-center mb-4 sm:mb-0 sm:flex-none sm:block">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.7 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{
+            duration: 0.4,
+            delay: 0.3 + index * 0.1 + 0.1,
+            ease: "easeOut",
+          }}
         >
-          {card.icon}
-        </GlassBadge>
-      </motion.div>
+          <GlassBadge
+            iconBg={card.iconBg}
+            accent={card.accent}
+            sizeClass="w-24 h-24 sm:w-14 sm:h-14"
+            radiusClass="rounded-3xl sm:rounded-2xl"
+          >
+            {card.icon}
+          </GlassBadge>
+        </motion.div>
+      </div>
 
-      <h3 className="text-xl sm:text-2xl font-medium text-[#15140F] leading-tight mt-8">
-        {card.title[0]}
-        <br />
+      <h3 className="text-2xl font-medium text-[#15140F] leading-tight mt-0 sm:mt-8 text-center sm:text-left">
+        {card.title[0]}{" "}
+        {/* Mobile par title ek hi line me — line break sirf sm+ par. */}
+        <br className="hidden sm:inline" />
         <span className="text-black/40">{card.title[1]}</span>
       </h3>
     </motion.div>

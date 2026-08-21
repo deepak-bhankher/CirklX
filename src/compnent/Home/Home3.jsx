@@ -85,12 +85,17 @@ function Home3() {
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
           className="text-center text-2xl sm:text-3xl md:text-[2.1rem] font-medium text-[#15140F] leading-snug max-w-3xl mx-auto"
         >
-          We're a <span className="text-red-400">social media marketing </span> agency helping brands and creators turn
-          raw content into <span className="text-red-400">viral Reels</span>, engaging Shorts, and scroll-stopping
-          posts — fast, <span className="text-red-400">trend-driven</span>, and built to grow your following.
+          We're a <span className="text-red-400">social media marketing </span>{" "}
+          agency helping brands and creators turn raw content into{" "}
+          <span className="text-red-400">viral Reels</span>, engaging Shorts,
+          and scroll-stopping posts — fast,{" "}
+          <span className="text-red-400">trend-driven</span>, and built to grow
+          your following.
         </motion.h2>
 
-        {/* ---- Stats ---- */}
+        {/* ---- Stats ----
+            Mobile par sab kuch center (heading ke saath align rahe),
+            sm+ par wapas left-aligned jaisa pehle tha. */}
         <div className="mt-14 sm:mt-16 grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-8">
           {STATS.map((stat, i) => (
             <motion.div
@@ -103,7 +108,7 @@ function Home3() {
                 delay: 0.3 + i * 0.15,
                 ease: "easeOut",
               }}
-              className="text-left"
+              className="text-center sm:text-left"
             >
               <p className="text-4xl sm:text-5xl font-extrabold text-[#15140F] leading-none mb-4 tracking-tight">
                 <CountUp
@@ -116,7 +121,7 @@ function Home3() {
               <h3 className="text-sm font-bold text-[#15140F] mb-2">
                 {stat.title}
               </h3>
-              <p className="text-xs text-black/50 leading-relaxed max-w-[240px]">
+              <p className="text-xs text-black/50 leading-relaxed max-w-[240px] mx-auto sm:mx-0">
                 {stat.desc}
               </p>
             </motion.div>

@@ -133,7 +133,7 @@ function Home6() {
             className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#15140F] leading-tight"
           >
             Everything You{" "}
-            <span
+            <br/><span
               className="italic font-light text-[#FF5722]"
               style={{ fontFamily: "'Instrument Serif', serif" }}
             >

@@ -218,20 +218,29 @@ function ArcTrack() {
   );
 }
 
-function PrimaryCta({ children = "Book A Free Meeting" }) {
+// `compact` sirf mobile par button ko chhota karta hai, taaki wo social
+// icons ke saath ek hi row me fit ho jaaye. sm+ par size bilkul same rehta hai.
+function PrimaryCta({ children = "Book A Free Meeting", compact = false }) {
+  const sizing = compact
+    ? "px-4 py-2.5 text-xs sm:px-6 sm:py-3 sm:text-sm"
+    : "px-6 py-3 text-sm";
+  const arrowBox = compact ? "w-5 h-5 sm:w-6 sm:h-6" : "w-6 h-6";
+
   return (
     <motion.button
       whileHover={{ scale: 1.04, y: -2 }}
       whileTap={{ scale: 0.97 }}
       transition={{ duration: 0.22, ease: "easeOut" }}
-      className="inline-flex items-center gap-2.5 rounded-lg hover:text-[#D6ff01] hover:border hover:border-[#D6ff01] hover:bg-black bg-[#D6FF01] px-6 py-3 text-sm font-bold text-[#15140F] cursor-pointer
+      className={`inline-flex items-center gap-2 sm:gap-2.5 rounded-lg hover:text-[#D6ff01] hover:border hover:border-[#D6ff01] hover:bg-black bg-[#D6FF01] ${sizing} font-bold text-[#15140F] cursor-pointer whitespace-nowrap
         shadow-[0_8px_28px_rgba(214,255,1,0.25)]
         hover:shadow-[0_12px_36px_rgba(214,255,1,0.4)]
-        transition-shadow duration-300"
+        transition-shadow duration-300`}
     >
       <Link to="/contact">{children}</Link>
 
-      <span className="flex items-center justify-center w-6 h-6 rounded-full bg-[#15140F]">
+      <span
+        className={`flex items-center justify-center ${arrowBox} rounded-full bg-[#15140F]`}
+      >
         <svg viewBox="0 0 24 24" width="13" height="13" fill="none">
           <path
             d="M7 17 17 7M9 7h8v8"
@@ -243,6 +252,16 @@ function PrimaryCta({ children = "Book A Free Meeting" }) {
         </svg>
       </span>
     </motion.button>
+  );
+}
+
+// Small reusable label above each footer column, so Navigation and
+// Get In Touch line up perfectly when they sit side by side on mobile.
+function ColumnLabel({ children }) {
+  return (
+    <p className="text-[10px] sm:text-[11px] font-semibold tracking-[0.12em] uppercase text-white/30 mb-1">
+      {children}
+    </p>
   );
 }
 
@@ -299,9 +318,12 @@ function Footer() {
 
       {/* ---- Footer Links + Contact + Social ---- */}
       <div className="relative z-10 border-t border-white/[0.07] mt-2">
-        <div className="max-w-5xl mx-auto px-6 py-14 grid grid-cols-1 sm:grid-cols-3 gap-12">
+        {/* MOBILE: 2-column grid. Brand block spans both columns on top, then
+            Navigation aur Get In Touch ek hi row me side-by-side aate hain.
+            sm+ par wahi purana 3-column layout — desktop kuch nahi badla. */}
+        <div className="max-w-5xl mx-auto px-6 py-12 sm:py-14 grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-10 sm:gap-12">
           {/* Brand col */}
-          <div className="flex flex-col gap-4">
+          <div className="col-span-2 sm:col-span-1 flex flex-col gap-4">
             <div className="flex items-center gap-2">
               <img
                 src="/white.png"
@@ -312,11 +334,15 @@ function Footer() {
                 CirklX
               </span>
             </div>
-            <p className="text-white/35 text-xs leading-relaxed max-w-[200px]">
+            <p className="text-white/35 text-xs leading-relaxed max-w-[220px]">
               Premium video editing for creators who want to go viral.
             </p>
-            {/* Social icons */}
-            <div className="flex items-center gap-2 mt-1">
+            {/* Mobile: social icons aur "Let's Talk" ek hi row me, aamne-saamne.
+                sm+: wrapper block ban jaata hai to icons upar aur button neeche —
+                bilkul purana desktop layout. */}
+            <div className="flex flex-wrap items-center justify-between gap-3 mt-1 sm:block">
+              {/* Social icons */}
+              <div className="flex items-center gap-1.5 sm:gap-2">
               {[
                 {
                   href: "https://instagram.com",
@@ -411,7 +437,7 @@ function Footer() {
                   aria-label={label}
                   whileHover={{ scale: 1.15, y: -2 }}
                   whileTap={{ scale: 0.92 }}
-                  className="w-8 h-8 flex items-center justify-center rounded-xl"
+                  className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-xl shrink-0"
                   style={{
                     background: "rgba(255,255,255,0.06)",
                     border: "1px solid rgba(255,255,255,0.1)",
@@ -420,17 +446,17 @@ function Footer() {
                   {node}
                 </motion.a>
               ))}
+              </div>
+
+              <motion.div className="sm:mt-6">
+                <PrimaryCta compact>Let's Talk</PrimaryCta>
+              </motion.div>
             </div>
-            <motion.div className="mt-2">
-              <PrimaryCta>Let's Talk</PrimaryCta>
-            </motion.div>
           </div>
 
           {/* Nav links col */}
-          <div className="flex flex-col gap-3">
-            <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-white/30 mb-1">
-              Navigation
-            </p>
+          <div className="flex flex-col gap-2.5 sm:gap-3">
+            <ColumnLabel>Navigation</ColumnLabel>
             {[
               { name: "Home", path: "/" },
               { name: "About", path: "/about" },
@@ -441,7 +467,7 @@ function Footer() {
               <Link
                 key={link.name}
                 to={link.path}
-                className="text-sm text-white/45 hover:text-[#D6FF01] transition-colors duration-200 w-fit"
+                className="text-[13px] sm:text-sm text-white/45 hover:text-[#D6FF01] transition-colors duration-200 w-fit"
               >
                 {link.name}
               </Link>
@@ -449,22 +475,20 @@ function Footer() {
           </div>
 
           {/* Contact col */}
-          <div className="flex flex-col gap-3">
-            <p className="text-[11px] font-semibold tracking-[0.12em] uppercase text-white/30 mb-1">
-              Get In Touch
-            </p>
+          <div className="flex flex-col gap-3 min-w-0">
+            <ColumnLabel>Get In Touch</ColumnLabel>
             <a
-              href="mailto:hello@cirklx.com"
-              className="flex items-center gap-2.5 text-sm text-white/45 hover:text-[#D6FF01] transition-colors duration-200"
+              href="mailto:cirklX.agency@gmail.com"
+              className="flex items-start gap-2 sm:gap-2.5 text-[11px] sm:text-sm text-white/45 hover:text-[#D6FF01] transition-colors duration-200 min-w-0"
             >
               <span
-                className="w-7 h-7 flex items-center justify-center rounded-lg flex-shrink-0"
+                className="w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center rounded-lg flex-shrink-0"
                 style={{
                   background: "rgba(255,255,255,0.06)",
                   border: "1px solid rgba(255,255,255,0.1)",
                 }}
               >
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none">
                   <rect
                     x="2"
                     y="4"
@@ -482,20 +506,22 @@ function Footer() {
                   />
                 </svg>
               </span>
-              cirklX.agency@gmail.com
+              <span className="break-all leading-relaxed pt-0.5 sm:pt-1">
+                cirklX.agency@gmail.com
+              </span>
             </a>
             <a
-              href="tel:+911234567890"
-              className="flex items-center gap-2.5 text-sm text-white/45 hover:text-[#D6FF01] transition-colors duration-200"
+              href="tel:+918053200325"
+              className="flex items-start gap-2 sm:gap-2.5 text-[11px] sm:text-sm text-white/45 hover:text-[#D6FF01] transition-colors duration-200 min-w-0"
             >
               <span
-                className="w-7 h-7 flex items-center justify-center rounded-lg flex-shrink-0"
+                className="w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center rounded-lg flex-shrink-0"
                 style={{
                   background: "rgba(255,255,255,0.06)",
                   border: "1px solid rgba(255,255,255,0.1)",
                 }}
               >
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none">
                   <path
                     d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8Z"
                     stroke="#D6FF01"
@@ -505,18 +531,20 @@ function Footer() {
                   />
                 </svg>
               </span>
-              +91 80532 00325
+              <span className="leading-relaxed pt-0.5 sm:pt-1 whitespace-nowrap">
+                +91 80532 00325
+              </span>
             </a>
             {/* Address */}
-            <div className="flex items-start gap-2.5 text-sm text-white/45">
+            <div className="flex items-start gap-2 sm:gap-2.5 text-[11px] sm:text-sm text-white/45 min-w-0">
               <span
-                className="w-7 h-7 flex items-center justify-center rounded-lg flex-shrink-0 mt-0.5"
+                className="w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center rounded-lg flex-shrink-0"
                 style={{
                   background: "rgba(255,255,255,0.06)",
                   border: "1px solid rgba(255,255,255,0.1)",
                 }}
               >
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none">
                   <path
                     d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Z"
                     stroke="#D6FF01"
@@ -531,7 +559,7 @@ function Footer() {
                   />
                 </svg>
               </span>
-              <span className="leading-relaxed">
+              <span className="leading-relaxed pt-0.5 sm:pt-1">
                 Hisar, Haryana,
                 <br />
                 India — 125001
@@ -541,32 +569,35 @@ function Footer() {
         </div>
       </div>
 
-      {/* ---- Bottom bar ---- */}
-      <div className="border-t border-white/[0.06] py-5 px-6">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-white/25 tracking-wide">
+      {/* ---- Bottom bar ----
+          Mobile par links pehle, copyright neeche — dono centered, aur links
+          wrap hokar bhi saaf dikhein isliye flex-wrap + gap. Dividers sirf
+          desktop par, kyunki mobile par wrap hone se wo bekaar lagte the. */}
+      <div className="border-t border-white/[0.06] py-6 px-6">
+        <div className="max-w-5xl mx-auto flex flex-col-reverse sm:flex-row items-center justify-between gap-4">
+          <p className="text-[11px] sm:text-xs text-white/25 tracking-wide text-center sm:text-left">
             © {new Date().getFullYear()} CirklX. All rights reserved.
           </p>
-          <div className="flex items-center gap-4">
+          <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 sm:gap-x-4">
             <Link
               to="/terms"
-              className="text-xs text-white/30 hover:text-[#D6FF01] transition-colors duration-200 tracking-wide"
+              className="text-[11px] sm:text-xs text-white/35 hover:text-[#D6FF01] transition-colors duration-200 tracking-wide"
             >
               Terms &amp; Conditions
             </Link>
-            <span className="w-px h-3 bg-white/15" />
+            <span className="hidden sm:inline-block w-px h-3 bg-white/15" />
             <Link
               to="/privacy"
-              className="text-xs text-white/30 hover:text-[#D6FF01] transition-colors duration-200 tracking-wide"
+              className="text-[11px] sm:text-xs text-white/35 hover:text-[#D6FF01] transition-colors duration-200 tracking-wide"
             >
               Privacy Policy
             </Link>
-            <span className="w-px h-3 bg-white/15" />
-            <div className="flex items-center gap-1">
+            <span className="hidden sm:inline-block w-px h-3 bg-white/15" />
+            <span className="flex items-center gap-1.5 text-[11px] sm:text-xs text-white/35 tracking-wide">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#D6FF01] opacity-70" />
-              <span className="text-xs text-white/25 tracking-wide">Blog</span>
-            </div>
-          </div>
+              Blog
+            </span>
+          </nav>
         </div>
       </div>
     </section>
