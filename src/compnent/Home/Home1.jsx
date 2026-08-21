@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaInstagram, FaPinterest, FaStar, FaYoutube, FaTiktok } from "react-icons/fa";
+import {
+  FaInstagram,
+  FaPinterest,
+  FaStar,
+  FaYoutube,
+  FaTiktok,
+} from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { MdArrowOutward } from "react-icons/md";
 import { BsInstagram } from "react-icons/bs";
@@ -132,16 +138,40 @@ function GlassIconCard({
 }) {
   const toneStyles =
     tone === "instagram"
-      ? { accent: "#FF5A1F", accent2: "rgba(255,90,31,0.5)", tint: "rgba(255,90,31,0.16)" }
+      ? {
+          accent: "#FF5A1F",
+          accent2: "rgba(255,90,31,0.5)",
+          tint: "rgba(255,90,31,0.16)",
+        }
       : tone === "facebook"
-        ? { accent: "#1877F2", accent2: "rgba(24,119,242,0.5)", tint: "rgba(24,119,242,0.16)" }
+        ? {
+            accent: "#1877F2",
+            accent2: "rgba(24,119,242,0.5)",
+            tint: "rgba(24,119,242,0.16)",
+          }
         : tone === "pinterest"
-          ? { accent: "#D0002B", accent2: "rgba(208,0,43,0.5)", tint: "rgba(208,0,43,0.16)" }
+          ? {
+              accent: "#D0002B",
+              accent2: "rgba(208,0,43,0.5)",
+              tint: "rgba(208,0,43,0.16)",
+            }
           : tone === "youtube"
-            ? { accent: "#FF0000", accent2: "rgba(255,0,0,0.5)", tint: "rgba(255,0,0,0.16)" }
-          : tone === "spark"
-            ? { accent: "#D6ff01", accent2: "rgba(214,255,1,0.5)", tint: "rgba(214,255,1,0.16)" }
-            : { accent: "#D6ff01", accent2: "rgba(214,255,1,0.4)", tint: "rgba(214,255,1,0.12)" };
+            ? {
+                accent: "#FF0000",
+                accent2: "rgba(255,0,0,0.5)",
+                tint: "rgba(255,0,0,0.16)",
+              }
+            : tone === "spark"
+              ? {
+                  accent: "#D6ff01",
+                  accent2: "rgba(214,255,1,0.5)",
+                  tint: "rgba(214,255,1,0.16)",
+                }
+              : {
+                  accent: "#D6ff01",
+                  accent2: "rgba(214,255,1,0.4)",
+                  tint: "rgba(214,255,1,0.12)",
+                };
 
   return (
     <motion.div
@@ -239,7 +269,9 @@ function FlowingIcons({
     },
     {
       tone: "spark",
-      icon: <RiSparkling2Fill size={glyphSize - 1} className="text-emerald-500" />,
+      icon: (
+        <RiSparkling2Fill size={glyphSize - 1} className="text-emerald-500" />
+      ),
     },
     {
       tone: "instagram",
@@ -279,7 +311,8 @@ function FlowingIcons({
   const opacityFrames = pts.map((_, i) => {
     const distFromStart = i;
     const distFromEnd = last - i;
-    if (distFromStart < fadeZone) return Math.pow(distFromStart / fadeZone, 1.5);
+    if (distFromStart < fadeZone)
+      return Math.pow(distFromStart / fadeZone, 1.5);
     if (distFromEnd < fadeZone) return Math.pow(distFromEnd / fadeZone, 1.5);
     return 1;
   });
@@ -440,7 +473,7 @@ function SecondaryGlassCta({ children, withArrow = false }) {
       <span className="flex items-center gap-2">
         {children}
 
-    <MdSlowMotionVideo size={20} />
+        <MdSlowMotionVideo size={20} />
       </span>
     </GlassButtonBase>
   );
@@ -501,7 +534,6 @@ export default function Home1() {
             preserveAspectRatio="none"
           >
             <defs>
-             
               <linearGradient id="curveFade" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
                 <stop offset="18%" stopColor="#ffffff" stopOpacity="1" />
@@ -538,11 +570,12 @@ export default function Home1() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-black/10
-              shadow-[0_2px_10px_rgba(0,0,0,0.04)] text-sm font-medium text-black/80"
+            className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-white border border-black/10
+    shadow-[0_2px_10px_rgba(0,0,0,0.04)] text-[10px] sm:text-xs md:text-[13px] leading-none
+    tracking-tight sm:tracking-normal font-medium text-black/80 whitespace-nowrap"
           >
-            <FaStar className="text-[#2ecc40]" size={13} />
-            4.9/5 - Hisar`s #1 SMM Agency
+            <FaStar className="text-[#2ecc40] shrink-0 text-[9px] sm:text-[11px] md:text-xs" />
+            4.9/5 - Hisar's #1 SMM Agency
           </motion.div>
 
           <motion.h1
@@ -550,9 +583,9 @@ export default function Home1() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
             className="mt-6 sm:mt-7 font-semibold text-white text-center
-              text-[28px] leading-[1.25] xs:text-[36px] xs:leading-[1.15] sm:text-[52px] sm:leading-[1.1] md:text-[62px] lg:text-[68px]"
+              text-[35px] leading-[1.25] xs:text-[36px] xs:leading-[1.15] sm:text-[56px] sm:leading-[1.1] md:text-[66px] lg:text-[80px]"
           >
-            Agency that makes your{" "} <br/>
+            Agency that makes your <br />
             <span className="inline">
               <span
                 className="italic font-light text-[#D6ff01]"
@@ -578,7 +611,7 @@ export default function Home1() {
                   height: headlineBadgeBoxSize,
                   background: "rgba(110,110,110,0.45)",
                   backdropFilter: "blur(8px)",
-                }} 
+                }}
               >
                 {/* Warm glow bleeding through from behind the glass */}
                 <span
@@ -639,7 +672,8 @@ export default function Home1() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="mt-6 sm:mt-8 px-3 py-1 text-[13px] sm:text-[15px] md:text-base text-white/80 font-medium leading-relaxed"
           >
-          Scroll-stopping reels & short-form video editing for Influencers,Creators & Brands across Haryana.
+            Scroll-stopping reels & short-form video editing for
+            Influencers,Creators & Brands across Haryana.
           </motion.p>
 
           <motion.div
@@ -667,7 +701,7 @@ export default function Home1() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.7 }}
-            className="md:hidden relative -mx-6 mt-2 w-[calc(100%+3rem)] h-[150px] sm:h-[180px] pointer-events-none overflow-visible"
+                        className="md:hidden relative -mx-6 -mt-6 sm:-mt-3 w-[calc(100%+3rem)] h-[150px] sm:h-[180px] pointer-events-none overflow-visible"
           >
             <svg
               className="absolute inset-0 w-full h-full opacity-60"
