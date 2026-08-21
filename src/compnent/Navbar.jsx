@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 
-import { RxCross1 } from "react-icons/rx";
-import { CiMenuFries } from "react-icons/ci";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { MdArrowOutward } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
+import MobileBottomNav from "./Mobilebottomnav";
 
 const NAV_LINKS = [
   { name: "Home", path: "/" },
@@ -20,10 +19,12 @@ function useDarkSection() {
 
   useEffect(() => {
     let darkSections = []; // cached — sirf resize/route change pe re-query hoga
-    let ticking = false;   // rAF throttle flag
+    let ticking = false; // rAF throttle flag
 
     function queryDarkSections() {
-      darkSections = Array.from(document.querySelectorAll('[data-theme="dark"]'));
+      darkSections = Array.from(
+        document.querySelectorAll('[data-theme="dark"]'),
+      );
     }
 
     function checkSection() {
@@ -108,7 +109,9 @@ function NavItem({ label, path, isDark }) {
       className="relative px-2 lg:px-4 py-2 cursor-pointer"
     >
       <motion.span
-        animate={{ color: active ? (isDark ? "#ffffff" : "#000000") : defaultColor }}
+        animate={{
+          color: active ? (isDark ? "#ffffff" : "#000000") : defaultColor,
+        }}
         transition={{ duration: 0.2 }}
         className="relative text-[13px] lg:text-sm font-medium tracking-wide whitespace-nowrap"
       >
@@ -166,13 +169,12 @@ function CtaButton() {
 }
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const isDark = useDarkSection();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -195,7 +197,8 @@ export default function Navbar() {
                 : "bg-white/5 backdrop-blur-sm border border-white/10"
           }`}
         >
-          <div className="flex items-center justify-between h-[62px]">
+          {/* Mobile par ab sirf logo — navigation neeche wale bar me hai. */}
+          <div className="flex items-center justify-between md:justify-between h-[56px] md:h-[62px]">
             {/* Logo */}
             <Link to="/">
               <motion.div
@@ -206,14 +209,14 @@ export default function Navbar() {
                 <motion.img
                   src={isDark ? "/white.png" : "/black.png"}
                   alt="CirklX"
-                  className="w-8 h-8 object-contain"
+                  className="w-7 h-7 md:w-8 md:h-8 object-contain"
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.3 }}
                 />
                 <motion.span
                   animate={{ color: isDark ? "#ffffff" : "#15140F" }}
                   transition={{ duration: 0.3 }}
-                  className="font-bold text-[17px] tracking-tight"
+                  className="font-bold text-[16px] md:text-[17px] tracking-tight"
                 >
                   CirklX
                 </motion.span>
@@ -250,98 +253,12 @@ export default function Navbar() {
             >
               <CtaButton />
             </motion.div>
-
-            {/* Hamburger */}
-            <motion.button
-              whileTap={{ scale: 0.87 }}
-              onClick={() => setOpen(!open)}
-              className="md:hidden cursor-pointer bg-[#D6ff01] border border-black/10
-                p-2 rounded-xl text-black
-                hover:bg-black hover:text-[#D6ff01] hover:border-[#D6ff01]
-                shadow-[0_0_14px_rgba(214,255,1,0.35)]
-                transition-all duration-300"
-            >
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.span
-                  key={open ? "x" : "m"}
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.18 }}
-                  className="block"
-                >
-                  {open ? <RxCross1 size={19} /> : <CiMenuFries size={21} />}
-                </motion.span>
-              </AnimatePresence>
-            </motion.button>
           </div>
         </div>
       </motion.nav>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -12, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -12, scale: 0.97 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className="fixed top-[82px] left-4 right-4 z-40 md:hidden"
-          >
-            <div
-              className="bg-black/20 backdrop-blur-2xl rounded-2xl
-              border border-white/20
-              shadow-[0_20px_60px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.15),0_0_0_1px_rgba(214,255,1,0.1)]
-              overflow-hidden"
-            >
-              <ul className="flex flex-col list-none px-3 py-3 gap-1">
-                {NAV_LINKS.map((link, i) => (
-                  <motion.li
-                    key={link.name}
-                    initial={{ opacity: 0, x: -12 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05, duration: 0.22 }}
-                    className="list-none"
-                  >
-                    <Link to={link.path} onClick={() => setOpen(false)}>
-                      <div
-                        className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl
-                        text-sm font-medium
-                        hover:bg-black/80 hover:text-[#D6ff01]
-                        transition-all duration-200 ${isDark ? "text-white" : "text-[#15140F]"}`}
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#D6ff01] shrink-0" />
-                        {link.name}
-                      </div>
-                    </Link>
-                  </motion.li>
-                ))}
-
-                <motion.li
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.25, duration: 0.22 }}
-                  className="list-none mt-1 pt-3 border-t border-white/15"
-                >
-                  <button
-                    className="w-full flex justify-center items-center gap-2
-  py-3 px-6 rounded-xl cursor-pointer
-  text-base font-semibold text-black
-  bg-[#D6ff01] border border-black/10
-  shadow-[0_0_20px_rgba(214,255,1,0.45)]
-  hover:bg-black hover:text-[#D6ff01]
-  transition-all duration-300"
-                    onClick={() => setOpen(false)}
-                  >
-                    <Link to="/contact">Book A Free Meeting</Link>
-                    <MdArrowOutward size={17} />
-                  </button>
-                </motion.li>
-              </ul>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Mobile navigation — screen ke bottom par */}
+      <MobileBottomNav />
     </>
   );
 }

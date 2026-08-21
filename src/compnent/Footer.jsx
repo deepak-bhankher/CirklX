@@ -573,7 +573,7 @@ function Footer() {
           Mobile par links pehle, copyright neeche — dono centered, aur links
           wrap hokar bhi saaf dikhein isliye flex-wrap + gap. Dividers sirf
           desktop par, kyunki mobile par wrap hone se wo bekaar lagte the. */}
-      <div className="border-t border-white/[0.06] py-6 px-6">
+     <div className="border-t border-white/[0.06] py-6 pb-28 md:pb-6 px-6">
         <div className="max-w-5xl mx-auto flex flex-col-reverse sm:flex-row items-center justify-between gap-4">
           <p className="text-[11px] sm:text-xs text-white/25 tracking-wide text-center sm:text-left">
             © {new Date().getFullYear()} CirklX. All rights reserved.
