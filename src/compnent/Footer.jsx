@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { FaInstagram, FaFacebookF, FaTiktok, FaYoutube } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 const ICONS = [
   {
@@ -255,6 +257,17 @@ function PrimaryCta({ children = "Book A Free Meeting", compact = false }) {
   );
 }
 
+// Saare social icons ab ek hi brand color (#D6FF01) me hain. react-icons ke
+// glyphs isliye use kiye kyunki wo monochrome ke liye bane hain — purane
+// hand-drawn SVGs single color me shapeless lagte (Instagram bas ek square).
+const SOCIALS = [
+  { href: "https://instagram.com", label: "Instagram", Icon: FaInstagram },
+  { href: "https://facebook.com", label: "Facebook", Icon: FaFacebookF },
+  { href: "https://twitter.com", label: "Twitter / X", Icon: FaXTwitter },
+  { href: "https://tiktok.com", label: "TikTok", Icon: FaTiktok },
+  { href: "https://youtube.com", label: "YouTube", Icon: FaYoutube },
+];
+
 // Small reusable label above each footer column, so Navigation and
 // Get In Touch line up perfectly when they sit side by side on mobile.
 function ColumnLabel({ children }) {
@@ -341,111 +354,25 @@ function Footer() {
                 sm+: wrapper block ban jaata hai to icons upar aur button neeche —
                 bilkul purana desktop layout. */}
             <div className="flex flex-wrap items-center justify-between gap-3 mt-1 sm:block">
-              {/* Social icons */}
+              {/* Social icons — sab ek hi lime color me */}
               <div className="flex items-center gap-1.5 sm:gap-2">
-              {[
-                {
-                  href: "https://instagram.com",
-                  label: "Instagram",
-                  node: (
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-                      <rect
-                        x="2.5"
-                        y="2.5"
-                        width="19"
-                        height="19"
-                        rx="6"
-                        fill="url(#igF)"
-                      />
-                      <defs>
-                        <linearGradient id="igF" x1="0" y1="0" x2="24" y2="24">
-                          <stop offset="0%" stopColor="#feda75" />
-                          <stop offset="40%" stopColor="#d62976" />
-                          <stop offset="100%" stopColor="#4f5bd5" />
-                        </linearGradient>
-                      </defs>
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="4.2"
-                        stroke="white"
-                        strokeWidth="2"
-                      />
-                      <circle cx="17.2" cy="6.8" r="1.3" fill="white" />
-                    </svg>
-                  ),
-                },
-                {
-                  href: "https://facebook.com",
-                  label: "Facebook",
-                  node: (
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-                      <path
-                        d="M14 8.5h-1.3c-.7 0-1.2.5-1.2 1.3v1.4H14l-.3 2H11.5V18h-2v-4.8H8v-2h1.5V9.5C9.5 7.7 10.7 6.5 12.4 6.5H14v2Z"
-                        fill="#1877F2"
-                      />
-                    </svg>
-                  ),
-                },
-                {
-                  href: "https://twitter.com",
-                  label: "Twitter / X",
-                  node: (
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-                      <path
-                        d="M4 4h4l3.5 5L15 4h4l-6 8 6 8h-4l-3.5-5L8 20H4l6-8L4 4Z"
-                        fill="white"
-                      />
-                    </svg>
-                  ),
-                },
-                {
-                  href: "https://tiktok.com",
-                  label: "TikTok",
-                  node: (
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-                      <path
-                        d="M16.5 3c.3 2 1.7 3.6 3.7 3.9v2.7c-1.4.1-2.7-.3-3.7-1v6.6c0 3-2.4 5.3-5.4 5.3S5.7 18.2 5.7 15.2c0-2.9 2.2-5.2 5.1-5.3v2.8c-1.3.1-2.3 1.2-2.3 2.5 0 1.4 1.1 2.5 2.5 2.5s2.6-1.1 2.6-2.5V3h2.9Z"
-                        fill="white"
-                      />
-                    </svg>
-                  ),
-                },
-                {
-                  href: "https://youtube.com",
-                  label: "YouTube",
-                  node: (
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-                      <rect
-                        x="2"
-                        y="5"
-                        width="20"
-                        height="14"
-                        rx="4"
-                        fill="#FF0000"
-                      />
-                      <path d="M10 9l5 3-5 3V9Z" fill="white" />
-                    </svg>
-                  ),
-                },
-              ].map(({ href, label, node }) => (
-                <motion.a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  whileHover={{ scale: 1.15, y: -2 }}
-                  whileTap={{ scale: 0.92 }}
-                  className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-xl shrink-0"
-                  style={{
-                    background: "rgba(255,255,255,0.06)",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                  }}
-                >
-                  {node}
-                </motion.a>
-              ))}
+                {SOCIALS.map(({ href, label, Icon }) => (
+                  <motion.a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    whileHover={{ scale: 1.15, y: -2 }}
+                    whileTap={{ scale: 0.92 }}
+                    className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-xl shrink-0
+                      text-[#D6FF01] bg-white/[0.06] border border-white/10
+                      hover:bg-[#D6FF01] hover:text-[#15140F] hover:border-[#D6FF01]
+                      transition-colors duration-300"
+                  >
+                    <Icon size={15} />
+                  </motion.a>
+                ))}
               </div>
 
               <motion.div className="sm:mt-6">
@@ -573,7 +500,7 @@ function Footer() {
           Mobile par links pehle, copyright neeche — dono centered, aur links
           wrap hokar bhi saaf dikhein isliye flex-wrap + gap. Dividers sirf
           desktop par, kyunki mobile par wrap hone se wo bekaar lagte the. */}
-     <div className="border-t border-white/[0.06] py-6 pb-28 md:pb-6 px-6">
+      <div className="border-t border-white/[0.06] py-6 pb-28 md:pb-6 px-6">
         <div className="max-w-5xl mx-auto flex flex-col-reverse sm:flex-row items-center justify-between gap-4">
           <p className="text-[11px] sm:text-xs text-white/25 tracking-wide text-center sm:text-left">
             © {new Date().getFullYear()} CirklX. All rights reserved.

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import {
   AnimatePresence,
   motion,
@@ -18,40 +18,25 @@ const ITEMS = [
 ];
 
 // ---- Bar geometry (px) ----
-const H = 62; // bar ki height
-const R = 31; // pill radius = H / 2
-const NOTCH_HALF = 38; // notch ek taraf se kitni chaudi hai
-const NOTCH_DEPTH = 28; // notch kitni gehri utarti hai
-const CIRCLE = 44; // uthe hue lime circle ka diameter
-const CIRCLE_LIFT = 19; // circle bar ke top se kitna upar uthta hai
+const H = 60; // bar ki height
+const R = 24; // bar ke corners ka radius
+const CIRCLE = 42; // uthe hue lime circle ka diameter
+const CIRCLE_LIFT = 18; // circle bar ke top se kitna upar uthta hai
+const CUT_R = 25; // notch ka radius — circle se thoda bada, taaki gap dikhe
+const PAD = 28; // items row ka side inset
 
-/**
- * Poore bar ka shape ek hi SVG path me — pill + `cx` par carve kiya hua notch.
- * Sirf numbers badalte hain, commands wahi ke wahi rehte hain, isliye ek
- * position se doosri par interpolate karna bilkul smooth rehta hai.
- */
-function buildPath(cx, w) {
-  return [
-    `M 0,${R}`,
-    `A ${R},${R} 0 0 1 ${R},0`,
-    `L ${cx - NOTCH_HALF},0`,
-    `C ${cx - 20},0 ${cx - 26},${NOTCH_DEPTH} ${cx},${NOTCH_DEPTH}`,
-    `C ${cx + 26},${NOTCH_DEPTH} ${cx + 20},0 ${cx + NOTCH_HALF},0`,
-    `L ${w - R},0`,
-    `A ${R},${R} 0 0 1 ${w},${R}`,
-    `A ${R},${R} 0 0 1 ${w - R},${H}`,
-    `L ${R},${H}`,
-    `A ${R},${R} 0 0 1 0,${R}`,
-    "Z",
-  ].join(" ");
-}
+// Lime circle aur notch dono ka vertical center — ek hi value, isliye notch
+// hamesha circle ke around perfectly baithti hai.
+const CENTER_Y = CIRCLE / 2 - CIRCLE_LIFT;
 
 export default function MobileBottomNav() {
   const { pathname } = useLocation();
   const wrapRef = useRef(null);
-  const widthRef = useRef(0);
   const initialised = useRef(false);
   const [width, setWidth] = useState(0);
+
+  // useId me colon aate hain jo SVG url(#id) me reliable nahi, isliye hata do.
+  const maskId = `nav-notch-${useId().replace(/:/g, "")}`;
 
   const activeIndex = Math.max(
     0,
@@ -59,8 +44,6 @@ export default function MobileBottomNav() {
   );
   const active = ITEMS[activeIndex];
 
-  // Bar ki asli width naapo — path px coordinates me banti hai, isliye viewBox
-  // ko stretch nahi karna padta (warna notch ka curve bigad jaata).
   useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
@@ -73,24 +56,22 @@ export default function MobileBottomNav() {
     return () => ro.disconnect();
   }, []);
 
-  widthRef.current = width;
-
-  // Sirf ek number animate hota hai — notch ka center x. Path aur circle dono
-  // usi se derive hote hain, isliye wo hamesha perfectly sync me chalte hain.
+  // Sirf ek number animate hota hai — notch ka center x. Mask circle aur lime
+  // circle dono usi se chalte hain, isliye wo kabhi out of sync nahi hote.
   const notchX = useMotionValue(0);
-  const smoothX = useSpring(notchX, {
-    stiffness: 260,
-    damping: 28,
-    mass: 0.9,
-  });
+  const smoothX = useSpring(notchX, { stiffness: 260, damping: 28, mass: 0.9 });
 
   useEffect(() => {
     if (!width) return;
-    const target = (width / ITEMS.length) * (activeIndex + 0.5);
+
+    // Item centers PAD ke andar evenly baante jaate hain — yahi values items
+    // row ke flex layout se match karti hain (usme bhi wahi PAD lagta hai).
+    const step = (width - PAD * 2) / ITEMS.length;
+    const target = PAD + step * (activeIndex + 0.5);
 
     if (!initialised.current) {
-      // Pehli baar bina animation ke set karo, warna page khulte hi notch
-      // left se slide karta hua aayega.
+      // Pehli baar bina animation ke, warna page khulte hi notch left se
+      // slide karta hua aayega.
       notchX.set(target);
       smoothX.set(target);
       initialised.current = true;
@@ -99,9 +80,6 @@ export default function MobileBottomNav() {
     }
   }, [activeIndex, width, notchX, smoothX]);
 
-  const path = useTransform(smoothX, (cx) =>
-    widthRef.current ? buildPath(cx, widthRef.current) : "",
-  );
   const circleLeft = useTransform(smoothX, (cx) => cx - CIRCLE / 2);
 
   return (
@@ -114,20 +92,43 @@ export default function MobileBottomNav() {
       style={{ bottom: "calc(0.75rem + env(safe-area-inset-bottom))" }}
     >
       <div ref={wrapRef} className="relative" style={{ height: H }}>
-        {/* Bar ka background — notch ke saath */}
-        <svg
-          className="absolute inset-0 pointer-events-none overflow-visible"
-          width={width || "100%"}
-          height={H}
-          style={{ filter: "drop-shadow(0 12px 30px rgba(0,0,0,0.45))" }}
-        >
-          <motion.path
-            d={path}
-            fill="#15140F"
-            stroke="rgba(255,255,255,0.10)"
-            strokeWidth="1"
-          />
-        </svg>
+        {/* Bar ka background. Shape = rounded rect MINUS ek circle (mask se).
+            Pehle poora outline ek SVG path se banta tha, par first/last item
+            par notch corner ke peeche chali jaati thi aur wahi ulta hissa
+            black wedge ban ke dikhta tha. Circle subtract karne me aisa ho
+            hi nahi sakta — wo bas corner ko kaat deta hai, kabhi bahar nahi
+            nikalta. */}
+        {width > 0 && (
+          <svg
+            className="absolute inset-0 pointer-events-none overflow-visible"
+            width={width}
+            height={H}
+            style={{ filter: "drop-shadow(0 12px 30px rgba(0,0,0,0.45))" }}
+          >
+            <defs>
+              <mask
+                id={maskId}
+                maskUnits="userSpaceOnUse"
+                x={0}
+                y={-CIRCLE_LIFT - 20}
+                width={width}
+                height={H + CIRCLE_LIFT + 20}
+              >
+                {/* safed = dikhega, kaala = kata hua */}
+                <rect width={width} height={H} rx={R} fill="#fff" />
+                <motion.circle cx={smoothX} cy={CENTER_Y} r={CUT_R} fill="#000" />
+              </mask>
+            </defs>
+
+            <rect
+              width={width}
+              height={H}
+              rx={R}
+              fill="#15140F"
+              mask={`url(#${maskId})`}
+            />
+          </svg>
+        )}
 
         {/* Circle ke peeche lime ki halki roshni */}
         <motion.span
@@ -164,7 +165,7 @@ export default function MobileBottomNav() {
               className="flex items-center justify-center"
             >
               <active.Icon
-                size={20}
+                size={19}
                 strokeWidth={2.2}
                 className="text-[#15140F]"
               />
@@ -172,9 +173,12 @@ export default function MobileBottomNav() {
           </AnimatePresence>
         </motion.div>
 
-        {/* Tappable items. Active icon yahan chhupa rehta hai kyunki wo upar
-            wale circle ke andar dikhta hai — spacing bani rehti hai. */}
-        <div className="absolute inset-0 flex items-center">
+        {/* Tappable items. PAD yahan bhi wahi hai jo notch position calculate
+            karte waqt use hota hai, warna circle icon ke upar nahi baithega. */}
+        <div
+          className="absolute inset-0 flex items-center"
+          style={{ paddingLeft: PAD, paddingRight: PAD }}
+        >
           {ITEMS.map((item, i) => {
             const isActive = i === activeIndex;
 
@@ -192,7 +196,7 @@ export default function MobileBottomNav() {
                   className="flex items-center justify-center"
                 >
                   <item.Icon
-                    size={20}
+                    size={19}
                     strokeWidth={1.8}
                     className="text-white/55"
                   />

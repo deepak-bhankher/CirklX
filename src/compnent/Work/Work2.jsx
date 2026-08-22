@@ -1,25 +1,85 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { motion, useAnimationControls } from "framer-motion";
+import { motion, animate, useMotionValue, useTransform } from "framer-motion";
 
 // Each reel: video src + thumbnail image + instagram handle.
 const REELS = [
-  { video: "/video1.mp4", thumb: "/thumb1.png", handle: "@logicgpt", followers: "403k" },
-  { video: "/video2.mp4", thumb: "/thumb3.png", handle: "@mr_techog", followers: "215k" },
-  { video: "/video3.mp4", thumb: "/thumb4.png", handle: "@logicgpt", followers: "403k" },
-  { video: "/video4.mp4", thumb: "/thumb2.png", handle: "@mr_techog", followers: "215k" },
-  { video: "/video5.mp4", thumb: "/thumb3.png", handle: "@uditgpt", followers: "732k" },
-  { video: "/video6.mp4", thumb: "/thumb6.png", handle: "@dr.himanshu_grover_", followers: "657k" },
-  { video: "/video7.mp4", thumb: "/thumb7.png", handle: "@fit.niya", followers: "73.1k" },
-  { video: "/video8.mp4", thumb: "/thumb5.png", handle: "@dr.himanshu_grover_", followers: "657k" },
-  { video: "/video9.mp4", thumb: "/thumb9.png", handle: "@houseofbinti", followers: "23.6k" },
-  { video: "/video10.mp4", thumb: "thumb8.png", handle: "@fit.niya", followers: "73.1k" },
+  {
+    video: "/video1.mp4",
+    thumb: "/thumb1.png",
+    handle: "@logicgpt",
+    followers: "403k",
+  },
+  {
+    video: "/video2.mp4",
+    thumb: "/thumb3.png",
+    handle: "@mr_techog",
+    followers: "215k",
+  },
+  {
+    video: "/video3.mp4",
+    thumb: "/thumb4.png",
+    handle: "@logicgpt",
+    followers: "403k",
+  },
+  {
+    video: "/video4.mp4",
+    thumb: "/thumb2.png",
+    handle: "@mr_techog",
+    followers: "215k",
+  },
+  {
+    video: "/video5.mp4",
+    thumb: "/thumb3.png",
+    handle: "@uditgpt",
+    followers: "732k",
+  },
+  {
+    video: "/video6.mp4",
+    thumb: "/thumb6.png",
+    handle: "@dr.himanshu_grover_",
+    followers: "657k",
+  },
+  {
+    video: "/video7.mp4",
+    thumb: "/thumb7.png",
+    handle: "@fit.niya",
+    followers: "73.1k",
+  },
+  {
+    video: "/video8.mp4",
+    thumb: "/thumb5.png",
+    handle: "@dr.himanshu_grover_",
+    followers: "657k",
+  },
+  {
+    video: "/video9.mp4",
+    thumb: "/thumb9.png",
+    handle: "@houseofbinti",
+    followers: "23.6k",
+  },
+  {
+    video: "/video10.mp4",
+    thumb: "thumb8.png",
+    handle: "@fit.niya",
+    followers: "73.1k",
+  },
 ];
+
+const COPIES = 3; // drag ke liye dono taraf buffer chahiye, isliye 2 ki jagah 3
+const SPEED = 100; // auto-scroll ki raftaar, px per second
 
 // Instagram glyph badge
 function InstagramIcon() {
   return (
     <span className="flex h-7 w-7 items-center justify-center rounded-md bg-gradient-to-br from-[#feda75] via-[#d62976] to-[#4f5bd5] text-white shadow-sm">
-      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2">
+      <svg
+        viewBox="0 0 24 24"
+        width="14"
+        height="14"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+      >
         <rect x="3" y="3" width="18" height="18" rx="5" />
         <circle cx="12" cy="12" r="4" />
         <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
@@ -30,13 +90,27 @@ function InstagramIcon() {
 
 function MuteIcon({ muted }) {
   return muted ? (
-    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg
+      viewBox="0 0 24 24"
+      width="14"
+      height="14"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
       <path d="M11 5 6 9H3v6h3l5 4V5z" />
       <line x1="16" y1="9" x2="22" y2="15" />
       <line x1="22" y1="9" x2="16" y2="15" />
     </svg>
   ) : (
-    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2">
+    <svg
+      viewBox="0 0 24 24"
+      width="14"
+      height="14"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
       <path d="M11 5 6 9H3v6h3l5 4V5z" />
       <path d="M15.5 8.5a5 5 0 0 1 0 7" />
       <path d="M18.5 6a9 9 0 0 1 0 12" />
@@ -44,7 +118,14 @@ function MuteIcon({ muted }) {
   );
 }
 
-function ReelCard({ reel, index, registerVideo, onPlay, onPause }) {
+function ReelCard({
+  reel,
+  index,
+  registerVideo,
+  onPlay,
+  onPause,
+  wasDragged,
+}) {
   const videoRef = useRef(null);
   const [started, setStarted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -82,6 +163,10 @@ function ReelCard({ reel, index, registerVideo, onPlay, onPause }) {
 
   const togglePlay = (e) => {
     e.stopPropagation();
+    // Drag ke turant baad browser click bhi bhejta hai — usse video
+    // play/pause nahi hona chahiye, warna har swipe pe reel toggle ho jaayegi.
+    if (wasDragged()) return;
+
     if (!started) {
       onPlay(index);
       setStarted(true);
@@ -142,7 +227,11 @@ function ReelCard({ reel, index, registerVideo, onPlay, onPause }) {
         draggable={false}
         onLoad={() => setThumbLoaded(true)}
         className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ${
-          started ? "opacity-0 scale-105" : thumbLoaded ? "opacity-100 scale-100 group-hover:scale-105" : "opacity-0"
+          started
+            ? "opacity-0 scale-105"
+            : thumbLoaded
+              ? "opacity-100 scale-100 group-hover:scale-105"
+              : "opacity-0"
         }`}
       />
       {/* Soft skeleton shimmer while thumbnail loads */}
@@ -158,7 +247,7 @@ function ReelCard({ reel, index, registerVideo, onPlay, onPause }) {
           src={reel.video}
           preload="none"
           loop
-       muted
+          muted
           playsInline
           onPause={handlePauseEvent}
           onPlay={() => setIsPlaying(true)}
@@ -203,8 +292,12 @@ function ReelCard({ reel, index, registerVideo, onPlay, onPause }) {
       <div className="absolute inset-x-0 bottom-0 p-4 flex items-center gap-2">
         <InstagramIcon />
         <div className="flex flex-col">
-          <p className="text-sm font-semibold text-white tracking-tight drop-shadow-sm leading-tight">{reel.handle}</p>
-          <p className="text-[11px] text-white/55 font-medium leading-tight">{reel.followers} followers</p>
+          <p className="text-sm font-semibold text-white tracking-tight drop-shadow-sm leading-tight">
+            {reel.handle}
+          </p>
+          <p className="text-[11px] text-white/55 font-medium leading-tight">
+            {reel.followers} followers
+          </p>
         </div>
       </div>
 
@@ -219,87 +312,103 @@ function ReelCard({ reel, index, registerVideo, onPlay, onPause }) {
   );
 }
 
-const CARD_WIDTH = 280;
-const GAP = 24;
-
 function Work2() {
   const trackRef = useRef(null);
-  const controls = useAnimationControls();
-  const xRef = useRef(0);
   const videosRef = useRef({}); // index -> HTMLVideoElement
   const activeIndexRef = useRef(null);
   const anyPlayingRef = useRef(false);
+  const animRef = useRef(null);
+  const draggingRef = useRef(false);
+  const dragMovedRef = useRef(false);
 
-  const track = [...REELS, ...REELS];
-  const fullPassWidth = REELS.length * (CARD_WIDTH + GAP);
+  const [passWidth, setPassWidth] = useState(0);
 
-  const playFrom = (fromX) => {
-    const remaining = Math.abs(fromX) / fullPassWidth;
-    const remainingDuration = 30 * (1 - remaining);
+  const track = Array.from({ length: COPIES }, () => REELS).flat();
 
-    controls
-      .start({
-        x: -fullPassWidth,
-        transition: { duration: remainingDuration, ease: "linear" },
-      })
-      .then(() => {
-        if (anyPlayingRef.current) return;
-        controls.set({ x: 0 });
-        xRef.current = 0;
-        playFrom(0);
-      });
-  };
+  // `drive` bina kisi limit ke chalta rehta hai — drag aur auto dono isi ko
+  // aage badhate hain. Actual track uska wrapped version use karta hai,
+  // isliye loop ke end par koi reset/jump hota hi nahi.
+  const drive = useMotionValue(0);
 
+  const offset = useTransform(drive, (v) => {
+    if (!passWidth) return 0;
+    const m = ((v % passWidth) + passWidth) % passWidth; // [0, passWidth)
+    // outer wrapper khud `drive` se move hota hai, isliye yahan se usko
+    // ghata dete hain — net translation sirf wrapped value ke barabar bachta hai.
+    return m - passWidth - v;
+  });
+
+  // Ek "pass" ki asli width DOM se naapo. Pehle ye hardcoded 280+24 thi,
+  // jo mobile ke 220px cards se match hi nahi karti thi.
   useEffect(() => {
-    playFrom(0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const el = trackRef.current;
+    if (!el) return;
+
+    const measure = () => {
+      const kids = el.children;
+      if (kids.length > REELS.length) {
+        setPassWidth(kids[REELS.length].offsetLeft - kids[0].offsetLeft);
+      }
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
   }, []);
 
-  const readCurrentX = () => {
-    const el = trackRef.current;
-    if (el) {
-      const transform = window.getComputedStyle(el).transform;
-      if (transform && transform !== "none") {
-        const match = transform.match(/matrix\(([^)]+)\)/);
-        if (match) {
-          const parts = match[1].split(",").map(Number);
-          xRef.current = parts[4] || 0;
-        }
-      }
-    }
-  };
+  const stopAuto = useCallback(() => {
+    animRef.current?.stop();
+    animRef.current = null;
+  }, []);
 
-  const handlePause = () => {
-    controls.stop();
-    readCurrentX();
-  };
+  const startAuto = useCallback(() => {
+    if (!passWidth || anyPlayingRef.current || draggingRef.current) return;
+    stopAuto();
 
-  const handleResume = () => {
-    if (anyPlayingRef.current) return;
-    playFrom(xRef.current);
-  };
+    const run = () => {
+      animRef.current = animate(drive, drive.get() - passWidth, {
+        duration: passWidth / SPEED,
+        ease: "linear",
+        onComplete: run, // agla segment — wrapping offset khud sambhal leta hai
+      });
+    };
+    run();
+  }, [passWidth, drive, stopAuto]);
+
+  useEffect(() => {
+    startAuto();
+    return stopAuto;
+  }, [startAuto, stopAuto]);
 
   const registerVideo = useCallback((index, el) => {
     videosRef.current[index] = el;
   }, []);
 
-  const handlePlay = useCallback((index) => {
-    Object.entries(videosRef.current).forEach(([i, el]) => {
-      if (Number(i) !== index && el && !el.paused) el.pause();
-    });
-    activeIndexRef.current = index;
-    anyPlayingRef.current = true;
-    controls.stop();
-    readCurrentX();
-  }, [controls]);
+  const handlePlay = useCallback(
+    (index) => {
+      Object.entries(videosRef.current).forEach(([i, el]) => {
+        if (Number(i) !== index && el && !el.paused) el.pause();
+      });
+      activeIndexRef.current = index;
+      anyPlayingRef.current = true;
+      stopAuto();
+    },
+    [stopAuto],
+  );
 
-  const handleVideoPause = useCallback((index) => {
-    if (activeIndexRef.current === index) {
-      activeIndexRef.current = null;
-      anyPlayingRef.current = false;
-      playFrom(xRef.current);
-    }
-  }, []);
+  const handleVideoPause = useCallback(
+    (index) => {
+      if (activeIndexRef.current === index) {
+        activeIndexRef.current = null;
+        anyPlayingRef.current = false;
+        startAuto();
+      }
+    },
+    [startAuto],
+  );
+
+  const wasDragged = useCallback(() => dragMovedRef.current, []);
 
   return (
     <section className="w-full bg-[#F4F2ED] py-20 sm:py-24">
@@ -317,26 +426,51 @@ function Work2() {
 
       <div
         className="relative w-full overflow-hidden"
-        onMouseEnter={handlePause}
-        onMouseLeave={handleResume}
+        onMouseEnter={stopAuto}
+        onMouseLeave={startAuto}
       >
+        {/* Drag layer. Ye khud `drive` ko move karta hai — Framer ka drag
+            touch par pan-y allow karta hai, isliye page ka vertical scroll
+            waise ka waisa kaam karta rehta hai. */}
         <motion.div
-          ref={trackRef}
-          className="flex gap-5 sm:gap-6 w-max px-6"
-          animate={controls}
-          initial={{ x: 0 }}
-          style={{ willChange: "transform" }}
+          drag="x"
+          style={{ x: drive }}
+          dragMomentum={false}
+          onDragStart={() => {
+            draggingRef.current = true;
+            dragMovedRef.current = false;
+            stopAuto();
+          }}
+          onDrag={(_, info) => {
+            if (Math.abs(info.offset.x) > 5) dragMovedRef.current = true;
+          }}
+          onDragEnd={() => {
+            draggingRef.current = false;
+            startAuto();
+            // click event drag ke baad aata hai, isliye flag thoda der rakho
+            setTimeout(() => {
+              dragMovedRef.current = false;
+            }, 80);
+          }}
+          className="w-max cursor-grab active:cursor-grabbing"
         >
-          {track.map((reel, i) => (
-            <ReelCard
-              key={i}
-              reel={reel}
-              index={i}
-              registerVideo={registerVideo}
-              onPlay={handlePlay}
-              onPause={handleVideoPause}
-            />
-          ))}
+          <motion.div
+            ref={trackRef}
+            className="flex gap-5 sm:gap-6 w-max px-6"
+            style={{ x: offset, willChange: "transform" }}
+          >
+            {track.map((reel, i) => (
+              <ReelCard
+                key={i}
+                reel={reel}
+                index={i}
+                registerVideo={registerVideo}
+                onPlay={handlePlay}
+                onPause={handleVideoPause}
+                wasDragged={wasDragged}
+              />
+            ))}
+          </motion.div>
         </motion.div>
 
         <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-24 bg-gradient-to-r from-[#F4F2ED] to-transparent" />
