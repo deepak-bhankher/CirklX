@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowUpRight, X } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 
 const ACCENT = "#D6ff01";
 
@@ -124,7 +124,8 @@ function ItemCard({ item, isBranding, isGraphics }) {
         className="group relative overflow-hidden rounded-[28px] cursor-pointer"
         style={{
           height: "380px",
-          boxShadow: "0 20px 48px -14px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06)",
+          boxShadow:
+            "0 20px 48px -14px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06)",
         }}
       >
         <img
@@ -210,9 +211,7 @@ function ItemCard({ item, isBranding, isGraphics }) {
           decoding="async"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-        <span
-          className="absolute top-3 left-3 text-[9px] font-bold tracking-[0.18em] uppercase px-2.5 py-1 rounded-full bg-[#1a1a1a] border border-white/10 text-white/70"
-        >
+        <span className="absolute top-3 left-3 text-[9px] font-bold tracking-[0.18em] uppercase px-2.5 py-1 rounded-full bg-[#1a1a1a] border border-white/10 text-white/70">
           {item.tag}
         </span>
         <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between">
@@ -229,148 +228,132 @@ function ItemCard({ item, isBranding, isGraphics }) {
   );
 }
 
-export default function DestinationsGrid({ onClose }) {
+// Ab ye section hamesha page par rehta hai — na koi toggle button, na Close.
+// Isliye `onClose` prop, entry/exit animation aur AnimatePresence sab hata diye.
+// Sections ke scroll-reveal animations waise ke waise hain.
+export default function DestinationsGrid() {
   useEffect(() => {
+    // Navbar apne dark/light detection ke liye sections dobara naapta hai.
     window.dispatchEvent(new Event("sections-updated"));
   }, []);
 
   return (
-      <motion.section
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } }}
-        exit={{ opacity: 0, y: -60, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } }}
-        data-theme="dark"
-        className="relative w-full bg-[#070707] py-20 sm:py-28 overflow-hidden"
-      >
-        {/* subtle top border */}
+    <section
+      data-theme="dark"
+      className="relative w-full bg-[#070707] py-20 sm:py-28 overflow-hidden"
+    >
+      {/* subtle top border */}
+      <div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px"
+        style={{
+          background: `linear-gradient(90deg, transparent, ${ACCENT}40, transparent)`,
+        }}
+      />
+
+      {/* bg glow */}
+      <div className="absolute inset-0 pointer-events-none">
         <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px"
-          style={{
-            background: `linear-gradient(90deg, transparent, ${ACCENT}40, transparent)`,
-          }}
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full blur-[120px]"
+          style={{ background: "rgba(214,255,1,0.04)" }}
         />
+      </div>
 
-        {/* bg glow */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div
-            className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full blur-[120px]"
-            style={{ background: "rgba(214,255,1,0.04)" }}
-          />
-        </div>
-
-        <div className="relative max-w-[1320px] mx-auto px-5 sm:px-10">
-          {/* Header */}
-          <div className="flex items-start justify-between mb-16 sm:mb-20">
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <span
-                  className="w-1.5 h-1.5 rounded-full"
-                  style={{ background: ACCENT, boxShadow: `0 0 10px ${ACCENT}` }}
-                />
-                <span
-                  className="text-[10px] sm:text-[11px] font-bold tracking-[0.24em] uppercase"
-                  style={{ color: ACCENT }}
-                >
-                  All Destinations
-                </span>
-              </div>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.06]">
-                Explore every
-                <br />
-                <span
-                  style={{
-                    backgroundImage: `linear-gradient(130deg, #fff 20%, ${ACCENT} 100%)`,
-                    WebkitBackgroundClip: "text",
-                    backgroundClip: "text",
-                    color: "transparent",
-                  }}
-                >
-                  category
-                </span>
-              </h2>
-            </motion.div>
-
+      <div className="relative max-w-[1320px] mx-auto px-5 sm:px-10">
+        {/* Header */}
+        <div className="mb-16 sm:mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <span
+                className="w-1.5 h-1.5 rounded-full"
+                style={{ background: ACCENT, boxShadow: `0 0 10px ${ACCENT}` }}
+              />
+              <span
+                className="text-[10px] sm:text-[11px] font-bold tracking-[0.24em] uppercase"
+                style={{ color: ACCENT }}
+              >
+                All Destinations
+              </span>
             </div>
-
-          {/* 4 Sections */}
-          <div className="flex flex-col gap-20 sm:gap-28">
-            {SECTIONS.map((section, si) => (
-              <motion.div
-                key={section.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{
-                  duration: 0.6,
-                  delay: si * 0.05,
-                  ease: [0.22, 1, 0.36, 1],
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.06]">
+              Explore every
+              <br />
+              <span
+                style={{
+                  backgroundImage: `linear-gradient(130deg, #fff 20%, ${ACCENT} 100%)`,
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
                 }}
               >
-                {/* Section header */}
-                <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 sm:mb-10">
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <span
-                        className="text-[9px] font-black tracking-[0.2em] uppercase px-2.5 py-1 rounded-full text-black"
-                        style={{ background: ACCENT }}
-                      >
-                        0{si + 1}
-                      </span>
-                      <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                        {section.label}
-                      </h3>
-                    </div>
-                    <p className="text-sm text-white/35 ml-10">{section.desc}</p>
-                  </div>
-                </div>
-
-                {/* 4 Cards grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-                  {section.items.map((item, ii) => (
-                    <motion.div
-                      key={item.name}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{
-                        duration: 0.45,
-                        delay: ii * 0.07,
-                        ease: [0.22, 1, 0.36, 1],
-                      }}
-                    >
-                      <ItemCard
-                        item={item}
-                        isBranding={section.id === "branding"}
-                        isGraphics={section.id === "graphics"}
-                      />
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Close button — bottom right after 4th section */}
-          <div className="flex justify-end mt-14 sm:mt-16">
-            <motion.button
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.92 }}
-              onClick={onClose}
-              className="flex cursor-pointer items-center gap-2 px-4 py-2 rounded-2xl border border-white/10 bg-[#111] text-white/60 text-sm font-medium hover:border-white/20 hover:text-white transition-colors duration-200"
-            >
-              <X size={14} />
-              Close
-            </motion.button>
-          </div>
+                category
+              </span>
+            </h2>
+          </motion.div>
         </div>
-      </motion.section>
+
+        {/* 4 Sections */}
+        <div className="flex flex-col gap-20 sm:gap-28">
+          {SECTIONS.map((section, si) => (
+            <motion.div
+              key={section.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{
+                duration: 0.6,
+                delay: si * 0.05,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              {/* Section header */}
+              <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 sm:mb-10">
+                <div>
+                  <div className="flex items-center gap-3 mb-2">
+                    <span
+                      className="text-[9px] font-black tracking-[0.2em] uppercase px-2.5 py-1 rounded-full text-black"
+                      style={{ background: ACCENT }}
+                    >
+                      0{si + 1}
+                    </span>
+                    <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                      {section.label}
+                    </h3>
+                  </div>
+                  <p className="text-sm text-white/35 ml-10">{section.desc}</p>
+                </div>
+              </div>
+
+              {/* 4 Cards grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+                {section.items.map((item, ii) => (
+                  <motion.div
+                    key={item.name}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      duration: 0.45,
+                      delay: ii * 0.07,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                  >
+                    <ItemCard
+                      item={item}
+                      isBranding={section.id === "branding"}
+                      isGraphics={section.id === "graphics"}
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

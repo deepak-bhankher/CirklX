@@ -1,7 +1,5 @@
-import { useRef, useState } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
-import DestinationsGrid from "./DestinationsGrid";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const ACCENT = "#D6ff01";
 
@@ -65,12 +63,14 @@ export default function Work5() {
   const headerY = useTransform(scrollYProgress, [0, 0.5], ["0px", "-30px"]);
   const headerOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0.5]);
 
-  // Duplicate for seamless loop
   const LOOP = [...DESTINATIONS, ...DESTINATIONS];
-  const [showGrid, setShowGrid] = useState(false);
 
   return (
-    <>
+    <section
+      ref={sectionRef}
+      data-theme="dark"
+      className="relative w-full bg-[#070707] overflow-hidden py-24 sm:py-32"
+    >
       {/* Keyframe injection */}
       <style>{`
         @keyframes marquee {
@@ -89,12 +89,6 @@ export default function Work5() {
           .marquee-track { animation: none; }
         }
       `}</style>
-
-      <section
-        ref={sectionRef}
-        data-theme="dark"
-        className="relative w-full bg-[#070707] overflow-hidden py-24 sm:py-32"
-      >
         {/* ── Background glows ── */}
         <div className="absolute inset-0 pointer-events-none">
           <div
@@ -286,35 +280,8 @@ export default function Work5() {
                 </span>
               </motion.div>
             ))}
-
-            {/* CTA */}
-            <AnimatePresence>
-              {!showGrid && (
-                <motion.button
-                  key="cta-btn"
-                  initial={{ opacity: 1 }}
-                  exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.25 } }}
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.96 }}
-                  onClick={() => setShowGrid(true)}
-                  className="flex items-center cursor-pointer gap-2.5 px-5 py-2.5 rounded-2xl text-black text-sm font-bold tracking-tight shrink-0 transition-shadow duration-300"
-                  style={{
-                    background: ACCENT,
-                    boxShadow: `0 8px 30px -8px ${ACCENT}70`,
-                  }}
-                >
-                  View all destinations
-                  <ArrowUpRight size={15} strokeWidth={2.5} />
-                </motion.button>
-              )}
-            </AnimatePresence>
           </div>
         </motion.div>
       </section>
-
-      <AnimatePresence>
-        {showGrid && <DestinationsGrid onClose={() => setShowGrid(false)} />}
-      </AnimatePresence>
-    </>
   );
 }
