@@ -131,17 +131,17 @@ function Service3() {
         <div className="flex items-center gap-3 sm:gap-4">
           <ArrowButton direction="left" onClick={goPrev} />
 
-          <div className="flex-1 grid grid-cols-3 gap-3 sm:gap-5 items-center">
+          <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-5 items-center">
 
-            {/* Left — static blurred */}
+            {/* Left — hidden on mobile, blurred on sm+ */}
             <div
-              className="bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] overflow-hidden"
+              className="hidden sm:block bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] overflow-hidden"
               style={{ filter: "blur(3px)", opacity: 0.4, transform: "scale(0.9)" }}
             >
               <CardContent review={prevReview} />
             </div>
 
-            {/* Center — animated */}
+            {/* Center — always visible, animated */}
             <div className="bg-white rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.12)] overflow-hidden relative">
               <AnimatePresence initial={false} custom={direction} mode="wait">
                 <motion.div
@@ -162,9 +162,9 @@ function Service3() {
               </AnimatePresence>
             </div>
 
-            {/* Right — static blurred */}
+            {/* Right — hidden on mobile, blurred on sm+ */}
             <div
-              className="bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] overflow-hidden"
+              className="hidden sm:block bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] overflow-hidden"
               style={{ filter: "blur(3px)", opacity: 0.4, transform: "scale(0.9)" }}
             >
               <CardContent review={nextReview} />
