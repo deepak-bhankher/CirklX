@@ -3,35 +3,30 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const REVIEWS = [
   {
-    reelMedia: "/about1.png",
     avatar: "/about4.png",
     handle: "@coachmatt_fit",
     followers: "112k Followers",
     quote: "They don't just edit — they understand what works. Every Reel had a strong hook.",
   },
   {
-    reelMedia: "/about2.png",
     avatar: "/about4.png",
     handle: "@adam_alvi",
     followers: "34k Followers",
     quote: "Their editing completely changed the game. Exactly what my audience wants.",
   },
   {
-    reelMedia: "/about3.png",
     avatar: "/about4.png",
     handle: "@sara_creates",
     followers: "78k Followers",
     quote: "Fast turnaround, sharp hooks, and editing that keeps people watching till the end.",
   },
   {
-    reelMedia: "/about1.png",
     avatar: "/about4.png",
     handle: "@zara_growth",
     followers: "55k Followers",
     quote: "Within 2 weeks my Reels were getting 3x more reach. Their hooks are insane.",
   },
   {
-    reelMedia: "/about2.png",
     avatar: "/about4.png",
     handle: "@raihan_edits",
     followers: "91k Followers",
@@ -64,33 +59,19 @@ function ArrowButton({ direction, onClick }) {
 
 function CardContent({ review }) {
   return (
-    <>
-      <div className="relative w-full aspect-[4/3]">
-        <img
-          src={review.reelMedia}
-          alt={review.handle}
-          className="absolute inset-0 w-full h-full object-cover"
-          draggable={false}
-        />
-      </div>
-      <div className="p-4 sm:p-5">
-        <p className="text-xs sm:text-sm text-[#15140F] leading-relaxed mb-4 line-clamp-2">
-          "{review.quote}"
-        </p>
-        <div className="flex items-center gap-2.5">
-          <img
-            src={review.avatar}
-            alt={review.handle}
-            className="w-8 h-8 rounded-full object-cover flex-shrink-0"
-            draggable={false}
-          />
-          <div>
-            <p className="text-xs font-semibold text-[#15140F]">{review.handle}</p>
-            <p className="text-[10px] text-black/40">{review.followers}</p>
-          </div>
-        </div>
-      </div>
-    </>
+    <div className="flex flex-col items-center text-center px-5 py-8 sm:px-6 sm:py-10">
+      <img
+        src={review.avatar}
+        alt={review.handle}
+        className="w-16 h-16 rounded-full object-cover mb-4 ring-2 ring-black/8"
+        draggable={false}
+      />
+      <p className="text-xs sm:text-sm text-[#15140F] leading-relaxed mb-5">
+        "{review.quote}"
+      </p>
+      <p className="text-sm font-semibold text-[#15140F]">{review.handle}</p>
+      <p className="text-[11px] text-black/40 mt-0.5">{review.followers}</p>
+    </div>
   );
 }
 
@@ -113,7 +94,6 @@ function Service3() {
   }, [index]);
 
   const prevReview = REVIEWS[(index - 1 + total) % total];
-  const centerReview = REVIEWS[index];
   const nextReview = REVIEWS[(index + 1) % total];
 
   return (
@@ -147,22 +127,22 @@ function Service3() {
       </div>
 
       {/* Carousel */}
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-3 sm:gap-4">
           <ArrowButton direction="left" onClick={goPrev} />
 
           <div className="flex-1 grid grid-cols-3 gap-3 sm:gap-5 items-center">
 
-            {/* Left card — static, blurred */}
+            {/* Left — static blurred */}
             <div
-              className="bg-white rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.07)] overflow-hidden"
-              style={{ filter: "blur(3px)", opacity: 0.45, transform: "scale(0.91)" }}
+              className="bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] overflow-hidden"
+              style={{ filter: "blur(3px)", opacity: 0.4, transform: "scale(0.9)" }}
             >
               <CardContent review={prevReview} />
             </div>
 
-            {/* Center card — content slides */}
-            <div className="bg-white rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.13)] overflow-hidden relative">
+            {/* Center — animated */}
+            <div className="bg-white rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.12)] overflow-hidden relative">
               <AnimatePresence initial={false} custom={direction} mode="wait">
                 <motion.div
                   key={index}
@@ -177,15 +157,15 @@ function Service3() {
                   exit="exit"
                   transition={{ duration: 0.45, ease: [0.32, 0.72, 0, 1] }}
                 >
-                  <CardContent review={centerReview} />
+                  <CardContent review={REVIEWS[index]} />
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            {/* Right card — static, blurred */}
+            {/* Right — static blurred */}
             <div
-              className="bg-white rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.07)] overflow-hidden"
-              style={{ filter: "blur(3px)", opacity: 0.45, transform: "scale(0.91)" }}
+              className="bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] overflow-hidden"
+              style={{ filter: "blur(3px)", opacity: 0.4, transform: "scale(0.9)" }}
             >
               <CardContent review={nextReview} />
             </div>
