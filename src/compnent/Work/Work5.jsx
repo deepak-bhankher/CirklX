@@ -1,18 +1,26 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 
 const ACCENT = "#D6ff01";
+const COPIES = 3; // drag ke liye dono taraf buffer chahiye, isliye 2 ki jagah 3
+const SPEED = 120; // auto-scroll ki raftaar, px per second (pehle 38s/pass tha)
 
 const DESTINATIONS = [
-  { id: 1,  name: "Gearix", image: "work1.jpeg" },
-  { id: 2,  name: "Easter Collection", image: "work2.jpeg" },
-  { id: 3,  name: "Geeta Syrup", image: "work3.jpeg" },
-  { id: 4,  name: "Easter Decor", image: "work4.jpeg" },
-  { id: 5,  name: "Burger Wings ", image: "work5.jpeg" },
-  { id: 6,  name: "Geeta Syrup", image: "work6.jpeg" },
-  { id: 7,  name: "Gearix", image: "work7.jpeg" },
-  { id: 8,  name: "Geeta Syrup", image: "work8.jpeg" },
-  { id: 9,  name: "Geeta Syrup", image: "work9.jpeg" },
+  { id: 1, name: "Gearix", image: "work1.jpeg" },
+  { id: 2, name: "Easter Collection", image: "work2.jpeg" },
+  { id: 3, name: "Geeta Syrup", image: "work3.jpeg" },
+  { id: 4, name: "Easter Decor", image: "work4.jpeg" },
+  { id: 5, name: "Burger Wings ", image: "work5.jpeg" },
+  { id: 6, name: "Geeta Syrup", image: "work6.jpeg" },
+  { id: 7, name: "Gearix", image: "work7.jpeg" },
+  { id: 8, name: "Geeta Syrup", image: "work8.jpeg" },
+  { id: 9, name: "Geeta Syrup", image: "work9.jpeg" },
   { id: 10, name: "Burger Wings", image: "work10.jpeg" },
   { id: 11, name: "Easter", image: "work11.jpeg" },
   { id: 12, name: "Geeta Syrup", image: "work12.jpeg" },
@@ -24,7 +32,10 @@ const DESTINATIONS = [
 /* ── Single Card — image only + small username below ────────── */
 function DestinationCard({ d }) {
   return (
-    <div className="group shrink-0 flex flex-col items-center gap-2.5" style={{ width: "280px" }}>
+    <div
+      className="group shrink-0 flex flex-col items-center gap-2.5"
+      style={{ width: "280px" }}
+    >
       <div
         className="relative overflow-hidden rounded-[28px]"
         style={{
@@ -54,6 +65,11 @@ function DestinationCard({ d }) {
 /* ── Main Export ─────────────────────────────────────────────── */
 export default function Work5() {
   const sectionRef = useRef(null);
+  const trackRef = useRef(null);
+  const animRef = useRef(null);
+  const draggingRef = useRef(false);
+
+  const [passWidth, setPassWidth] = useState(0);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -63,225 +79,246 @@ export default function Work5() {
   const headerY = useTransform(scrollYProgress, [0, 0.5], ["0px", "-30px"]);
   const headerOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0.5]);
 
-  const LOOP = [...DESTINATIONS, ...DESTINATIONS];
+  const LOOP = Array.from({ length: COPIES }, () => DESTINATIONS).flat();
+
+  // `drive` bina kisi limit ke chalta rehta hai — drag aur auto dono isi ko
+  // aage badhate hain. Track uska wrapped version use karta hai, isliye loop
+  // ke end par koi reset ya jump hota hi nahi.
+  const drive = useMotionValue(0);
+
+  const offset = useTransform(drive, (v) => {
+    if (!passWidth) return 0;
+    const m = ((v % passWidth) + passWidth) % passWidth; // [0, passWidth)
+    // Outer wrapper khud `drive` se move hota hai, isliye yahan se usko ghata
+    // dete hain — net translation sirf wrapped value ke barabar bachta hai.
+    return m - passWidth - v;
+  });
+
+  // Ek "pass" ki asli width DOM se naapo, taaki gap ya card size badalne par
+  // bhi loop exactly seamless rahe.
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+
+    const measure = () => {
+      const kids = el.children;
+      if (kids.length > DESTINATIONS.length) {
+        setPassWidth(kids[DESTINATIONS.length].offsetLeft - kids[0].offsetLeft);
+      }
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  const stopAuto = useCallback(() => {
+    animRef.current?.stop();
+    animRef.current = null;
+  }, []);
+
+  const startAuto = useCallback(() => {
+    if (!passWidth || draggingRef.current) return;
+    // Pehle ye CSS media query se handle hota tha, ab JS me.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    stopAuto();
+    const run = () => {
+      animRef.current = animate(drive, drive.get() - passWidth, {
+        duration: passWidth / SPEED,
+        ease: "linear",
+        onComplete: run, // agla segment — wrapping offset khud sambhal leta hai
+      });
+    };
+    run();
+  }, [passWidth, drive, stopAuto]);
+
+  useEffect(() => {
+    startAuto();
+    return stopAuto;
+  }, [startAuto, stopAuto]);
+
+  useEffect(() => {
+    window.dispatchEvent(new Event("sections-updated"));
+  }, []);
 
   return (
     <section
       ref={sectionRef}
       data-theme="dark"
-      className="relative w-full bg-[#070707] overflow-hidden py-24 sm:py-32"
+      className="relative w-full bg-[#070707] overflow-hidden pt-24 sm:pt-32 pb-10 sm:pb-14"
     >
-      {/* Keyframe injection */}
-      <style>{`
-        @keyframes marquee {
-          0%   { transform: translate3d(0,0,0); }
-          100% { transform: translate3d(-50%,0,0); }
-        }
-        .marquee-track {
-          animation: marquee 38s linear infinite;
-          will-change: transform;
-          backface-visibility: hidden;
-        }
-        .marquee-track:hover {
-          animation-play-state: paused;
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .marquee-track { animation: none; }
-        }
-      `}</style>
-        {/* ── Background glows ── */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div
-            className="absolute -top-60 left-1/2 -translate-x-1/2 w-[1000px] h-[700px] rounded-full blur-[140px]"
-            style={{
-              background:
-                "radial-gradient(ellipse, rgba(214,255,1,0.05) 0%, transparent 65%)",
-            }}
-          />
-          <div
-            className="absolute -bottom-40 right-0 w-[600px] h-[600px] rounded-full blur-[110px]"
-            style={{ background: "rgba(80,40,180,0.035)" }}
-          />
-          <div
-            className="absolute -bottom-20 left-0 w-[400px] h-[400px] rounded-full blur-[90px]"
-            style={{ background: "rgba(0,120,80,0.03)" }}
-          />
-        </div>
-
-        {/* ── Grid ── */}
+      {/* ── Background glows ── */}
+      <div className="absolute inset-0 pointer-events-none">
         <div
-          className="absolute inset-0 pointer-events-none opacity-[0.018]"
+          className="absolute -top-60 left-1/2 -translate-x-1/2 w-[1000px] h-[700px] rounded-full blur-[140px]"
           style={{
-            backgroundImage: `
+            background:
+              "radial-gradient(ellipse, rgba(214,255,1,0.05) 0%, transparent 65%)",
+          }}
+        />
+        <div
+          className="absolute -bottom-40 right-0 w-[600px] h-[600px] rounded-full blur-[110px]"
+          style={{ background: "rgba(80,40,180,0.035)" }}
+        />
+        <div
+          className="absolute -bottom-20 left-0 w-[400px] h-[400px] rounded-full blur-[90px]"
+          style={{ background: "rgba(0,120,80,0.03)" }}
+        />
+      </div>
+
+      {/* ── Grid ── */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.018]"
+        style={{
+          backgroundImage: `
               linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),
               linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)
             `,
-            backgroundSize: "90px 90px",
-          }}
-        />
+          backgroundSize: "90px 90px",
+        }}
+      />
 
-        {/* ── Header ── */}
-        <motion.div
-          style={{ y: headerY, opacity: headerOpacity }}
-          className="relative max-w-[1320px] mx-auto px-5 sm:px-10 mb-14 sm:mb-20"
-        >
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-8">
-            {/* Left */}
-            <div className="max-w-lg">
-              <motion.div
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                className="flex items-center gap-3 mb-5"
-              >
-                <span
-                  className="w-1.5 h-1.5 rounded-full"
-                  style={{
-                    background: ACCENT,
-                    boxShadow: `0 0 12px ${ACCENT}`,
-                  }}
-                />
-                <span
-                  className="text-[10px] sm:text-[11px] font-bold tracking-[0.24em] uppercase"
-                  style={{ color: ACCENT }}
-                >
-                  Top Destinations
-                </span>
-              </motion.div>
-
-              <motion.h2
-                initial={{ opacity: 0, y: 22 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  duration: 0.65,
-                  delay: 0.07,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="text-4xl sm:text-5xl lg:text-[58px] font-bold text-white leading-[1.04] tracking-tight"
-              >
-                Where the world
-                <br />
-                <span
-                  style={{
-                    backgroundImage: `linear-gradient(130deg, #fff 20%, ${ACCENT} 100%)`,
-                    WebkitBackgroundClip: "text",
-                    backgroundClip: "text",
-                    color: "transparent",
-                  }}
-                >
-                  is booking now
-                </span>
-              </motion.h2>
-            </div>
-
-            {/* Right */}
+      {/* ── Header ── */}
+      <motion.div
+        style={{ y: headerY, opacity: headerOpacity }}
+        className="relative max-w-[1320px] mx-auto px-5 sm:px-10 mb-14 sm:mb-20"
+      >
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-8">
+          {/* Left */}
+          <div className="max-w-lg">
             <motion.div
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              className="flex items-center gap-3 mb-5"
+            >
+              <span
+                className="w-1.5 h-1.5 rounded-full"
+                style={{
+                  background: ACCENT,
+                  boxShadow: `0 0 12px ${ACCENT}`,
+                }}
+              />
+              <span
+                className="text-[10px] sm:text-[11px] font-bold tracking-[0.24em] uppercase"
+                style={{ color: ACCENT }}
+              >
+                Top Destinations
+              </span>
+            </motion.div>
+
+            <motion.h2
+              initial={{ opacity: 0, y: 22 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{
-                duration: 0.55,
-                delay: 0.16,
+                duration: 0.65,
+                delay: 0.07,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="flex flex-col gap-3 sm:items-end"
+              className="text-4xl sm:text-5xl lg:text-[58px] font-bold text-white leading-[1.04] tracking-tight"
             >
-              <p className="text-sm sm:text-[15px] text-white/38 max-w-[270px] sm:text-right leading-relaxed">
-                Live counts from this week's hottest packages across our top
-                markets.
-              </p>
-              <div className="flex items-center sm:justify-end gap-2">
-                <motion.span
-                  animate={{ opacity: [1, 0.25, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="w-1.5 h-1.5 rounded-full bg-emerald-400"
-                />
-                <span className="text-[11px] text-white/28 font-medium tracking-wide">
-                  Live · Updated now
-                </span>
-              </div>
-            </motion.div>
+              Where the world
+              <br />
+              <span
+                style={{
+                  backgroundImage: `linear-gradient(130deg, #fff 20%, ${ACCENT} 100%)`,
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
+                }}
+              >
+                is booking now
+              </span>
+            </motion.h2>
           </div>
-        </motion.div>
 
-        {/* ── Infinite Marquee ── */}
+          {/* Right */}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{
+              duration: 0.55,
+              delay: 0.16,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="flex flex-col gap-3 sm:items-end"
+          >
+            <p className="text-sm sm:text-[15px] text-white/38 max-w-[270px] sm:text-right leading-relaxed">
+              Live counts from this week's hottest packages across our top
+              markets.
+            </p>
+            <div className="flex items-center sm:justify-end gap-2">
+              <motion.span
+                animate={{ opacity: [1, 0.25, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="w-1.5 h-1.5 rounded-full bg-emerald-400"
+              />
+              <span className="text-[11px] text-white/28 font-medium tracking-wide">
+                Live · Updated now
+              </span>
+            </div>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      {/* ── Marquee — auto chalta rehta hai, aur haath se bhi kheench sakte ho ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className="relative w-full overflow-hidden"
+        onMouseEnter={stopAuto}
+        onMouseLeave={startAuto}
+      >
+        {/* Left fade mask */}
+        <div
+          className="absolute left-0 top-0 h-full w-24 sm:w-40 pointer-events-none z-10"
+          style={{
+            background:
+              "linear-gradient(to right, #070707 0%, transparent 100%)",
+          }}
+        />
+        {/* Right fade mask */}
+        <div
+          className="absolute right-0 top-0 h-full w-24 sm:w-40 pointer-events-none z-10"
+          style={{
+            background: "linear-gradient(to left, #070707 0%, transparent 100%)",
+          }}
+        />
+
+        {/* Drag layer. Framer ka drag="x" touch par pan-y allow karta hai,
+            isliye page ka vertical scroll waise ka waisa chalta rehta hai. */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="relative w-full overflow-hidden"
+          drag="x"
+          style={{ x: drive }}
+          dragMomentum={false}
+          onDragStart={() => {
+            draggingRef.current = true;
+            stopAuto();
+          }}
+          onDragEnd={() => {
+            draggingRef.current = false;
+            startAuto();
+          }}
+          className="w-max cursor-grab active:cursor-grabbing"
         >
-          {/* Left fade mask */}
-          <div
-            className="absolute left-0 top-0 h-full w-24 sm:w-40 pointer-events-none z-10"
-            style={{
-              background:
-                "linear-gradient(to right, #070707 0%, transparent 100%)",
-            }}
-          />
-          {/* Right fade mask */}
-          <div
-            className="absolute right-0 top-0 h-full w-24 sm:w-40 pointer-events-none z-10"
-            style={{
-              background:
-                "linear-gradient(to left, #070707 0%, transparent 100%)",
-            }}
-          />
-
-          {/* Track */}
-          <div
-            className="marquee-track flex gap-5 sm:gap-6 py-4 px-3"
-            style={{ width: "max-content" }}
+          <motion.div
+            ref={trackRef}
+            className="flex gap-5 sm:gap-6 py-4 px-3 w-max"
+            style={{ x: offset, willChange: "transform" }}
           >
             {LOOP.map((d, i) => (
               <DestinationCard key={`${d.id}-${i}`} d={d} />
             ))}
-          </div>
+          </motion.div>
         </motion.div>
-
-        {/* ── Bottom stats row ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="relative max-w-[1320px] mx-auto px-5 sm:px-10 mt-14 sm:mt-16"
-        >
-          <div className="flex flex-wrap items-center justify-between gap-6 rounded-[24px] px-6 sm:px-10 py-5 sm:py-6 border border-white/[0.07] bg-[#0e0e0e]">
-            {[
-              { value: "7,000+", label: "Hotels worldwide" },
-              { value: "199+", label: "Active packages" },
-              { value: "4.8★", label: "Average rating" },
-              { value: "2M+", label: "Happy travellers" },
-            ].map((s, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 14 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  duration: 0.45,
-                  delay: i * 0.07,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="flex flex-col gap-0.5"
-              >
-                <span
-                  className="text-2xl sm:text-3xl font-bold tracking-tight"
-                  style={{ color: ACCENT }}
-                >
-                  {s.value}
-                </span>
-                <span className="text-xs sm:text-sm text-white/35 font-medium">
-                  {s.label}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      </section>
+      </motion.div>
+    </section>
   );
 }

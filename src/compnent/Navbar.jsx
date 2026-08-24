@@ -80,7 +80,7 @@ function useDarkSection() {
     const timeout = setTimeout(() => {
       queryDarkSections();
       checkSection();
-    }, 150);
+    }, 300);
 
     return () => {
       window.removeEventListener("scroll", onScroll);

@@ -145,7 +145,9 @@ function ItemCard({ item, isBranding, isGraphics }) {
             {item.name}
           </h3>
           <div className="flex items-center justify-between rounded-2xl pl-4 pr-1.5 py-1.5 border border-white/10 bg-[#161616] transition-colors duration-300 group-hover:border-white/20 group-hover:bg-[#1d1d1d]">
-            <span className="text-xs font-semibold text-white">Explore Now</span>
+            <span className="text-xs font-semibold text-white">
+              Explore Now
+            </span>
             <span
               className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rounded-2xl"
               style={{ background: ACCENT, color: "#000" }}
@@ -240,7 +242,7 @@ export default function DestinationsGrid() {
   return (
     <section
       data-theme="dark"
-      className="relative w-full bg-[#070707] py-20 sm:py-28 overflow-hidden"
+      className="relative w-full bg-[#070707] pt-8 sm:pt-10 pb-20 sm:pb-28 overflow-hidden"
     >
       {/* subtle top border */}
       <div
@@ -259,43 +261,6 @@ export default function DestinationsGrid() {
       </div>
 
       <div className="relative max-w-[1320px] mx-auto px-5 sm:px-10">
-        {/* Header */}
-        <div className="mb-16 sm:mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <span
-                className="w-1.5 h-1.5 rounded-full"
-                style={{ background: ACCENT, boxShadow: `0 0 10px ${ACCENT}` }}
-              />
-              <span
-                className="text-[10px] sm:text-[11px] font-bold tracking-[0.24em] uppercase"
-                style={{ color: ACCENT }}
-              >
-                All Destinations
-              </span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight leading-[1.06]">
-              Explore every
-              <br />
-              <span
-                style={{
-                  backgroundImage: `linear-gradient(130deg, #fff 20%, ${ACCENT} 100%)`,
-                  WebkitBackgroundClip: "text",
-                  backgroundClip: "text",
-                  color: "transparent",
-                }}
-              >
-                category
-              </span>
-            </h2>
-          </motion.div>
-        </div>
-
         {/* 4 Sections */}
         <div className="flex flex-col gap-20 sm:gap-28">
           {SECTIONS.map((section, si) => (
