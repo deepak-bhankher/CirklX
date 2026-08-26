@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   AnimatePresence,
   motion,
@@ -25,18 +25,19 @@ const CIRCLE_LIFT = 18; // circle bar ke top se kitna upar uthta hai
 const CUT_R = 25; // notch ka radius — circle se thoda bada, taaki gap dikhe
 const PAD = 28; // items row ka side inset
 
-// Lime circle aur notch dono ka vertical center — ek hi value, isliye notch
-// hamesha circle ke around perfectly baithti hai.
+// Lime circle aur notch dono ka vertical center — ek hi value.
 const CENTER_Y = CIRCLE / 2 - CIRCLE_LIFT;
+
+// Notch ab CSS mask se katta hai (SVG mask se nahi), kyunki backdrop-filter
+// sirf real DOM element par chalta hai — SVG <rect> par nahi. Center ki x
+// position --notch-x variable se aati hai jo spring se live update hoti hai.
+const NOTCH_MASK = `radial-gradient(circle at var(--notch-x) ${CENTER_Y}px, transparent ${CUT_R}px, #000 ${CUT_R + 1}px)`;
 
 export default function MobileBottomNav() {
   const { pathname } = useLocation();
   const wrapRef = useRef(null);
   const initialised = useRef(false);
   const [width, setWidth] = useState(0);
-
-  // useId me colon aate hain jo SVG url(#id) me reliable nahi, isliye hata do.
-  const maskId = `nav-notch-${useId().replace(/:/g, "")}`;
 
   const activeIndex = Math.max(
     0,
@@ -56,22 +57,18 @@ export default function MobileBottomNav() {
     return () => ro.disconnect();
   }, []);
 
-  // Sirf ek number animate hota hai — notch ka center x. Mask circle aur lime
-  // circle dono usi se chalte hain, isliye wo kabhi out of sync nahi hote.
+  // Sirf ek number animate hota hai — notch ka center x. Mask aur lime circle
+  // dono usi se chalte hain, isliye wo kabhi out of sync nahi hote.
   const notchX = useMotionValue(0);
   const smoothX = useSpring(notchX, { stiffness: 260, damping: 28, mass: 0.9 });
 
   useEffect(() => {
     if (!width) return;
 
-    // Item centers PAD ke andar evenly baante jaate hain — yahi values items
-    // row ke flex layout se match karti hain (usme bhi wahi PAD lagta hai).
     const step = (width - PAD * 2) / ITEMS.length;
     const target = PAD + step * (activeIndex + 0.5);
 
     if (!initialised.current) {
-      // Pehli baar bina animation ke, warna page khulte hi notch left se
-      // slide karta hua aayega.
       notchX.set(target);
       smoothX.set(target);
       initialised.current = true;
@@ -81,6 +78,8 @@ export default function MobileBottomNav() {
   }, [activeIndex, width, notchX, smoothX]);
 
   const circleLeft = useTransform(smoothX, (cx) => cx - CIRCLE / 2);
+  // CSS variable ko px string chahiye, plain number se calc fail hota hai.
+  const notchXpx = useTransform(smoothX, (cx) => `${cx}px`);
 
   return (
     <motion.nav
@@ -88,47 +87,38 @@ export default function MobileBottomNav() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
       className="md:hidden fixed inset-x-4 z-50"
-      // env(safe-area-inset-bottom) — iPhone ke home indicator ke liye
       style={{ bottom: "calc(0.75rem + env(safe-area-inset-bottom))" }}
     >
       <div ref={wrapRef} className="relative" style={{ height: H }}>
-        {/* Bar ka background. Shape = rounded rect MINUS ek circle (mask se).
-            Pehle poora outline ek SVG path se banta tha, par first/last item
-            par notch corner ke peeche chali jaati thi aur wahi ulta hissa
-            black wedge ban ke dikhta tha. Circle subtract karne me aisa ho
-            hi nahi sakta — wo bas corner ko kaat deta hai, kabhi bahar nahi
-            nikalta. */}
-        {width > 0 && (
-          <svg
-            className="absolute inset-0 pointer-events-none overflow-visible"
-            width={width}
-            height={H}
-            style={{ filter: "drop-shadow(0 12px 30px rgba(0,0,0,0.45))" }}
-          >
-            <defs>
-              <mask
-                id={maskId}
-                maskUnits="userSpaceOnUse"
-                x={0}
-                y={-CIRCLE_LIFT - 20}
-                width={width}
-                height={H + CIRCLE_LIFT + 20}
-              >
-                {/* safed = dikhega, kaala = kata hua */}
-                <rect width={width} height={H} rx={R} fill="#fff" />
-                <motion.circle cx={smoothX} cy={CENTER_Y} r={CUT_R} fill="#000" />
-              </mask>
-            </defs>
+        {/* Drop shadow alag layer par. Glass wali div masked hai aur mask
+            uske bahar ka shadow bhi kaat deti hai, isliye shadow yahan. */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            borderRadius: R,
+            boxShadow: "0 14px 34px rgba(0,0,0,0.30)",
+          }}
+        />
 
-            <rect
-              width={width}
-              height={H}
-              rx={R}
-              fill="#15140F"
-              mask={`url(#${maskId})`}
-            />
-          </svg>
-        )}
+        {/* Glass bar — blur + halka dark tint + upar white rim highlight.
+            Mask se beech me notch cut hoti hai. */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            "--notch-x": notchXpx,
+            borderRadius: R,
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.04) 45%, rgba(255,255,255,0.02) 100%), rgba(21,20,15,0.55)",
+            backdropFilter: "blur(20px) saturate(180%)",
+            WebkitBackdropFilter: "blur(20px) saturate(180%)",
+            boxShadow:
+              "inset 0 1px 0 rgba(255,255,255,0.25), inset 0 0 0 1px rgba(255,255,255,0.10), inset 0 -12px 26px rgba(0,0,0,0.18)",
+            maskImage: NOTCH_MASK,
+            WebkitMaskImage: NOTCH_MASK,
+            maskRepeat: "no-repeat",
+            WebkitMaskRepeat: "no-repeat",
+          }}
+        />
 
         {/* Circle ke peeche lime ki halki roshni */}
         <motion.span
@@ -173,8 +163,7 @@ export default function MobileBottomNav() {
           </AnimatePresence>
         </motion.div>
 
-        {/* Tappable items. PAD yahan bhi wahi hai jo notch position calculate
-            karte waqt use hota hai, warna circle icon ke upar nahi baithega. */}
+        {/* Tappable items */}
         <div
           className="absolute inset-0 flex items-center"
           style={{ paddingLeft: PAD, paddingRight: PAD }}
@@ -198,7 +187,7 @@ export default function MobileBottomNav() {
                   <item.Icon
                     size={19}
                     strokeWidth={1.8}
-                    className="text-white/55"
+                    className="text-white/70"
                   />
                 </motion.span>
               </Link>
