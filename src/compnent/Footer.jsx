@@ -3,6 +3,17 @@ import { Link } from "react-router-dom";
 import { FaInstagram, FaFacebookF, FaTiktok, FaYoutube } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
+
+const WHATSAPP_NUMBER = "918053200325";
+const WHATSAPP_MSG = "Hi CirklX! I want to book a free meeting.";
+const WA_LINK = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}?text=${encodeURIComponent(WHATSAPP_MSG)}`;
+
+// tel: link — click karte hi phone ka dialer number ke saath khul jaata hai.
+const PHONE_LINK = "tel:+918053200325";
+
+
+
+
 const ICONS = [
   {
     name: "Facebook",
@@ -222,14 +233,27 @@ function ArcTrack() {
 
 // `compact` sirf mobile par button ko chhota karta hai, taaki wo social
 // icons ke saath ek hi row me fit ho jaaye. sm+ par size bilkul same rehta hai.
-function PrimaryCta({ children = "Book A Free Meeting", compact = false }) {
+// `compact` sirf mobile par button ko chhota karta hai, taaki wo social
+// icons ke saath ek hi row me fit ho jaaye. sm+ par size bilkul same rehta hai.
+// `href` default WhatsApp hai, par caller alag link bhej sakta hai (jaise tel:).
+function PrimaryCta({
+  children = "Book A Free Meeting",
+  compact = false,
+  href = WA_LINK,
+}) {
   const sizing = compact
     ? "px-4 py-2.5 text-xs sm:px-6 sm:py-3 sm:text-sm"
     : "px-6 py-3 text-sm";
   const arrowBox = compact ? "w-5 h-5 sm:w-6 sm:h-6" : "w-6 h-6";
 
+  // tel:/mailto: same tab me khulne chahiye, sirf http links naye tab me.
+  const isExternal = href.startsWith("http");
+
   return (
-    <motion.button
+    <motion.a
+      href={href}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
       whileHover={{ scale: 1.04, y: -2 }}
       whileTap={{ scale: 0.97 }}
       transition={{ duration: 0.22, ease: "easeOut" }}
@@ -238,7 +262,7 @@ function PrimaryCta({ children = "Book A Free Meeting", compact = false }) {
         hover:shadow-[0_12px_36px_rgba(214,255,1,0.4)]
         transition-shadow duration-300`}
     >
-      <Link to="/contact">{children}</Link>
+      {children}
 
       <span
         className={`flex items-center justify-center ${arrowBox} rounded-full bg-[#15140F]`}
@@ -253,7 +277,7 @@ function PrimaryCta({ children = "Book A Free Meeting", compact = false }) {
           />
         </svg>
       </span>
-    </motion.button>
+    </motion.a>
   );
 }
 
@@ -376,7 +400,7 @@ function Footer() {
               </div>
 
               <motion.div className="sm:mt-6">
-                <PrimaryCta compact>Let's Talk</PrimaryCta>
+               <PrimaryCta compact href={PHONE_LINK}>Let's Talk</PrimaryCta>
               </motion.div>
             </div>
           </div>
