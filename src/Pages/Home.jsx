@@ -5,6 +5,7 @@ import Home4 from "../compnent/Home/Home4";
 import Home5 from "../compnent/Home/Home5";
 import Home6 from "../compnent/Home/Home6";
 import Home7 from "../compnent/Home/Home7";
+import Home8 from "../compnent/Home/Home8";
 
 function Home() {
   return (
@@ -15,6 +16,7 @@ function Home() {
       <Home4 />
       <Home5/>
       <Home7/>
+      <Home8/>
       <Home6/>
     </div>
   );
