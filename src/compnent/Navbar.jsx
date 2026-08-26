@@ -13,6 +13,10 @@ const NAV_LINKS = [
   { name: "Contact", path: "/contact" },
 ];
 
+const WHATSAPP_NUMBER = "+918053200325"; // <-- apna number daal
+
+const WHATSAPP_MSG = "Hi CirklX! I want to book a free meeting.";
+
 function useDarkSection() {
   const [isDark, setIsDark] = useState(true);
   const { pathname } = useLocation();
@@ -130,8 +134,16 @@ function NavItem({ label, path, isDark }) {
 
 function CtaButton() {
   const [hovered, setHovered] = useState(false);
+
+  // encodeURIComponent zaruri hai — warna space aur ! wale characters
+  // URL me toot jaate hain aur message adhoora khulta hai.
+  const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MSG)}`;
+
   return (
-    <motion.button
+    <motion.a
+      href={waLink}
+      target="_blank"
+      rel="noopener noreferrer"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       whileHover={{ scale: 1.04, y: -1 }}
@@ -142,7 +154,7 @@ function CtaButton() {
         hover:shadow-[0_0_22px_rgba(214,255,1,0.5)]
         transition-all duration-300"
     >
-      <Link to="/contact">Book A Free Meeting</Link>
+      Book A Free Meeting
 
       <div className="relative w-[17px] h-[17px] overflow-hidden">
         <motion.span
@@ -164,7 +176,7 @@ function CtaButton() {
           <MdArrowOutward size={17} />
         </motion.span>
       </div>
-    </motion.button>
+    </motion.a>
   );
 }
 
