@@ -169,11 +169,9 @@ function PlatformCard({ card, index }) {
         </motion.div>
       </div>
 
-      <h3 className="text-2xl sm:text-[1.6rem] font-medium text-[#15140F] leading-tight text-center sm:text-left mt-0 sm:mt-7">
-        {card.title[0]}{" "}
-        {/* Mobile par title ek hi line me — line break sirf sm+ par. */}
-        <br className="hidden sm:inline" />
-        {card.title[1]}
+           <h3 className="text-2xl sm:text-[1.6rem] font-medium text-[#15140F] leading-tight text-center sm:text-left mt-0 sm:mt-7">
+        {/* join se dono words ek hi line me — bottom cards jaisa */}
+        {card.title.join(" ")}
       </h3>
     </motion.div>
   );
