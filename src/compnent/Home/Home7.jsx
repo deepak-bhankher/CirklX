@@ -210,30 +210,25 @@ export default function Home7() {
               </span>
             </motion.div>
 
-            <motion.h2
-              initial={{ opacity: 0, y: 22 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.65,
-                delay: 0.07,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="text-4xl sm:text-5xl lg:text-[58px] font-bold text-white leading-[1.04] tracking-tight"
-            >
-              Where the world
-              <br />
-              <span
-                style={{
-                  backgroundImage: `linear-gradient(130deg, #fff 20%, ${ACCENT} 100%)`,
-                  WebkitBackgroundClip: "text",
-                  backgroundClip: "text",
-                  color: "transparent",
-                }}
-              >
-                is booking now
-              </span>
-            </motion.h2>
+     <motion.h2
+  initial={{ opacity: 0, y: 22 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true }}
+  transition={{
+    duration: 0.65,
+    delay: 0.07,
+    ease: [0.22, 1, 0.36, 1],
+  }}
+  className="text-4xl sm:text-5xl lg:text-[58px] font-bold leading-[1.04] tracking-tight break-words pb-[0.14em] -mb-[0.14em]"
+  style={{
+    backgroundImage: `linear-gradient(130deg, #fff 20%, ${ACCENT} 100%)`,
+    WebkitBackgroundClip: "text",
+    backgroundClip: "text",
+    color: "transparent",
+  }}
+>
+  Graphics
+</motion.h2>
           </div>
 
           {/* Right */}
