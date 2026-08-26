@@ -21,6 +21,49 @@ const STEPS = [
   },
 ];
 
+// Trusted-by brand logos. Replace the label/icon markup with real SVG
+// logos whenever you have them.
+const BRANDS = [
+  { name: "sparkle", style: "font-bold" },
+  { name: "Lum◻Labs", style: "font-bold" },
+  { name: "✤ Craftgram", style: "font-bold" },
+  { name: "♫ Pulse", style: "font-bold" },
+  { name: "swift➤", style: "font-bold italic" },
+  { name: "sparkle", style: "font-bold" },
+];
+
+function BrandMarquee() {
+  // List ko duplicate karke track 2x banaya. x ko 0% se -50% tak linear
+  // infinite animate karne par doosra half pehle ke exactly upar aa jata
+  // hai, isliye loop point par koi jump nahi dikhta.
+  const track = [...BRANDS, ...BRANDS];
+
+  return (
+    // -mx-6 se section ka px-6 cancel — marquee full-bleed chalta hai
+    <div className="relative w-full -mx-6 overflow-hidden">
+      <motion.div
+        className="flex w-max items-center gap-10 sm:gap-14 md:gap-16"
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+      >
+        {track.map((brand, i) => (
+          <span
+            key={i}
+            className={`flex-shrink-0 text-lg sm:text-xl md:text-2xl text-black/80 whitespace-nowrap ${brand.style}`}
+          >
+            {brand.name}
+          </span>
+        ))}
+      </motion.div>
+
+      {/* Dono kinaron par soft fade — logo hard-cut hone ki jagah
+          emerge/dissolve hote hue lagte hain. */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-24 bg-gradient-to-r from-[#F4F2ED] to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-24 bg-gradient-to-l from-[#F4F2ED] to-transparent" />
+    </div>
+  );
+}
+
 function StepCard({ step, index, isLast }) {
   return (
     <motion.div
@@ -89,12 +132,15 @@ function Home2() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="text-center text-xs sm:text-sm font-semibold tracking-widest text-black/40 uppercase mb-10 sm:mb-14"
+          className="text-center text-xs sm:text-sm font-semibold tracking-widest text-black/40 uppercase mb-6 sm:mb-8"
         >
           Trusted by 10,000+ founders &amp; business owners
         </motion.p>
+
+        <BrandMarquee />
       </div>
-      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-2">
+
+      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-2 mt-12 sm:mt-16">
         {STEPS.map((step, i) => (
           <StepCard
             key={i}

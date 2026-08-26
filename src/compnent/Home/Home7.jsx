@@ -181,86 +181,43 @@ export default function Home7() {
       />
 
       {/* ── Header ── */}
-      <motion.div
-        style={{ y: headerY, opacity: headerOpacity }}
-        className="relative max-w-[1320px] mx-auto px-5 sm:px-10 mb-14 sm:mb-20"
-      >
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-8">
-          {/* Left */}
-          <div className="max-w-lg">
-            <motion.div
-              initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-              className="flex items-center gap-3 mb-5"
-            >
-              <span
-                className="w-1.5 h-1.5 rounded-full"
-                style={{
-                  background: ACCENT,
-                  boxShadow: `0 0 12px ${ACCENT}`,
-                }}
-              />
-              <span
-                className="text-[10px] sm:text-[11px] font-bold tracking-[0.24em] uppercase"
-                style={{ color: ACCENT }}
-              >
-                Top Destinations
-              </span>
-            </motion.div>
+  
 
-            <motion.h2
-              initial={{ opacity: 0, y: 22 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.65,
-                delay: 0.07,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="text-4xl sm:text-5xl lg:text-[58px] font-bold leading-[1.04] tracking-tight break-words pb-[0.14em] -mb-[0.14em]"
-              style={{
-                backgroundImage: `linear-gradient(130deg, #fff 20%, ${ACCENT} 100%)`,
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                color: "transparent",
-              }}
-            >
-              Graphics
-            </motion.h2>
-          </div>
+  <motion.div
+  style={{ y: headerY, opacity: headerOpacity }}
+  className="relative max-w-[1320px] mx-auto px-5 sm:px-10 -mt-8 sm:-mt-14 mb-8 sm:mb-10"
+>
+  <motion.div
+    initial={{ opacity: 0, y: 22 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{
+      duration: 0.65,
+      ease: [0.22, 1, 0.36, 1],
+    }}
+    className="flex items-center gap-3 sm:gap-4"
+  >
+    <span
+      className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full flex-shrink-0"
+      style={{
+        background: ACCENT,
+        boxShadow: `0 0 14px ${ACCENT}`,
+      }}
+    />
 
-          {/* Right */}
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 0.55,
-              delay: 0.16,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="flex flex-col gap-3 sm:items-end"
-          >
-            <p className="text-sm sm:text-[15px] text-white/38 max-w-[270px] sm:text-right leading-relaxed">
-              Live counts from this week's hottest packages across our top
-              markets.
-            </p>
-            <div className="flex items-center sm:justify-end gap-2">
-              <motion.span
-                animate={{ opacity: [1, 0.25, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="w-1.5 h-1.5 rounded-full bg-emerald-400"
-              />
-              <span className="text-[11px] text-white/28 font-medium tracking-wide">
-                Live · Updated now
-              </span>
-            </div>
-          </motion.div>
-        </div>
-      </motion.div>
-
+    <h2
+      className="text-4xl sm:text-5xl lg:text-[58px] font-bold leading-[1.04] tracking-tight break-words pb-[0.14em] -mb-[0.14em]"
+      style={{
+        backgroundImage: `linear-gradient(130deg, #fff 20%, ${ACCENT} 100%)`,
+        WebkitBackgroundClip: "text",
+        backgroundClip: "text",
+        color: "transparent",
+      }}
+    >
+      Graphics
+    </h2>
+  </motion.div>
+</motion.div>
       {/* ── Marquee — auto chalta rehta hai, aur haath se bhi kheench sakte ho ── */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
