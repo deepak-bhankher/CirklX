@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { animate, motion, useMotionValue } from "framer-motion";
 
 const REVIEWS = [
   {
@@ -34,6 +34,9 @@ const REVIEWS = [
   },
 ];
 
+const AUTOPLAY_MS = 3800;
+const SLIDE_MS = 0.9;
+
 function ArrowButton({ direction, onClick }) {
   return (
     <motion.button
@@ -59,7 +62,7 @@ function ArrowButton({ direction, onClick }) {
 
 function CardContent({ review }) {
   return (
-    <div className="flex flex-col items-center text-center px-5 py-8 sm:px-6 sm:py-10">
+    <div className="flex flex-col items-center text-center h-full px-5 py-8 sm:px-6 sm:py-10">
       <img
         src={review.avatar}
         alt={review.handle}
@@ -69,32 +72,114 @@ function CardContent({ review }) {
       <p className="text-xs sm:text-sm text-[#15140F] leading-relaxed mb-5">
         "{review.quote}"
       </p>
-      <p className="text-sm font-semibold text-[#15140F]">{review.handle}</p>
+      <p className="text-sm font-semibold text-[#15140F] mt-auto">
+        {review.handle}
+      </p>
       <p className="text-[11px] text-black/40 mt-0.5">{review.followers}</p>
     </div>
   );
 }
 
 function Work3() {
-  const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState(1);
   const total = REVIEWS.length;
 
-  const goTo = (newIndex, dir) => {
-    setDirection(dir);
-    setIndex((newIndex + total) % total);
+  // 3 copies — hum hamesha beech wali copy me rehte hain, isliye dono taraf
+  // hamesha cards maujood rehte hain aur loop point par khaali slot nahi aata.
+  const track = [...REVIEWS, ...REVIEWS, ...REVIEWS];
+
+  const viewportRef = useRef(null);
+  const [dims, setDims] = useState({ slot: 0, gap: 20, center: 1 });
+  const [index, setIndex] = useState(total); // sirf styling/dots ke liye
+  const indexRef = useRef(total); // asli source of truth
+  const dimsRef = useRef(dims);
+  const animRef = useRef(null);
+
+  // x ab React state se nahi, motion value se chalti hai. Isi wajah se
+  // wrap ke waqt hone wala re-render position ko dobara animate nahi karta —
+  // pehle wahi jhatka de raha tha.
+  const x = useMotionValue(0);
+
+  const offsetFor = (i) => {
+    const d = dimsRef.current;
+    return -(i - d.center) * (d.slot + d.gap);
   };
-  const goNext = () => goTo(index + 1, 1);
-  const goPrev = () => goTo(index - 1, -1);
+
+  // Slot width JS se naapte hain kyunki transform ka % track ki apni width
+  // par lagta hai, container ki nahi — isliye exact px chahiye.
+  useEffect(() => {
+    const el = viewportRef.current;
+    if (!el) return;
+
+    const measure = () => {
+      const w = el.getBoundingClientRect().width;
+      const wide = window.matchMedia("(min-width: 640px)").matches;
+      const visible = wide ? 3 : 1;
+      const gap = wide ? 20 : 12;
+
+      const next = {
+        slot: (w - gap * (visible - 1)) / visible,
+        gap,
+        center: wide ? 1 : 0, // desktop par center slot doosra hai
+      };
+
+      dimsRef.current = next;
+      setDims(next);
+      x.set(offsetFor(indexRef.current)); // resize par slide nahi, seedha jagah par
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const go = (delta) => {
+    if (!dimsRef.current.slot) return;
+
+    const target = indexRef.current + delta;
+    indexRef.current = target;
+    setIndex(target);
+
+    animRef.current?.stop();
+    animRef.current = animate(x, offsetFor(target), {
+      duration: SLIDE_MS,
+      ease: [0.22, 1, 0.36, 1],
+      onComplete: () => {
+        // Slide poora hone ke baad agar bahar wali copy me pahunch gaye to
+        // chupke se beech wali copy me laut aate hain. Cards identical hain
+        // aur x seedha set hoti hai, isliye ye reposition dikhta hi nahi.
+        let norm = indexRef.current;
+        if (norm >= total * 2) norm -= total;
+        else if (norm < total) norm += total;
+
+        if (norm !== indexRef.current) {
+          indexRef.current = norm;
+          setIndex(norm);
+          x.set(offsetFor(norm));
+        }
+      },
+    });
+  };
 
   useEffect(() => {
-    const timer = setTimeout(goNext, 3500);
+    if (!dims.slot) return;
+    const timer = setTimeout(() => go(1), AUTOPLAY_MS);
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index]);
+  }, [index, dims.slot]);
 
-  const prevReview = REVIEWS[(index - 1 + total) % total];
-  const nextReview = REVIEWS[(index + 1) % total];
+  useEffect(() => () => animRef.current?.stop(), []);
+
+  const activeDot = ((index % total) + total) % total;
+
+  const goToDot = (i) => {
+    let diff = i - activeDot;
+    // loop ke around chhota raasta chuno
+    if (diff > total / 2) diff -= total;
+    if (diff < -total / 2) diff += total;
+    if (diff !== 0) go(diff);
+  };
 
   return (
     <section className="w-full bg-[#F4F2ED] py-16 sm:py-20 md:py-24 px-4 sm:px-6 md:px-10">
@@ -129,50 +214,46 @@ function Work3() {
       {/* Carousel */}
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center gap-3 sm:gap-4">
-          <ArrowButton direction="left" onClick={goPrev} />
+          <ArrowButton direction="left" onClick={() => go(-1)} />
 
-          <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-5 items-center">
+          {/* py-5 se shadow ko saans lene ki jagah milti hai, warna
+              overflow-hidden use upar-neeche se kaat deta hai. */}
+          <div ref={viewportRef} className="flex-1 overflow-hidden py-5">
+            {dims.slot > 0 && (
+              <motion.div
+                className="flex items-stretch"
+                style={{ x, gap: dims.gap, willChange: "transform" }}
+              >
+                {track.map((review, i) => {
+                  const isCenter = i === index;
 
-            {/* Left — hidden on mobile, blurred on sm+ */}
-            <div
-              className="hidden sm:block bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] overflow-hidden"
-              style={{ filter: "blur(3px)", opacity: 0.4, transform: "scale(0.9)" }}
-            >
-              <CardContent review={prevReview} />
-            </div>
-
-            {/* Center — always visible, animated */}
-            <div className="bg-white rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.12)] overflow-hidden relative">
-              <AnimatePresence initial={false} custom={direction} mode="wait">
-                <motion.div
-                  key={index}
-                  custom={direction}
-                  variants={{
-                    enter: (dir) => ({ x: dir > 0 ? "60%" : "-60%", opacity: 0 }),
-                    center: { x: "0%", opacity: 1 },
-                    exit: (dir) => ({ x: dir > 0 ? "-60%" : "60%", opacity: 0 }),
-                  }}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={{ duration: 0.45, ease: [0.32, 0.72, 0, 1] }}
-                >
-                  <CardContent review={REVIEWS[index]} />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            {/* Right — hidden on mobile, blurred on sm+ */}
-            <div
-              className="hidden sm:block bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] overflow-hidden"
-              style={{ filter: "blur(3px)", opacity: 0.4, transform: "scale(0.9)" }}
-            >
-              <CardContent review={nextReview} />
-            </div>
-
+                  return (
+                    <div
+                      key={i}
+                      style={{ width: dims.slot }}
+                      className={`flex-shrink-0 transition-all duration-700 ease-out ${
+                        isCenter
+                          ? "opacity-100 blur-0 scale-100"
+                          : "sm:opacity-40 sm:blur-[3px] sm:scale-90"
+                      }`}
+                    >
+                      <div
+                        className={`h-full bg-white rounded-2xl overflow-hidden transition-shadow duration-700 ${
+                          isCenter
+                            ? "shadow-[0_8px_40px_rgba(0,0,0,0.12)]"
+                            : "shadow-[0_4px_16px_rgba(0,0,0,0.06)]"
+                        }`}
+                      >
+                        <CardContent review={review} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </motion.div>
+            )}
           </div>
 
-          <ArrowButton direction="right" onClick={goNext} />
+          <ArrowButton direction="right" onClick={() => go(1)} />
         </div>
 
         {/* Dots */}
@@ -180,9 +261,9 @@ function Work3() {
           {REVIEWS.map((_, i) => (
             <button
               key={i}
-              onClick={() => goTo(i, i > index ? 1 : -1)}
+              onClick={() => goToDot(i)}
               className={`rounded-full transition-all duration-300 ${
-                i === index ? "w-6 h-2 bg-black" : "w-2 h-2 bg-black/20"
+                i === activeDot ? "w-6 h-2 bg-black" : "w-2 h-2 bg-black/20"
               }`}
               aria-label={`Go to review ${i + 1}`}
             />
