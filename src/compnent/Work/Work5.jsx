@@ -219,20 +219,15 @@ export default function Work5() {
                 delay: 0.07,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="text-4xl sm:text-5xl lg:text-[58px] font-bold text-white leading-[1.04] tracking-tight"
+              className="text-4xl sm:text-5xl lg:text-[58px] font-bold leading-[1.04] tracking-tight break-words pb-[0.14em] -mb-[0.14em]"
+              style={{
+                backgroundImage: `linear-gradient(130deg, #fff 20%, ${ACCENT} 100%)`,
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                color: "transparent",
+              }}
             >
-              Where the world
-              <br />
-              <span
-                style={{
-                  backgroundImage: `linear-gradient(130deg, #fff 20%, ${ACCENT} 100%)`,
-                  WebkitBackgroundClip: "text",
-                  backgroundClip: "text",
-                  color: "transparent",
-                }}
-              >
-                is booking now
-              </span>
+              Graphics
             </motion.h2>
           </div>
 
@@ -288,7 +283,8 @@ export default function Work5() {
         <div
           className="absolute right-0 top-0 h-full w-24 sm:w-40 pointer-events-none z-10"
           style={{
-            background: "linear-gradient(to left, #070707 0%, transparent 100%)",
+            background:
+              "linear-gradient(to left, #070707 0%, transparent 100%)",
           }}
         />
 
