@@ -4,61 +4,61 @@ import { motion, animate, useMotionValue, useTransform } from "framer-motion";
 // Each reel: video src + thumbnail image + instagram handle.
 const REELS = [
   {
-    video: "/video1.mp4",
+    video: "/video1-opt.mp4",
     thumb: "/thumb1.png",
     handle: "@logicgpt",
     followers: "403k",
   },
   {
-    video: "/video2.mp4",
+    video: "/video2-opt.mp4",
     thumb: "/thumb3.png",
     handle: "@mr_techog",
     followers: "215k",
   },
   {
-    video: "/video3.mp4",
+    video: "/video3-opt.mp4",
     thumb: "/thumb4.png",
     handle: "@logicgpt",
     followers: "403k",
   },
   {
-    video: "/video4.mp4",
+    video: "/video4-opt.mp4",
     thumb: "/thumb2.png",
     handle: "@mr_techog",
     followers: "215k",
   },
   {
-    video: "/video5.mp4",
+    video: "/video5-opt.mp4",
     thumb: "/thumb3.png",
     handle: "@uditgpt",
     followers: "732k",
   },
   {
-    video: "/video6.mp4",
+    video: "/video6-opt.mp4",
     thumb: "/thumb6.png",
     handle: "@dr.himanshu_grover_",
     followers: "657k",
   },
   {
-    video: "/video7.mp4",
+    video: "/video7-opt.mp4",
     thumb: "/thumb7.png",
     handle: "@fit.niya",
     followers: "73.1k",
   },
   {
-    video: "/video8.mp4",
+    video: "/video8-opt.mp4",
     thumb: "/thumb5.png",
     handle: "@dr.himanshu_grover_",
     followers: "657k",
   },
   {
-    video: "/video9.mp4",
+    video: "/video9-opt.mp4",
     thumb: "/thumb9.png",
     handle: "@houseofbinti",
     followers: "23.6k",
   },
   {
-    video: "/video10.mp4",
+    video: "/video10-opt.mp4",
     thumb: "thumb8.png",
     handle: "@fit.niya",
     followers: "73.1k",
@@ -313,6 +313,7 @@ function ReelCard({
 }
 
 function Home5() {
+  const sectionRef = useRef(null);
   const trackRef = useRef(null);
   const videosRef = useRef({}); // index -> HTMLVideoElement
   const activeIndexRef = useRef(null);
@@ -322,6 +323,7 @@ function Home5() {
   const dragMovedRef = useRef(false);
 
   const [passWidth, setPassWidth] = useState(0);
+  const [inView, setInView] = useState(false);
 
   const track = Array.from({ length: COPIES }, () => REELS).flat();
 
@@ -357,13 +359,29 @@ function Home5() {
     return () => ro.disconnect();
   }, []);
 
+  // Section screen par hai ya nahi — usi hisaab se auto-scroll chalti/rukti hai.
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(([entry]) =>
+      setInView(entry.isIntersecting),
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   const stopAuto = useCallback(() => {
     animRef.current?.stop();
     animRef.current = null;
   }, []);
 
   const startAuto = useCallback(() => {
-    if (!passWidth || anyPlayingRef.current || draggingRef.current) return;
+    // inView check zaruri hai — warna ye loop page load se hi chalta rehta
+    // hai jabki section screen se neeche hota hai, aur har frame main thread
+    // par 30 cards ki position calculate hoti rehti hai.
+    if (!inView || !passWidth || anyPlayingRef.current || draggingRef.current)
+      return;
     stopAuto();
 
     const run = () => {
@@ -374,7 +392,7 @@ function Home5() {
       });
     };
     run();
-  }, [passWidth, drive, stopAuto]);
+  }, [inView, passWidth, drive, stopAuto]);
 
   useEffect(() => {
     startAuto();
@@ -411,7 +429,7 @@ function Home5() {
   const wasDragged = useCallback(() => dragMovedRef.current, []);
 
   return (
-    <section className="w-full bg-[#F4F2ED] py-20 sm:py-24">
+    <section ref={sectionRef} className="w-full bg-[#F4F2ED] py-20 sm:py-24">
       <div className="max-w-6xl mx-auto px-6">
         <motion.h2
           initial={{ opacity: 0, y: 16 }}

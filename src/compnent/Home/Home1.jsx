@@ -519,7 +519,7 @@ export default function Home1() {
         className="absolute inset-0 w-full h-full object-cover object-center"
         style={{ minHeight: "100%", minWidth: "100%" }}
       >
-        <source src="/video.mp4" type="video/mp4" />
+        <source src="/video-opt.mp4" type="video/mp4" />
       </video>
       {/* Dark overlay so text stays readable */}
       <div className="absolute inset-0 bg-black/20 sm:bg-black/40" />

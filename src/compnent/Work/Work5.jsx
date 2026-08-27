@@ -12,21 +12,21 @@ const COPIES = 3; // drag ke liye dono taraf buffer chahiye, isliye 2 ki jagah 3
 const SPEED = 120; // auto-scroll ki raftaar, px per second (pehle 38s/pass tha)
 
 const DESTINATIONS = [
-  { id: 1, name: "Gearix", image: "work1.jpeg" },
-  { id: 2, name: "Easter Collection", image: "work2.jpeg" },
-  { id: 3, name: "Geeta Syrup", image: "work3.jpeg" },
-  { id: 4, name: "Easter Decor", image: "work4.jpeg" },
-  { id: 5, name: "Burger Wings ", image: "work5.jpeg" },
-  { id: 6, name: "Geeta Syrup", image: "work6.jpeg" },
-  { id: 7, name: "Gearix", image: "work7.jpeg" },
-  { id: 8, name: "Geeta Syrup", image: "work8.jpeg" },
-  { id: 9, name: "Geeta Syrup", image: "work9.jpeg" },
-  { id: 10, name: "Burger Wings", image: "work10.jpeg" },
-  { id: 11, name: "Easter", image: "work11.jpeg" },
-  { id: 12, name: "Geeta Syrup", image: "work12.jpeg" },
-  { id: 13, name: "Gearix", image: "work13.jpeg" },
-  { id: 14, name: "Easter", image: "work14.jpeg" },
-  { id: 15, name: "Burger Wings", image: "work15.jpeg" },
+  { id: 1, name: "Gearix", image: "work1.webp" },
+  { id: 2, name: "Easter Collection", image: "work2.webp" },
+  { id: 3, name: "Geeta Syrup", image: "work3.webp" },
+  { id: 4, name: "Easter Decor", image: "work4.webp" },
+  { id: 5, name: "Burger Wings ", image: "work5.webp" },
+  { id: 6, name: "Geeta Syrup", image: "work6.webp" },
+  { id: 7, name: "Gearix", image: "work7.webp" },
+  { id: 8, name: "Geeta Syrup", image: "work8.webp" },
+  { id: 9, name: "Geeta Syrup", image: "work9.webp" },
+  { id: 10, name: "Burger Wings", image: "work10.webp" },
+  { id: 11, name: "Easter", image: "work11.webp" },
+  { id: 12, name: "Geeta Syrup", image: "work12.webp" },
+  { id: 13, name: "Gearix", image: "work13.webp" },
+  { id: 14, name: "Easter", image: "work14.webp" },
+  { id: 15, name: "Burger Wings", image: "work15.webp" },
 ];
 
 /* ── Single Card — image only + small username below ────────── */

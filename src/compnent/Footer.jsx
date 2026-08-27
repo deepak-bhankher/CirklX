@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaInstagram, FaFacebookF, FaTiktok, FaYoutube } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-
 
 const WHATSAPP_NUMBER = "918053200325";
 const WHATSAPP_MSG = "Hi CirklX! I want to book a free meeting.";
@@ -10,9 +10,6 @@ const WA_LINK = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}?text=${enco
 
 // tel: link — click karte hi phone ka dialer number ke saath khul jaata hai.
 const PHONE_LINK = "tel:+918053200325";
-
-
-
 
 const ICONS = [
   {
@@ -149,8 +146,26 @@ function GlassIconCard({ icon, tone = "default", size = 56 }) {
 }
 
 function ArcTrack() {
+  const wrapRef = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  // Rotation tabhi chalti hai jab arc screen par ho. Pehle ye page load se
+  // hi chalti rehti thi — footer teen screen neeche hone par bhi — aur har
+  // frame main thread par kaam deti thi.
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(([entry]) =>
+      setVisible(entry.isIntersecting),
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
     <div
+      ref={wrapRef}
       className="relative w-full overflow-hidden"
       style={{ height: `${VISIBLE_HEIGHT}px` }}
     >
@@ -194,7 +209,7 @@ function ArcTrack() {
       >
         <motion.div
           className="absolute inset-0"
-          animate={{ rotate: 360 }}
+          animate={visible ? { rotate: 360 } : {}}
           transition={{
             duration: ROTATION_DURATION,
             repeat: Infinity,
@@ -400,7 +415,9 @@ function Footer() {
               </div>
 
               <motion.div className="sm:mt-6">
-               <PrimaryCta compact href={PHONE_LINK}>Let's Talk</PrimaryCta>
+                <PrimaryCta compact href={PHONE_LINK}>
+                  Let's Talk
+                </PrimaryCta>
               </motion.div>
             </div>
           </div>
