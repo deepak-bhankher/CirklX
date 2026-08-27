@@ -3,72 +3,72 @@ import { animate, motion, useMotionValue } from "framer-motion";
 
 const REVIEWS = [
   {
-    avatar: "/about4.png",
-    handle: " Video Production & Creativity*",
+    avatar: "/man1.png",
+    handle: "Arjun Malhotra",
     followers: "112k Followers",
     quote:
       "CirklX is one of the most creative digital marketing agencies in Hisar. Their video shoots are professionally planned, and the editing quality is excellent. The team understands the brand before creating content, which makes every reel look unique and engaging.",
   },
   {
-    avatar: "/about4.png",
-    handle: "Social Media Marketing",
+    avatar: "/women1.png",
+    handle: "Ananya Sharma",
     followers: "34k Followers",
     quote:
       "We had a great experience working with CirklX for social media marketing in Hisar. Their team helped us with content planning, creative ideas, reels, and overall social media management. Very professional, responsive, and creative team.",
   },
   {
-    avatar: "/about4.png",
-    handle: "Professional Video Shoots",
+    avatar: "/women2.png",
+    handle: "Priya Verma  ",
     followers: "78k Followers",
     quote:
       "If you are looking for professional video shoots in Hisar, CirklX is a great choice. From shoot planning and camera work to final video editing, everything was handled professionally. The final videos looked premium and perfect for social media.",
   },
   {
-    avatar: "/about4.png",
-    handle: "Reels & Video Editing",
+    avatar: "/man2.png",
+    handle: "Rahul Sharma",
     followers: "55k Followers",
     quote:
       "Really impressed with CirklX's video editing services. Their reel edits are clean, modern, and engaging without looking over-edited. They understand current social media trends while still keeping the content aligned with the brand.",
   },
   {
-    avatar: "/about4.png",
-    handle: " Creative Agency in Hisar",
+    avatar: "/women3.png",
+    handle: "Riya Mehta",
     followers: "91k Followers",
     quote:
       "CirklX is not just another marketing agency in Hisar. Their biggest strength is creativity. They come up with fresh concepts for shoots, reels, and social media content instead of repeating the same ideas everyone else is using.",
   },
 
   {
-    avatar: "/about4.png",
-    handle: " Complete Content Creation",
+    avatar: "/women4.png",
+    handle: "Simran Kaur",
     followers: "91k Followers",
     quote:
       "We approached CirklX for content creation and social media, and the experience was excellent. They handled everything from creative concepts and video shoots to editing and posting strategy. A reliable team for brands looking to improve their online presence.",
   },
   {
-    avatar: "/about4.png",
-    handle: " Brand-Focused SMM",
+    avatar: "/man3.png",
+    handle: "Karan Verma",
     followers: "91k Followers",
     quote:
       "One of the best things about CirklX is that their social media marketing doesn't feel generic. They understand your business, audience, and brand style before planning the content. Their creative reels and video shoots helped give our social media a much more professional look.",
   },
   {
-    avatar: "/about4.png",
-    handle: " Video Editing & Reels",
+    avatar: "/man4.png",
+    handle: "Aditya Singh",
     followers: "91k Followers",
     quote:
       "Highly recommended for video editing and reel production in Hisar. The CirklX team has a strong understanding of pacing, transitions, storytelling, and social media content. They turned our raw footage into professional and engaging videos.",
   },
   {
-    avatar: "/about4.png",
-    handle: "Digital Marketing Agency",
+    avatar: "/women5.png",
+    handle: "Neha Kapoor",
     followers: "91k Followers",
     quote:
       "A professional and creative digital marketing agency in Hisar. CirklX offers a good combination of social media marketing, content creation, video shoots, and editing. Communication is smooth, ideas are fresh, and the overall execution is impressive.",
   },
   {
-    avatar: "/about4.png",
-    handle: " Overall Agency Experience",
+    avatar: "/man5.png",
+    handle: "Rohit Mehta",
     followers: "91k Followers",
     quote:
       "Great experience working with CirklX Agency. Their team is young, creative, and understands what works on social media today. From video production and editing to SMM and creative strategy, they provide a complete solution for businesses looking to grow digitally in Hisar.",
