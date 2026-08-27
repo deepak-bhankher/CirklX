@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { BsFillAirplaneEnginesFill } from "react-icons/bs";
+
 
 const ACCENT = "#D6ff01";
 
@@ -178,7 +178,7 @@ function ConnectorPath({
 function CenterNode({
   wrapSize = "w-[110px] h-[110px] sm:w-[140px] sm:h-[140px] md:w-[160px] md:h-[160px]",
   circleSize = "w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16",
-  iconSize = 22,
+  iconSize = 34,
   labelSize = "text-base sm:text-lg",
   dotCount = 180,
 }) {
@@ -205,9 +205,12 @@ function CenterNode({
             boxShadow: `0 0 26px rgba(214,255,1,0.35), 0 10px 24px rgba(0,0,0,0.5)`,
           }}
         >
-          <BsFillAirplaneEnginesFill
-            className="absolute left-1/2 -translate-x-1/2 text-[#D6ff01]"
-            size={iconSize}
+                    <img
+            src="/white.png"
+            alt="CirklX"
+            className="object-contain"
+            style={{ width: iconSize, height: iconSize }}
+            draggable={false}
           />
         </motion.div>
       </div>
@@ -496,7 +499,7 @@ export default function Work4() {
               CirklX
             </text>
             {/* airplane icon via foreignObject centered on badge */}
-            <foreignObject x="138" y="30" width="44" height="44">
+                      <foreignObject x="138" y="30" width="44" height="44">
               <div
                 style={{
                   width: "100%",
@@ -506,10 +509,15 @@ export default function Work4() {
                   justifyContent: "center",
                 }}
               >
-                <BsFillAirplaneEnginesFill size={20} color="#D6ff01" />
+                <img
+                  src="/white.png"
+                  alt="CirklX"
+                  style={{ width: 22, height: 22, objectFit: "contain" }}
+                  draggable={false}
+                />
               </div>
             </foreignObject>
-
+       
             {/* ══ BEFORE card ══  x=0 y=108 w=148 h=300 */}
             <foreignObject x="0" y="108" width="148" height="300">
               <motion.div
