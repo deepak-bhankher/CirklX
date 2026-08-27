@@ -34,7 +34,7 @@ function useDarkSection() {
     function checkSection() {
       const nav = document.querySelector("nav");
       const navBottom = nav ? nav.getBoundingClientRect().bottom : 70;
-      const checkY = navBottom;
+      const checkY = navBottom
 
       let foundDark = false;
       for (let i = 0; i < darkSections.length; i++) {

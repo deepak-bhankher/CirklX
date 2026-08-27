@@ -38,54 +38,22 @@ const SECTIONS = [
     desc: "Brand marks that leave a lasting impression",
     items: [
       {
-        name: "Apex Studio",
-        img: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?q=70&w=500&auto=format&fit=crop",
-        tag: "Wordmark",
+        name: "Command",
+        img: "logo22.jpeg",
+        tag: "Command",
       },
       {
-        name: "Nova Brand",
-        img: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=70&w=500&auto=format&fit=crop",
-        tag: "Monogram",
+        name: "Mangal",
+        img: "logo23.jpeg",
+        tag: "Mangal",
       },
       {
-        name: "Orbit Co.",
-        img: "https://images.unsplash.com/photo-1634942537034-2531766767d1?q=70&w=500&auto=format&fit=crop",
-        tag: "Emblem",
-      },
-      {
-        name: "Pulse Media",
-        img: "https://images.unsplash.com/photo-1561070791-2526d30994b5?q=70&w=500&auto=format&fit=crop",
-        tag: "Abstract",
+        name: "Burger Wings.",
+        img: "logo24.jpeg",
+        tag: "Burger Wings",
       },
     ],
-  },
-  {
-    id: "graphics",
-    label: "Graphics",
-    desc: "Visual content that stops the scroll",
-    items: [
-      {
-        name: "Social Banner",
-        img: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?q=70&w=500&auto=format&fit=crop",
-        tag: "Social Media",
-      },
-      {
-        name: "Event Poster",
-        img: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=70&w=500&auto=format&fit=crop",
-        tag: "Print",
-      },
-      {
-        name: "UI Kit",
-        img: "https://images.unsplash.com/photo-1545235617-9465d2a55698?q=70&w=500&auto=format&fit=crop",
-        tag: "Digital",
-      },
-      {
-        name: "Motion Reel",
-        img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=70&w=500&auto=format&fit=crop",
-        tag: "Animation",
-      },
-    ],
-  },
+  },  
   {
     id: "branding",
     label: "Branding",
@@ -115,6 +83,14 @@ const SECTIONS = [
   },
 ];
 
+// Grid ab section ke item count se banti hai. 3 items ke liye lg:grid-cols-3,
+// warna 4 columns me teesra card ke baad ek khaali khaana reh jaata tha.
+function gridClass(count) {
+  return count === 3
+    ? "grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5"
+    : "grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5";
+}
+
 function ItemCard({ item, isBranding, isGraphics }) {
   if (isGraphics) {
     return (
@@ -125,7 +101,7 @@ function ItemCard({ item, isBranding, isGraphics }) {
         style={{
           height: "380px",
           boxShadow:
-            "0 20px 48px -14px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06)",
+            "0 12px 32px -12px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.05)",
         }}
       >
         <img
@@ -135,16 +111,17 @@ function ItemCard({ item, isBranding, isGraphics }) {
           loading="lazy"
           decoding="async"
         />
+        {/* Gradient image ke upar hai, isliye ye dono light theme me bhi
+            dark hi rehte hain — warna white text image par padh nahi aata. */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-        <span className="absolute top-4 left-4 text-[9px] font-semibold tracking-widest uppercase px-2.5 py-1 rounded-full text-white/75 bg-[#1a1a1a] border border-white/10">
+        <span className="absolute top-4 left-4 text-[9px] font-semibold tracking-widest uppercase px-2.5 py-1 rounded-full text-white bg-black/60 backdrop-blur-sm">
           {item.tag}
         </span>
         <div className="absolute inset-x-0 bottom-0 p-5">
           <h3 className="text-xl font-bold text-white tracking-tight leading-none mb-4">
             {item.name}
           </h3>
-          <div className="flex items-center justify-between rounded-2xl pl-4 pr-1.5 py-1.5 border border-white/10 bg-[#161616] transition-colors duration-300 group-hover:border-white/20 group-hover:bg-[#1d1d1d]">
+          <div className="flex items-center justify-between rounded-2xl pl-4 pr-1.5 py-1.5 border border-white/15 bg-white/10 backdrop-blur-md transition-colors duration-300 group-hover:bg-white/20">
             <span className="text-xs font-semibold text-white">
               Explore Now
             </span>
@@ -165,8 +142,8 @@ function ItemCard({ item, isBranding, isGraphics }) {
       <motion.div
         whileHover={{ y: -4 }}
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        className="group relative rounded-[20px] overflow-hidden border border-white/[0.08] bg-[#111] cursor-pointer"
-        style={{ boxShadow: "0 8px 32px -8px rgba(0,0,0,0.6)" }}
+        className="group relative rounded-[20px] overflow-hidden border border-black/[0.06] bg-white cursor-pointer"
+        style={{ boxShadow: "0 8px 28px -10px rgba(0,0,0,0.15)" }}
       >
         <div className="relative h-44 overflow-hidden">
           <img
@@ -176,7 +153,6 @@ function ItemCard({ item, isBranding, isGraphics }) {
             loading="lazy"
             decoding="async"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#111] via-transparent to-transparent" />
           <span
             className="absolute top-3 left-3 text-[9px] font-bold tracking-[0.18em] uppercase px-2.5 py-1 rounded-full text-black"
             style={{ background: ACCENT }}
@@ -185,7 +161,9 @@ function ItemCard({ item, isBranding, isGraphics }) {
           </span>
         </div>
         <div className="p-4 flex items-center justify-between">
-          <span className="text-sm font-semibold text-white">{item.name}</span>
+          <span className="text-sm font-semibold text-[#15140F]">
+            {item.name}
+          </span>
           <span
             className="w-7 h-7 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
             style={{ background: ACCENT, color: "#000" }}
@@ -202,7 +180,7 @@ function ItemCard({ item, isBranding, isGraphics }) {
       whileHover={{ y: -4 }}
       transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
       className="group relative rounded-[20px] overflow-hidden cursor-pointer"
-      style={{ boxShadow: "0 8px 32px -8px rgba(0,0,0,0.6)" }}
+      style={{ boxShadow: "0 8px 28px -10px rgba(0,0,0,0.15)" }}
     >
       <div className="relative h-52 overflow-hidden">
         <img
@@ -212,8 +190,8 @@ function ItemCard({ item, isBranding, isGraphics }) {
           loading="lazy"
           decoding="async"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-        <span className="absolute top-3 left-3 text-[9px] font-bold tracking-[0.18em] uppercase px-2.5 py-1 rounded-full bg-[#1a1a1a] border border-white/10 text-white/70">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+        <span className="absolute top-3 left-3 text-[9px] font-bold tracking-[0.18em] uppercase px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-sm text-white">
           {item.tag}
         </span>
         <div className="absolute bottom-0 left-0 right-0 p-4 flex items-end justify-between">
@@ -240,25 +218,15 @@ export default function DestinationsGrid() {
   }, []);
 
   return (
-    <section
-      data-theme="dark"
-      className="relative w-full bg-[#070707] pt-8 sm:pt-10 pb-20 sm:pb-28 overflow-hidden"
-    >
+    // data-theme="dark" hata diya — ab navbar is section par black text dikhata hai.
+        <section className="relative w-full bg-[#F4F2ED] pt-24 sm:pt-28 pb-20 sm:pb-28 overflow-hidden">
       {/* subtle top border */}
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px"
         style={{
-          background: `linear-gradient(90deg, transparent, ${ACCENT}40, transparent)`,
+          background: `linear-gradient(90deg, transparent, rgba(0,0,0,0.12), transparent)`,
         }}
       />
-
-      {/* bg glow */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full blur-[120px]"
-          style={{ background: "rgba(214,255,1,0.04)" }}
-        />
-      </div>
 
       <div className="relative max-w-[1320px] mx-auto px-5 sm:px-10">
         {/* 4 Sections */}
@@ -285,16 +253,16 @@ export default function DestinationsGrid() {
                     >
                       0{si + 1}
                     </span>
-                    <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                    <h3 className="text-2xl sm:text-3xl font-bold text-[#15140F] tracking-tight">
                       {section.label}
                     </h3>
                   </div>
-                  <p className="text-sm text-white/35 ml-10">{section.desc}</p>
+                  <p className="text-sm text-black/45 ml-10">{section.desc}</p>
                 </div>
               </div>
 
-              {/* 4 Cards grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+              {/* Cards grid — column count item count se aata hai */}
+              <div className={gridClass(section.items.length)}>
                 {section.items.map((item, ii) => (
                   <motion.div
                     key={item.name}
