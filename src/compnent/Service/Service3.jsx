@@ -215,7 +215,6 @@ function Service3() {
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center gap-3 sm:gap-4">
           <ArrowButton direction="left" onClick={() => go(-1)} />
-
           {/* py-5 se shadow ko saans lene ki jagah milti hai, warna
               overflow-hidden use upar-neeche se kaat deta hai. */}
           <div ref={viewportRef} className="flex-1 overflow-hidden py-5">
@@ -223,7 +222,7 @@ function Service3() {
               <motion.div
                 className="flex items-stretch"
                 style={{ x, gap: dims.gap, willChange: "transform" }}
-              >
+              >s
                 {track.map((review, i) => {
                   const isCenter = i === index;
 

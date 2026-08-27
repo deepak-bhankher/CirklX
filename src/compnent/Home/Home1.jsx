@@ -686,7 +686,7 @@ export default function Home1() {
               <Link to="/contact">Book A Free Meeting</Link>
             </PrimaryGlassCta>
             <SecondaryGlassCta>
-              <Link to="/contact">View Our Works</Link>
+              <Link to="/work">View Our Works</Link>
             </SecondaryGlassCta>
           </motion.div>
 

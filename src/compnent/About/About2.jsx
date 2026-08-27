@@ -3,20 +3,13 @@ import { motion } from "framer-motion";
 // Trusted-by brand logos. Replace the label/icon markup with real SVG
 // logos whenever you have them — kept as styled text + small marks here so
 // the row works immediately without extra image assets.
-const BRANDS = [
-  { name: "sparkle", style: "font-bold" },
-  { name: "Lum◻Labs", style: "font-bold" },
-  { name: "✤ Craftgram", style: "font-bold" },
-  { name: "♫ Pulse", style: "font-bold" },
-  { name: "swift➤", style: "font-bold italic" },
-  { name: "sparkle", style: "font-bold" },
-];
+// 21 logo files — array haath se likhne ki jagah generate kar liya.
+const BRANDS = Array.from({ length: 21 }, (_, i) => `/logo${i + 1}.png`);
 
 function BrandMarquee() {
-  // Duplicate the brand list so the track is 2x one full pass. Animating x
-  // from 0% to -50% on an infinite linear loop makes the second half line
-  // up exactly with the first, so it reads as one continuous, seamless
-  // right-to-left scroll with no visible jump at the loop point.
+  // List 2x duplicate — x ko 0% se -50% linear infinite animate karne par
+  // doosra half pehle ke exactly upar aata hai, isliye loop point par jump
+  // nahi dikhta aur flow continuous lagta hai.
   const track = [...BRANDS, ...BRANDS];
 
   return (
@@ -28,15 +21,20 @@ function BrandMarquee() {
       <motion.div
         className="flex w-max items-center gap-10 sm:gap-14 md:gap-16"
         animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
       >
-        {track.map((brand, i) => (
-          <span
+        {track.map((src, i) => (
+          <img
             key={i}
-            className={`flex-shrink-0 text-lg sm:text-xl md:text-2xl text-black/80 whitespace-nowrap ${brand.style}`}
-          >
-            {brand.name}
-          </span>
+            src={src}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            draggable={false}
+            // h-* fix, w-auto — har logo apna aspect ratio rakhta hai.
+            // object-contain se koi bhi logo crop nahi hota.
+            className="flex-shrink-0 h-16 sm:h-20 md:h-24 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity duration-300"
+          />
         ))}
       </motion.div>
 
