@@ -84,15 +84,17 @@ function Home2() {
   return (
     <section className="w-full bg-[#F4F2ED] py-16 sm:py-20 px-6">
       <div className="max-w-7xl mx-auto">
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="text-center text-xs sm:text-sm font-semibold tracking-widest text-black/40 uppercase mb-6 sm:mb-8"
+          transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
+          className="flex justify-center mb-8"
         >
-          Trusted by 10,000+ founders &amp; business owners
-        </motion.p>
+          <span className="inline-flex items-center rounded-lg border border-black/20 hover:bg-black hover:text-[#D6ff01] transition-all duration-300   cursor-pointer px-4 py-1.5 text-xs font-semibold tracking-wide text-black/70">
+            OUR PROCESS
+          </span>
+        </motion.div>
 
       </div>
 

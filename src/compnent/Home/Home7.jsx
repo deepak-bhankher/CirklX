@@ -12,21 +12,31 @@ const COPIES = 3; // drag ke liye dono taraf buffer chahiye, isliye 2 ki jagah 3
 const SPEED = 120; // auto-scroll ki raftaar, px per second (pehle 38s/pass tha)
 
 const DESTINATIONS = [
-  { id: 1, name: "Gearix", image: "work1.webp" },
-  { id: 2, name: "Easter Collection", image: "work2.webp" },
-  { id: 3, name: "Geeta Syrup", image: "work3.webp" },
-  { id: 4, name: "Easter Decor", image: "work4.webp" },
-  { id: 5, name: "Burger Wings ", image: "work5.webp" },
-  { id: 6, name: "Geeta Syrup", image: "work6.webp" },
-  { id: 7, name: "Gearix", image: "work7.webp" },
-  { id: 8, name: "Geeta Syrup", image: "work8.webp" },
-  { id: 9, name: "Geeta Syrup", image: "work9.webp" },
-  { id: 10, name: "Burger Wings", image: "work10.webp" },
-  { id: 11, name: "Easter", image: "work11.webp" },
-  { id: 12, name: "Geeta Syrup", image: "work12.webp" },
-  { id: 13, name: "Gearix", image: "work13.webp" },
-  { id: 14, name: "Easter", image: "work14.webp" },
-  { id: 15, name: "Burger Wings", image: "work15.webp" },
+  { id: 1, name: "Gearix", image: "/work1.webp" },
+  { id: 2, name: "Easter Collection", image: "/work2.webp" },
+  { id: 3, name: "Geeta Syrup", image: "/work3.webp" },
+  { id: 4, name: "Easter Decor", image: "/work4.webp" },
+  { id: 5, name: "Burger Wings", image: "/work5.webp" },
+  { id: 6, name: "Geeta Syrup", image: "/work6.webp" },
+  { id: 7, name: "Gearix", image: "/work7.webp" },
+  { id: 8, name: "Geeta Syrup", image: "/work8.webp" },
+  { id: 9, name: "Geeta Syrup", image: "/work9.webp" },
+  { id: 10, name: "Burger Wings", image: "/work10.webp" },
+  { id: 11, name: "Easter", image: "/work11.webp" },
+  { id: 12, name: "Geeta Syrup", image: "/work12.webp" },
+  { id: 13, name: "Gearix", image: "/work13.webp" },
+  { id: 14, name: "Easter", image: "/work14.webp" },
+  { id: 15, name: "Burger Wings", image: "/work15.webp" },
+  { id: 16, name: "BSM Uniex salon", image: "/work16.webp" },
+  { id: 18, name: "Hydra Facial", image: "/work18.webp" },
+  { id: 20, name: "Kavya", image: "/work20.webp" },
+   { id: 24, name: "CirklX", image: "/work24.webp" },
+   { id: 19, name: "Jewellery Box", image: "/work19.webp" },
+  { id: 22, name: "Tsuki", image: "/work22.webp" },
+  { id: 23, name: "Hisar Collage", image: "/work23.webp" },
+  { id: 21, name: "Tsuki", image: "/work21.webp" },
+  { id: 17, name: "Haircut & Beard", image: "/work17.webp" },
+ 
 ];
 
 /* ── Single Card — image only + small username below ────────── */
@@ -41,7 +51,7 @@ function DestinationCard({ d }) {
         style={{
           width: "280px",
           height: "380px",
-          boxShadow: `0 20px 48px -14px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06)`,
+          boxShadow: `none`,
           transform: "translateZ(0)",
         }}
       >
@@ -55,7 +65,7 @@ function DestinationCard({ d }) {
         />
       </div>
 
-      <span className="text-[11px] font-medium text-white/40 tracking-wide">
+      <span className="text-[11px] font-medium text-black tracking-wide">
         {d.name}
       </span>
     </div>
@@ -146,8 +156,7 @@ export default function Home7() {
   return (
     <section
       ref={sectionRef}
-      data-theme="dark"
-      className="relative w-full bg-[#070707] overflow-hidden pt-24 sm:pt-32 pb-10 sm:pb-14"
+      className="relative w-full bg-[#F4F2ED] overflow-hidden pt-24 sm:pt-32 pb-10 sm:pb-14"
     >
       {/* ── Background glows ── */}
       <div className="absolute inset-0 pointer-events-none">
@@ -180,10 +189,10 @@ export default function Home7() {
         }}
       />
 
-      <div className="relative max-w-[1320px] mx-auto px-5 sm:px-10 -mt-10 sm:-mt-14 mb-8 sm:mb-10">
+      <div className=" z-0 max-w-[1320px]  mx-auto px-5 sm:px-10 -mt-10 sm:-mt-14 mb-8 sm:mb-10">
         <h2
           className="text-4xl sm:text-5xl lg:text-[58px] font-bold text-center leading-[1.04] tracking-tight"
-          style={{ color: "#ffffff" }}
+          style={{ color: "#000000" }}
         >
           Graphics
         </h2>
@@ -197,23 +206,6 @@ export default function Home7() {
         onMouseEnter={stopAuto}
         onMouseLeave={startAuto}
       >
-        {/* Left fade mask */}
-        <div
-          className="absolute left-0 top-0 h-full w-24 sm:w-40 pointer-events-none z-10"
-          style={{
-            background:
-              "linear-gradient(to right, #070707 0%, transparent 100%)",
-          }}
-        />
-        {/* Right fade mask */}
-        <div
-          className="absolute right-0 top-0 h-full w-24 sm:w-40 pointer-events-none z-10"
-          style={{
-            background:
-              "linear-gradient(to left, #070707 0%, transparent 100%)",
-          }}
-        />
-
         {/* Drag layer. Framer ka drag="x" touch par pan-y allow karta hai,
             isliye page ka vertical scroll waise ka waisa chalta rehta hai. */}
         <motion.div

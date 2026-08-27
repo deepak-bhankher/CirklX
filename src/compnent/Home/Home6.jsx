@@ -6,7 +6,7 @@ const FAQS = [
     question: "What does CirklX actually do?",
     answer:
       "We're a full-service social media marketing agency in Hisar. We plan, shoot, edit, and post content — Reels, Shorts & Posts — and manage your entire social media presence so your brand grows consistently.",
-  },
+  },  
 
   {
     question: "Which platforms do you manage?",
