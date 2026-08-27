@@ -3,27 +3,22 @@ import { motion } from "framer-motion";
 const teamMembers = [
   {
     id: 1,
-    image: "/team1.jpg",
-    name: "Krishan Bansal",
-    role: "Lead Editor",
-    description:
-      "Creates viral short-form videos with cinematic storytelling and smooth motion graphics.",
+    image: "/team3.jpeg",
+    name: "Govind Sharma",
+    role: "Creative Director",
   },
   {
     id: 2,
-    image: "/team2.jpg",
+    image: "/team2.jpeg",
     name: "Naveen Nagar",
-    role: "Creative Director",
-    description:
-      "Turns simple ideas into high-converting social media content loved by brands.",
+    role: "  Lead Editor",
   },
   {
     id: 3,
-    image: "/team3.jpg",
-    name: "Govind Sharma",
+    image: "/team1.jpeg",
+    name: " Krishan Bansal",
     role: "Client Success",
-    description:
-      "Keeps every project on track while making sure clients are always happy.",
+  
   },
 ];
 
@@ -63,12 +58,11 @@ function TeamCard({ member }) {
         />
       </div>
 
-      <div className="p-7">
+      <div className="p-7 text-center">
         <h2 className="text-2xl font-bold text-[#15140F]">{member.name}</h2>
         <span className="inline-block mt-3 border border-black/20 px-3 py-1 text-xs font-semibold tracking-wide rounded-md text-black/70 group-hover:bg-black group-hover:text-[#D6ff01] group-hover:border-black transition-all duration-300">
           {member.role}
         </span>
-        <p className="text-black/60 leading-7 mt-4">{member.description}</p>
       </div>
     </motion.div>
   );

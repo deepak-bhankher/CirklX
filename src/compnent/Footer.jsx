@@ -67,8 +67,8 @@ function PrimaryCta({
 // glyphs isliye use kiye kyunki wo monochrome ke liye bane hain — purane
 // hand-drawn SVGs single color me shapeless lagte (Instagram bas ek square).
 const SOCIALS = [
-  { href: "https://instagram.com", label: "Instagram", Icon: FaInstagram },
-  { href: "https://facebook.com", label: "Facebook", Icon: FaFacebookF },
+  { href: "https://www.instagram.com/cirklx.agency/", label: "Instagram", Icon: FaInstagram },
+  { href: "https://www.facebook.com/cirklxagency/?ref=PROFILE_EDIT_xav_ig_profile_page_web#", label: "Facebook", Icon: FaFacebookF },
   { href: "https://twitter.com", label: "Twitter / X", Icon: FaXTwitter },
   { href: "https://tiktok.com", label: "TikTok", Icon: FaTiktok },
   { href: "https://youtube.com", label: "YouTube", Icon: FaYoutube },
@@ -294,7 +294,7 @@ function Footer() {
                   </svg>
                 </ContactIcon>
                 <span className="leading-relaxed pt-0.5 sm:pt-1">
-                  Hisar, Haryana,
+                   DSS 79, Basment, Near Lemon Tree,<br/> Old Court Complex, Hisar, Haryana,
                   <br />
                   India — 125001
                 </span>

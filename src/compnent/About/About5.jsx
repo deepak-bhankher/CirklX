@@ -1,9 +1,17 @@
 import { motion } from "framer-motion";
 
+
+const WHATSAPP_NUMBER = "918053200325";
+const APPLY_MSG = "I want to be a part of your team!";
+// replace(/\D/g, "") — number me space/+/dash kuch bhi ho, sab hat jaata hai.
+// wa.me sirf plain digits accept karta hai, warna 404 aata hai.
+const APPLY_LINK = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}?text=${encodeURIComponent(APPLY_MSG)}`;
+
+
 const OPENINGS = [
  {
-  title: "React Developer",
-  desc: "Develops modern, high-performance websites with seamless user experiences.",
+  title: "Content Creater",
+  desc: "Creating engaging content that connects, inspires, and leaves an impact.",
 },
 {
   title: "Marketing Lead",
@@ -21,15 +29,18 @@ const OPENINGS = [
 
 function ApplyButton() {
   return (
-    <motion.button
+    <motion.a
+      href={APPLY_LINK}
+      target="_blank"
+      rel="noopener noreferrer"
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.96 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
-     className="shrink-0 whitespace-nowrap rounded-lg bg-[#D6ff01] text-black px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold
-  hover:bg-black hover:text-[#D6ff01] transition-all cursor-pointer hover:shadow-lg duration-300"
+      className="shrink-0 whitespace-nowrap rounded-lg bg-[#D6ff01] text-black px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold
+        hover:bg-black hover:text-[#D6ff01] transition-all cursor-pointer hover:shadow-lg duration-300"
     >
       Apply Now
-    </motion.button>
+    </motion.a>
   );
 }
 
