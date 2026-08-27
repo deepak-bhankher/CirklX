@@ -77,7 +77,7 @@ export default function Home7() {
   });
 
   const headerY = useTransform(scrollYProgress, [0, 0.5], ["0px", "-30px"]);
-  const headerOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0.5]);
+  const headerOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0.9]);
 
   const LOOP = Array.from({ length: COPIES }, () => DESTINATIONS).flat();
 
@@ -180,45 +180,14 @@ export default function Home7() {
         }}
       />
 
-      {/* ── Header ── */}
-  
-
-  <motion.div
-  style={{ y: headerY, opacity: headerOpacity }}
-  className="relative max-w-[1320px] mx-auto px-5 sm:px-10 -mt-8 sm:-mt-14 mb-8 sm:mb-10"
->
-  <motion.div
-    initial={{ opacity: 0, y: 22 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{
-      duration: 0.65,
-      ease: [0.22, 1, 0.36, 1],
-    }}
-    className="flex items-center gap-3 sm:gap-4"
-  >
-    <span
-      className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full flex-shrink-0"
-      style={{
-        background: ACCENT,
-        boxShadow: `0 0 14px ${ACCENT}`,
-      }}
-    />
-
-    <h2
-      className="text-4xl sm:text-5xl lg:text-[58px] font-bold leading-[1.04] tracking-tight break-words pb-[0.14em] -mb-[0.14em]"
-      style={{
-        backgroundImage: `linear-gradient(130deg, #fff 20%, ${ACCENT} 100%)`,
-        WebkitBackgroundClip: "text",
-        backgroundClip: "text",
-        color: "transparent",
-      }}
-    >
-      Graphics
-    </h2>
-  </motion.div>
-</motion.div>
-      {/* ── Marquee — auto chalta rehta hai, aur haath se bhi kheench sakte ho ── */}
+      <div className="relative max-w-[1320px] mx-auto px-5 sm:px-10 -mt-10 sm:-mt-14 mb-8 sm:mb-10">
+        <h2
+          className="text-4xl sm:text-5xl lg:text-[58px] font-bold text-center leading-[1.04] tracking-tight"
+          style={{ color: "#ffffff" }}
+        >
+          Graphics
+        </h2>
+      </div>
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}

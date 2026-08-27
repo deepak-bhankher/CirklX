@@ -185,7 +185,7 @@ function ServiceCard({ card, index }) {
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5, delay: 0.3 + index * 0.1, ease: "easeOut" }}
       whileHover={{ y: -4 }}
-      className="relative flex flex-col justify-center sm:justify-between bg-white rounded-3xl p-6 sm:p-7 min-h-[190px] sm:min-h-[230px] overflow-hidden
+      className="relative flex flex-col justify-center sm:justify-between bg-white rounded-3xl p-6 sm:p-7 min-h-[190px] sm:min-h-[180px] overflow-hidden
         shadow-[0_2px_16px_rgba(0,0,0,0.03)] hover:shadow-[0_10px_32px_rgba(0,0,0,0.08)]
         transition-shadow duration-300"
     >

@@ -212,7 +212,7 @@ function Work3() {
       </div>
 
       {/* Carousel */}
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         <div className="flex items-center gap-3 sm:gap-4">
           <ArrowButton direction="left" onClick={() => go(-1)} />
 
@@ -240,7 +240,7 @@ function Work3() {
                       <div
                         className={`h-full bg-white rounded-2xl overflow-hidden transition-shadow duration-700 ${
                           isCenter
-                            ? "shadow-[0_8px_40px_rgba(0,0,0,0.12)]"
+                            ?  "shadow-[0_4px_16px_rgba(0,0,0,0.05)]"
                             : "shadow-[0_4px_16px_rgba(0,0,0,0.06)]"
                         }`}
                       >
