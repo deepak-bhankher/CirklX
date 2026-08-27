@@ -25,6 +25,7 @@ const CIRCLE = 42; // uthe hue lime circle ka diameter
 const CIRCLE_LIFT = 18; // circle bar ke top se kitna upar uthta hai
 const CUT_R = 25; // notch ka radius — circle se thoda bada, taaki gap dikhe
 const PAD = 28; // items row ka side inset
+const  HIT = 68;
 
 // Lime circle aur notch dono ka vertical center — ek hi value.
 const CENTER_Y = CIRCLE / 2 - CIRCLE_LIFT;
@@ -44,6 +45,7 @@ export default function MobileBottomNav() {
   const [dragging, setDragging] = useState(false);
   // Drag ke dauraan circle me hovered item ka icon dikhta hai, active ka nahi.
   const [previewIndex, setPreviewIndex] = useState(null);
+    const previewRef = useRef(null); // haptic ko double-fire hone se rokta hai
 
   const activeIndex = Math.max(
     0,
@@ -100,6 +102,7 @@ export default function MobileBottomNav() {
   }, [activeIndex, width]);
 
   const circleLeft = useTransform(smoothX, (cx) => cx - CIRCLE / 2);
+    const hitLeft = useTransform(smoothX, (cx) => cx - HIT / 2);
   // CSS variable ko px string chahiye, plain number se calc fail hota hai.
   const notchXpx = useTransform(smoothX, (cx) => `${cx}px`);
 
@@ -123,7 +126,7 @@ export default function MobileBottomNav() {
     setDragging(true);
   };
 
-  const handlePointerMove = (e) => {
+    const handlePointerMove = (e) => {
     if (!draggingRef.current || !wrapRef.current) return;
 
     const x = clampX(localX(e.clientX));
@@ -131,8 +134,16 @@ export default function MobileBottomNav() {
     // sirf notchX set karne par spring peeche reh jaata aur laggy lagta.
     notchX.set(x);
     smoothX.set(x);
-    setPreviewIndex(indexForX(x));
+
+    const idx = indexForX(x);
+    if (idx !== previewRef.current) {
+      previewRef.current = idx;
+      setPreviewIndex(idx);
+      // Naye slot me ghusne par halka sa haptic — physical feel deta hai.
+      if (navigator.vibrate) navigator.vibrate(8);
+    }
   };
+
 
   const handlePointerUp = (e) => {
     if (!draggingRef.current || !wrapRef.current) return;
@@ -140,6 +151,7 @@ export default function MobileBottomNav() {
     setDragging(false);
 
     const idx = indexForX(clampX(localX(e.clientX)));
+        previewRef.current = null;
     setPreviewIndex(null);
 
     // Spring ki jagah seedha animate — release par circle jahan hai wahan se
@@ -209,41 +221,52 @@ export default function MobileBottomNav() {
         {/* Active item ka uthe hua circle — yahi drag handle bhi hai.
             touchAction: none zaruri hai, warna browser page scroll karne
             lagta hai aur drag beech me toot jaata. */}
+              {/* Invisible hit area — asli touch target. Circle sirf 42px ka hai
+            jo ungli ke liye kam padta hai, isliye 68px ka wrapper. */}
         <motion.div
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
           onPointerCancel={handlePointerUp}
-          animate={{ scale: dragging ? 1.12 : 1 }}
-          transition={{ duration: 0.18, ease: "easeOut" }}
-          className="absolute flex items-center justify-center rounded-full bg-[#D6ff01] cursor-grab active:cursor-grabbing"
+          className="absolute flex items-center justify-center cursor-grab active:cursor-grabbing"
           style={{
-            left: circleLeft,
-            top: -CIRCLE_LIFT,
-            width: CIRCLE,
-            height: CIRCLE,
-            boxShadow: dragging
-              ? "0 10px 26px rgba(0,0,0,0.45)"
-              : "0 6px 18px rgba(0,0,0,0.35)",
+            left: hitLeft,
+            top: -CIRCLE_LIFT - (HIT - CIRCLE) / 2,
+            width: HIT,
+            height: HIT,
             touchAction: "none",
           }}
         >
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.span
-              key={shown.name}
-              initial={{ opacity: 0, scale: 0.55, rotate: -35 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              exit={{ opacity: 0, scale: 0.55, rotate: 35 }}
-              transition={{ duration: 0.22, ease: "easeOut" }}
-              className="flex items-center justify-center pointer-events-none"
-            >
-              <shown.Icon
-                size={19}
-                strokeWidth={2.2}
-                className="text-[#15140F]"
-              />
-            </motion.span>
-          </AnimatePresence>
+          {/* Dikhne wala lime circle */}
+          <motion.div
+            animate={{ scale: dragging ? 1.12 : 1 }}
+            transition={{ duration: 0.18, ease: "easeOut" }}
+            className="flex items-center justify-center rounded-full bg-[#D6ff01] pointer-events-none"
+            style={{
+              width: CIRCLE,
+              height: CIRCLE,
+              boxShadow: dragging
+                ? "0 10px 26px rgba(0,0,0,0.45)"
+                : "0 6px 18px rgba(0,0,0,0.35)",
+            }}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={shown.name}
+                initial={{ opacity: 0, scale: 0.55, rotate: -35 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                exit={{ opacity: 0, scale: 0.55, rotate: 35 }}
+                transition={{ duration: 0.22, ease: "easeOut" }}
+                className="flex items-center justify-center"
+              >
+                <shown.Icon
+                  size={19}
+                  strokeWidth={2.2}
+                  className="text-[#15140F]"
+                />
+              </motion.span>
+            </AnimatePresence>
+          </motion.div>
         </motion.div>
 
         {/* Tappable items */}
