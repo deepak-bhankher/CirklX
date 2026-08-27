@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import {
+  animate,
   AnimatePresence,
   motion,
   useMotionValue,
   useSpring,
   useTransform,
 } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FiHome, FiUser, FiGrid, FiPlayCircle, FiMail } from "react-icons/fi";
 
 const ITEMS = [
@@ -35,15 +36,21 @@ const NOTCH_MASK = `radial-gradient(circle at var(--notch-x) ${CENTER_Y}px, tran
 
 export default function MobileBottomNav() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const wrapRef = useRef(null);
   const initialised = useRef(false);
+  const draggingRef = useRef(false);
   const [width, setWidth] = useState(0);
+  const [dragging, setDragging] = useState(false);
+  // Drag ke dauraan circle me hovered item ka icon dikhta hai, active ka nahi.
+  const [previewIndex, setPreviewIndex] = useState(null);
 
   const activeIndex = Math.max(
     0,
     ITEMS.findIndex((item) => item.path === pathname),
   );
-  const active = ITEMS[activeIndex];
+  const shownIndex = previewIndex ?? activeIndex;
+  const shown = ITEMS[shownIndex];
 
   useEffect(() => {
     const el = wrapRef.current;
@@ -62,11 +69,25 @@ export default function MobileBottomNav() {
   const notchX = useMotionValue(0);
   const smoothX = useSpring(notchX, { stiffness: 260, damping: 28, mass: 0.9 });
 
+  // Kisi index ka center x — slot width PAD ke andar barabar bantti hai.
+  const slotFor = (i) => {
+    const step = (width - PAD * 2) / ITEMS.length;
+    return PAD + step * (i + 0.5);
+  };
+
+  // Ulta hisaab: finger ki x position kis item ke slot me girti hai.
+  const indexForX = (x) => {
+    const step = (width - PAD * 2) / ITEMS.length;
+    const raw = Math.round((x - PAD) / step - 0.5);
+    return Math.min(ITEMS.length - 1, Math.max(0, raw));
+  };
+
   useEffect(() => {
     if (!width) return;
+    // Drag ke beech route badla to position ko haath se mat cheeno.
+    if (draggingRef.current) return;
 
-    const step = (width - PAD * 2) / ITEMS.length;
-    const target = PAD + step * (activeIndex + 0.5);
+    const target = slotFor(activeIndex);
 
     if (!initialised.current) {
       notchX.set(target);
@@ -75,11 +96,62 @@ export default function MobileBottomNav() {
     } else {
       notchX.set(target);
     }
-  }, [activeIndex, width, notchX, smoothX]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeIndex, width]);
 
   const circleLeft = useTransform(smoothX, (cx) => cx - CIRCLE / 2);
   // CSS variable ko px string chahiye, plain number se calc fail hota hai.
   const notchXpx = useTransform(smoothX, (cx) => `${cx}px`);
+
+  // ---- Drag handling ----
+  // Framer ka drag="x" yahan kaam nahi karta: wo transform badalta hai jabki
+  // circle `left` motion value se position hota hai — dono desync ho jaate.
+  // Isliye pointer events se seedha notchX chalate hain.
+
+  const clampX = (x) =>
+    Math.min(slotFor(ITEMS.length - 1), Math.max(slotFor(0), x));
+
+  const localX = (clientX) => {
+    const rect = wrapRef.current.getBoundingClientRect();
+    return clientX - rect.left;
+  };
+
+  const handlePointerDown = (e) => {
+    if (!width) return;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    draggingRef.current = true;
+    setDragging(true);
+  };
+
+  const handlePointerMove = (e) => {
+    if (!draggingRef.current || !wrapRef.current) return;
+
+    const x = clampX(localX(e.clientX));
+    // Dono set karte hain taaki circle bilkul finger ke saath chale —
+    // sirf notchX set karne par spring peeche reh jaata aur laggy lagta.
+    notchX.set(x);
+    smoothX.set(x);
+    setPreviewIndex(indexForX(x));
+  };
+
+  const handlePointerUp = (e) => {
+    if (!draggingRef.current || !wrapRef.current) return;
+    draggingRef.current = false;
+    setDragging(false);
+
+    const idx = indexForX(clampX(localX(e.clientX)));
+    setPreviewIndex(null);
+
+    // Spring ki jagah seedha animate — release par circle jahan hai wahan se
+    // us item ki jagah tak smoothly glide karta hai, koi jhatka nahi.
+    notchX.set(slotFor(idx));
+    animate(smoothX, slotFor(idx), {
+      duration: 0.45,
+      ease: [0.22, 1, 0.36, 1],
+    });
+
+    if (idx !== activeIndex) navigate(ITEMS[idx].path);
+  };
 
   return (
     <motion.nav
@@ -134,27 +206,38 @@ export default function MobileBottomNav() {
           }}
         />
 
-        {/* Active item ka uthe hua circle */}
+        {/* Active item ka uthe hua circle — yahi drag handle bhi hai.
+            touchAction: none zaruri hai, warna browser page scroll karne
+            lagta hai aur drag beech me toot jaata. */}
         <motion.div
-          className="absolute pointer-events-none flex items-center justify-center rounded-full bg-[#D6ff01]"
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
+          animate={{ scale: dragging ? 1.12 : 1 }}
+          transition={{ duration: 0.18, ease: "easeOut" }}
+          className="absolute flex items-center justify-center rounded-full bg-[#D6ff01] cursor-grab active:cursor-grabbing"
           style={{
             left: circleLeft,
             top: -CIRCLE_LIFT,
             width: CIRCLE,
             height: CIRCLE,
-            boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
+            boxShadow: dragging
+              ? "0 10px 26px rgba(0,0,0,0.45)"
+              : "0 6px 18px rgba(0,0,0,0.35)",
+            touchAction: "none",
           }}
         >
           <AnimatePresence mode="wait" initial={false}>
             <motion.span
-              key={active.name}
+              key={shown.name}
               initial={{ opacity: 0, scale: 0.55, rotate: -35 }}
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
               exit={{ opacity: 0, scale: 0.55, rotate: 35 }}
               transition={{ duration: 0.22, ease: "easeOut" }}
-              className="flex items-center justify-center"
+              className="flex items-center justify-center pointer-events-none"
             >
-              <active.Icon
+              <shown.Icon
                 size={19}
                 strokeWidth={2.2}
                 className="text-[#15140F]"
@@ -169,18 +252,19 @@ export default function MobileBottomNav() {
           style={{ paddingLeft: PAD, paddingRight: PAD }}
         >
           {ITEMS.map((item, i) => {
-            const isActive = i === activeIndex;
+            // Drag ke waqt jo item circle ke neeche hai wo bhi chhup jaaye.
+            const hidden = i === shownIndex;
 
             return (
               <Link
                 key={item.name}
                 to={item.path}
                 aria-label={item.name}
-                aria-current={isActive ? "page" : undefined}
+                aria-current={i === activeIndex ? "page" : undefined}
                 className="flex-1 h-full flex items-center justify-center"
               >
                 <motion.span
-                  animate={{ opacity: isActive ? 0 : 1, y: isActive ? -6 : 0 }}
+                  animate={{ opacity: hidden ? 0 : 1, y: hidden ? -6 : 0 }}
                   transition={{ duration: 0.18 }}
                   className="flex items-center justify-center"
                 >
