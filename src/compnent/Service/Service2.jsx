@@ -118,15 +118,18 @@ function ServiceCardContent({ service }) {
   // Mobile par image normal flow me hai (h-auto + object-contain), isliye
   // poori image dikhti hai — kahin se cut nahi hoti. sm+ par wapas absolute
   // object-cover, bilkul purana desktop behaviour.
- const imageBlock = (
-  <div className="order-2 sm:order-none relative w-full pb-8 sm:pb-0 sm:h-full">
-    <img
-      src={service.image}
-      alt={service.title}
-      className="mx-auto block h-auto w-auto max-w-full max-h-[300px] rounded-2xl object-contain sm:max-h-none sm:absolute sm:inset-0 sm:w-full sm:h-full sm:object-cover"
-    />
-  </div>
-);
+   const imageBlock = (
+    // Mobile par px-8 text block ki padding se match karta hai, taaki image
+    // ka left edge heading/text ke saath aligned rahe.
+    <div className="order-2 sm:order-none relative w-full px-8 pb-8 sm:px-0 sm:pb-0 sm:h-full">
+      <img
+        src={service.image}
+        alt={service.title}
+        // mx-auto hata diya — wahi image ko center kar raha tha.
+        className="block h-auto w-auto max-w-full max-h-[300px] rounded-2xl object-contain sm:max-h-none sm:absolute sm:inset-0 sm:w-full sm:h-full sm:object-cover"
+      />
+    </div>
+  );
   return (
     // Fixed height so every card (regardless of text length) is identical size —
     // this is what stops the next stacked card from "peeking" through.
