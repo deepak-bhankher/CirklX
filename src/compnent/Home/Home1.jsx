@@ -73,6 +73,23 @@ function useHeadlineBadgeBoxSize() {
   return size;
 }
 
+// CSS `hidden`/`md:hidden` sirf display:none karta hai — framer motion
+// hidden elements ko bhi animate karta rehta hai. Isliye breakpoint JS se
+// check karke sirf ek hi curve DOM me daalte hain.
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const update = () => setIsDesktop(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  return isDesktop;
+}
+
 const CURVE_POINTS = [
   { left: "1.8%", top: "3.1%" },
   { left: "2.3%", top: "20.4%" },
@@ -490,6 +507,7 @@ const HEADLINE_ICONS = [
 
 export default function Home1() {
   const iconSize = useResponsiveIconSize();
+    const isDesktop = useIsDesktop();
   const headlineIconSize = useHeadlineIconSize();
   const headlineBadgeBoxSize = useHeadlineBadgeBoxSize();
 
@@ -510,21 +528,29 @@ export default function Home1() {
       className="relative w-full lg:h-dvh lg:min-h-dvh pt-32 sm:pt-36 md:pt-[140px] pb-24 sm:pb-28 lg:pb-32 overflow-hidden"
     >
       {/* Background video */}
+           {/* Background video. Poster pehle paint hota hai taaki background
+          turant dikhe, aur video pehle frame par hi settle ho jaaye.
+          preload="metadata" — poori file page load ke saath nahi kheenchti. */}
+           {/* Background video. Poster pehle paint hota hai taaki background
+          turant dikhe, aur video pehle frame par hi settle ho jaaye.
+          preload="metadata" — poori file page load ke saath nahi kheenchti. */}
       <video
         autoPlay
         muted
         loop
         playsInline
         disablePictureInPicture
+        poster="/hero-poster.webp"
+        preload="metadata"
+        src="/video-opt.mp4"
         className="absolute inset-0 w-full h-full object-cover object-center"
         style={{ minHeight: "100%", minWidth: "100%" }}
-      >
-        <source src="/video-opt.mp4" type="video/mp4" />
-      </video>
+      />
       {/* Dark overlay so text stays readable */}
       <div className="absolute inset-0 bg-black/20 sm:bg-black/40" />
 
       {/* ===== DESKTOP / TABLET (md and up) — untouched ===== */}
+   {isDesktop && (
       <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-[380px] sm:top-[240px] md:top-[260px] lg:top-[220px] xl:top-[190px] w-full max-w-[95vw] sm:max-w-[110vw] md:w-[1100px] md:max-w-[150vw] lg:w-[1320px] lg:max-w-[92vw] xl:w-[1480px] xl:max-w-[95vw] h-[220px] sm:h-[630px] md:h-[660px] lg:h-[760px] xl:h-[840px] overflow-hidden pointer-events-none">
         <div className="absolute top-[16px] sm:top-[-120px] md:top-[-150px] lg:top-[-180px] xl:top-[-200px] left-0 w-full h-[190px] sm:h-[650px] md:h-[650px] lg:h-[760px] xl:h-[840px]">
           <svg
@@ -563,6 +589,7 @@ export default function Home1() {
           />
         </div>
       </div>
+      )}
 
       <div className="relative z-10 md:px-10 h-full flex items-center">
         <div className="md:max-w-5xl md:mx-auto px-6 text-center flex flex-col items-center w-full gap-1 sm:gap-0">
@@ -697,6 +724,7 @@ export default function Home1() {
               buttons ke neeche baithta hai aur kisi text ke upar overlap nahi karta.
               -mx-6 se ye page ke horizontal padding ko cancel karke edge-to-edge
               jaata hai, jaisa reference screenshot me dikh raha hai. */}
+     {!isDesktop && (
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -741,6 +769,7 @@ export default function Home1() {
               fadeZone={4}
             />
           </motion.div>
+     )}
         </div>
       </div>
     </section>

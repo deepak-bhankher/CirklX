@@ -118,14 +118,7 @@ function MuteIcon({ muted }) {
   );
 }
 
-function ReelCard({
-  reel,
-  index,
-  registerVideo,
-  onPlay,
-  onPause,
-  wasDragged,
-}) {
+function ReelCard({ reel, index, registerVideo, onPlay, onPause, wasDragged }) {
   const videoRef = useRef(null);
   const [started, setStarted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -192,7 +185,8 @@ function ReelCard({
 
   const handleTimeUpdate = () => {
     const vid = videoRef.current;
-    if (vid && vid.duration) setProgress((vid.currentTime / vid.duration) * 100);
+    if (vid && vid.duration)
+      setProgress((vid.currentTime / vid.duration) * 100);
   };
 
   const handlePauseEvent = () => {
@@ -324,6 +318,7 @@ function Home5() {
 
   const [passWidth, setPassWidth] = useState(0);
   const [inView, setInView] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const track = Array.from({ length: COPIES }, () => REELS).flat();
 
@@ -357,7 +352,7 @@ function Home5() {
     const ro = new ResizeObserver(measure);
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [mounted]);
 
   // Section screen par hai ya nahi — usi hisaab se auto-scroll chalti/rukti hai.
   useEffect(() => {
@@ -366,6 +361,27 @@ function Home5() {
 
     const io = new IntersectionObserver(([entry]) =>
       setInView(entry.isIntersecting),
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // Cards tabhi DOM me aate hain jab section paas aa jaaye. 30 cards ×
+  // ~5 motion elements = 150 framer instances — page load par yahi sabse
+  // bhaari cheez thi. Mount hone ke baad wapas nahi hatate, warna video
+  // aur hover ka state reset ho jaayega.
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setMounted(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "300px" }, // thoda pehle se, taaki scroll par ready ho
     );
     io.observe(el);
     return () => io.disconnect();
@@ -449,48 +465,53 @@ function Home5() {
       >
         {/* Drag layer. Ye khud `drive` ko move karta hai — Framer ka drag
             touch par pan-y allow karta hai, isliye page ka vertical scroll
-            waise ka waisa kaam karta rehta hai. */}
-        <motion.div
-          drag="x"
-          style={{ x: drive }}
-          dragMomentum={false}
-          onDragStart={() => {
-            draggingRef.current = true;
-            dragMovedRef.current = false;
-            stopAuto();
-          }}
-          onDrag={(_, info) => {
-            if (Math.abs(info.offset.x) > 5) dragMovedRef.current = true;
-          }}
-          onDragEnd={() => {
-            draggingRef.current = false;
-            startAuto();
-            // click event drag ke baad aata hai, isliye flag thoda der rakho
-            setTimeout(() => {
-              dragMovedRef.current = false;
-            }, 80);
-          }}
-          className="w-max cursor-grab active:cursor-grabbing"
-        >
-          <motion.div
-            ref={trackRef}
-            className="flex gap-5 sm:gap-6 w-max px-6"
-            style={{ x: offset, willChange: "transform" }}
-          >
-            {track.map((reel, i) => (
-              <ReelCard
-                key={i}
-                reel={reel}
-                index={i}
-                registerVideo={registerVideo}
-                onPlay={handlePlay}
-                onPause={handleVideoPause}
-                wasDragged={wasDragged}
-              />
-            ))}
-          </motion.div>
-        </motion.div>
+         waise ka waisa kaam karta rehta hai. */}
+        {/* Mount hone tak card ke barabar khaali jagah — warna cards aate hi
+            page neeche khisak jaayega (CLS). */}
+        {!mounted && <div className="h-[293px] sm:h-[347px] md:h-[373px]" />}
 
+        {mounted && (
+          <motion.div
+            drag="x"
+            style={{ x: drive }}
+            dragMomentum={false}
+            onDragStart={() => {
+              draggingRef.current = true;
+              dragMovedRef.current = false;
+              stopAuto();
+            }}
+            onDrag={(_, info) => {
+              if (Math.abs(info.offset.x) > 5) dragMovedRef.current = true;
+            }}
+            onDragEnd={() => {
+              draggingRef.current = false;
+              startAuto();
+              // click event drag ke baad aata hai, isliye flag thoda der rakho
+              setTimeout(() => {
+                dragMovedRef.current = false;
+              }, 80);
+            }}
+            className="w-max cursor-grab active:cursor-grabbing"
+          >
+            <motion.div
+              ref={trackRef}
+              className="flex gap-5 sm:gap-6 w-max px-6"
+              style={{ x: offset, willChange: "transform" }}
+            >
+              {track.map((reel, i) => (
+                <ReelCard
+                  key={i}
+                  reel={reel}
+                  index={i}
+                  registerVideo={registerVideo}
+                  onPlay={handlePlay}
+                  onPause={handleVideoPause}
+                  wasDragged={wasDragged}
+                />
+              ))}
+            </motion.div>
+          </motion.div>
+        )}
         <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-24 bg-gradient-to-r from-[#F4F2ED] to-transparent" />
         <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-24 bg-gradient-to-l from-[#F4F2ED] to-transparent" />
       </div>

@@ -8,7 +8,7 @@ import {
 } from "framer-motion";
 
 const ACCENT = "#D6ff01";
-const COPIES = 3; // drag ke liye dono taraf buffer chahiye, isliye 2 ki jagah 3
+const COPIES = 2; // drag ke liye dono taraf buffer chahiye, isliye 2 ki jagah 3
 const SPEED = 120; // auto-scroll ki raftaar, px per second (pehle 38s/pass tha)
 
 const DESTINATIONS = [
@@ -80,6 +80,8 @@ export default function Home7() {
   const draggingRef = useRef(false);
 
   const [passWidth, setPassWidth] = useState(0);
+    const [inView, setInView] = useState(false);
+    const [mounted, setMounted] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -117,10 +119,44 @@ export default function Home7() {
       }
     };
 
-    measure();
+       measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);
     return () => ro.disconnect();
+  }, [mounted]);
+
+  // Section screen par hai ya nahi — usi hisaab se marquee chalti/rukti hai.
+  // Bina iske ye loop page load se hi chalta rehta tha aur har frame 72
+  // cards ki position calculate hoti thi.
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(([entry]) =>
+      setInView(entry.isIntersecting),
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+
+    // Cards tabhi DOM me aate hain jab section paas aa jaaye. 48 cards page
+  // load par render karna main thread par bhaari padta hai.
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setMounted(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "300px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
   const stopAuto = useCallback(() => {
@@ -128,8 +164,8 @@ export default function Home7() {
     animRef.current = null;
   }, []);
 
-  const startAuto = useCallback(() => {
-    if (!passWidth || draggingRef.current) return;
+      const startAuto = useCallback(() => {
+    if (!inView || !passWidth || draggingRef.current) return;
     // Pehle ye CSS media query se handle hota tha, ab JS me.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -142,7 +178,7 @@ export default function Home7() {
       });
     };
     run();
-  }, [passWidth, drive, stopAuto]);
+  },  [inView, passWidth, drive, stopAuto]);
 
   useEffect(() => {
     startAuto();
@@ -208,6 +244,11 @@ export default function Home7() {
       >
         {/* Drag layer. Framer ka drag="x" touch par pan-y allow karta hai,
             isliye page ka vertical scroll waise ka waisa chalta rehta hai. */}
+                {/* Mount hone tak card ke barabar khaali jagah — warna cards aate hi
+            page neeche khisak jaayega (CLS). */}
+        {!mounted && <div style={{ height: 428 }} />}
+
+        {mounted && (
         <motion.div
           drag="x"
           style={{ x: drive }}
@@ -231,8 +272,11 @@ export default function Home7() {
               <DestinationCard key={`${d.id}-${i}`} d={d} />
             ))}
           </motion.div>
+
         </motion.div>
+          )}
       </motion.div>
+
     </section>
   );
 }
