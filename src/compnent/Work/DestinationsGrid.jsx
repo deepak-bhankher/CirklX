@@ -38,6 +38,8 @@ const SECTIONS = [
     label: "Logo",
     desc: "Brand marks that leave a lasting impression",
     marquee: true,
+    // Logo images crop nahi honi chahiye — poori dikhni chahiye
+    contain: true,
     items: [
       { name: "Command", img: "logo22.jpeg", tag: "Command" },
       { name: "Mangal", img: "logo23.jpeg", tag: "Mangal" },
@@ -70,17 +72,26 @@ function gridClass(count) {
 }
 
 // Branding ka card — sirf image aur tag. Neeche wali white patti aur arrow
+// Branding ka card — sirf image aur tag. Neeche wali white patti aur arrow
 // hata diye, isliye image poori dikhti hai.
-function BrandCard({ item }) {
+// `contain` wale sections (jaise Logo) me image crop nahi hoti — poori
+// dikhti hai aur bacha hua area bg se bhar jaata hai.
+function BrandCard({ item, contain = false }) {
   return (
     <div
-      className="group relative shrink-0 w-[240px] sm:w-[320px] h-[180px] sm:h-[240px] rounded-[20px] overflow-hidden"
+     className={`group relative shrink-0 rounded-[20px] overflow-hidden ${
+        contain
+          ? "w-[320px] sm:w-[440px]"
+          : "w-[240px] sm:w-[320px] h-[180px] sm:h-[240px]"
+      }`}
       style={{ boxShadow: "0 8px 28px -10px rgba(0,0,0,0.15)" }}
     >
       <img
         src={item.img}
         alt={item.tag}
-        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        className={`w-full h-full transition-transform duration-500 group-hover:scale-105 ${
+          contain ? "object-contain" : "object-cover"
+        }`}
         loading="lazy"
         decoding="async"
         draggable={false}
@@ -95,18 +106,18 @@ function BrandCard({ item }) {
   );
 }
 
-const BRAND_SPEED = 40; // px per second
+const BRAND_SPEED = 70; // px per second
 
-function BrandMarquee({ items, speed = BRAND_SPEED, reverse = false }) {
+function BrandMarquee({ items, speed = BRAND_SPEED, contain = false }) {
   const scrollRef = useRef(null);
   const pausedRef = useRef(false);
 
   // 3 copies — hum hamesha beech wali copy me rehte hain, isliye user dono
   // taraf kheench sakta hai aur kabhi kinara nahi aata.
-const copies = items.length >= 6 ? 3 : items.length >= 4 ? 5 : 9;
+  const copies = items.length >= 6 ? 3 : items.length >= 4 ? 5 : 9;
   const track = Array.from({ length: copies }, () => items).flat();
 
-    useEffect(() => {
+  useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -203,13 +214,13 @@ const copies = items.length >= 6 ? 3 : items.length >= 4 ? 5 : 9;
       onPointerCancel={handlePointerUp}
       onMouseEnter={pause}
       onMouseLeave={handlePointerUp}
-      className="relative overflow-x-auto overflow-y-hidden overscroll-x-contain -mx-5 sm:-mx-10
+      className="relative left-1/2 w-screen -ml-[50vw] overflow-x-auto overflow-y-hidden overscroll-x-contain
         [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden
         cursor-grab active:cursor-grabbing"
     >
-      <div className="flex w-max gap-4 sm:gap-5 py-2 px-5 sm:px-10">
+      <div className="flex w-max gap-4 sm:gap-5 py-2">
         {track.map((item, i) => (
-          <BrandCard key={i} item={item} />
+          <BrandCard key={i} item={item} contain={contain} />
         ))}
       </div>
     </div>
@@ -274,7 +285,7 @@ export default function DestinationsGrid() {
         <div className="flex flex-col gap-20 sm:gap-28">
           {SECTIONS.map((section, si) => (
             <div key={section.id} className="reveal reveal-lg">
-                           <div
+              <div
                 className={`mb-8 sm:mb-10 ${section.marquee ? "text-center" : ""}`}
               >
                 <h3 className="text-2xl sm:text-3xl font-bold text-[#15140F] tracking-tight mb-2">
@@ -283,8 +294,8 @@ export default function DestinationsGrid() {
                 <p className="text-sm text-black/45">{section.desc}</p>
               </div>
 
-                           {section.marquee ? (
-                <BrandMarquee items={section.items} />
+              {section.marquee ? (
+                <BrandMarquee items={section.items} contain={section.contain} />
               ) : (
                 <div className={gridClass(section.items.length)}>
                   {section.items.map((item) => (
