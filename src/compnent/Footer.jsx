@@ -327,10 +327,13 @@ function Footer() {
                 Privacy Policy
               </Link>
               <span className="hidden sm:inline-block w-px h-3 bg-white/15" />
-              <span className="flex items-center gap-1.5 text-[11px] sm:text-xs text-white/35 tracking-wide">
+              <Link
+                to="/blog"
+                className="flex items-center gap-1.5 text-[11px] sm:text-xs text-white/35 hover:text-[#D6FF01] transition-colors duration-200 tracking-wide"
+              >
                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#D6FF01] opacity-70" />
                 Blog
-              </span>
+              </Link>
             </nav>
           </div>
         </div>

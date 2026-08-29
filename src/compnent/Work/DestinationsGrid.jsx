@@ -79,7 +79,7 @@ function gridClass(count) {
 function BrandCard({ item, contain = false }) {
   return (
     <div
-     className={`group relative shrink-0 rounded-[20px] overflow-hidden ${
+      className={`group relative shrink-0 rounded-[20px] overflow-hidden ${
         contain
           ? "w-[320px] sm:w-[440px]"
           : "w-[240px] sm:w-[320px] h-[180px] sm:h-[240px]"
