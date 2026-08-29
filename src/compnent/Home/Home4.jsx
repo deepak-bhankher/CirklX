@@ -1,7 +1,7 @@
-import { motion } from "framer-motion";
 import { AiOutlineYoutube } from "react-icons/ai";
 import { AiOutlineInstagram } from "react-icons/ai";
 import { TbBrandAdobePhotoshop } from "react-icons/tb";
+import { useRevealGroup } from "../useReveal";
 
 // Saare icons ab ek hi responsive size use karte hain — mobile par bada,
 // sm+ par chhota. react-icons ke `size` prop ki jagah Tailwind w/h classes,
@@ -36,6 +36,9 @@ const PLATFORM_CARDS = [
 // sm+ par chhota top-left.
 const BADGE_SIZE = "w-20 h-20 sm:w-14 sm:h-14";
 const BADGE_RADIUS = "rounded-3xl sm:rounded-2xl";
+
+// Stagger delays — pehle framer ke `delay: index * 0.1` se aate the.
+const DELAY_CLASS = ["", "reveal-d1", "reveal-d2", "reveal-d3", "reveal-d4"];
 
 const SERVICE_CARDS = [
   {
@@ -136,58 +139,37 @@ function GlassBadge({ children, iconBg, accent, sizeClass, radiusClass }) {
 
 function PlatformCard({ card, index }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
-      whileHover={{ y: -4 }}
-      className="flex flex-col justify-center sm:justify-between bg-white rounded-3xl p-6 sm:p-7 min-h-[190px] sm:min-h-[180px]
-        shadow-[0_2px_16px_rgba(0,0,0,0.03)] hover:shadow-[0_10px_32px_rgba(0,0,0,0.08)]
-        transition-shadow duration-300"
+    <div
+      className={`reveal reveal-lg ${DELAY_CLASS[index]} flex flex-col justify-center sm:justify-between bg-white rounded-3xl p-6 sm:p-7 min-h-[190px] sm:min-h-[180px]
+        shadow-[0_2px_16px_rgba(0,0,0,0.03)] transition-all duration-300
+        hover:-translate-y-1 hover:shadow-[0_10px_32px_rgba(0,0,0,0.08)]`}
     >
       {/* Mobile: badge centered. sm+: top-left, service cards jaisa. */}
       <div className="flex items-center justify-center sm:justify-start mb-4 sm:mb-0">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.7 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{
-            duration: 0.4,
-            delay: index * 0.1 + 0.15,
-            ease: "easeOut",
-          }}
+        <GlassBadge
+          iconBg={card.iconBg}
+          accent={card.accent}
+          sizeClass={BADGE_SIZE}
+          radiusClass={BADGE_RADIUS}
         >
-          <GlassBadge
-            iconBg={card.iconBg}
-            accent={card.accent}
-            sizeClass={BADGE_SIZE}
-            radiusClass={BADGE_RADIUS}
-          >
-            {card.icon}
-          </GlassBadge>
-        </motion.div>
+          {card.icon}
+        </GlassBadge>
       </div>
 
-           <h3 className="text-2xl sm:text-[1.6rem] font-medium text-[#15140F] leading-tight text-center sm:text-left mt-0 sm:mt-7">
+      <h3 className="text-2xl sm:text-[1.6rem] font-medium text-[#15140F] leading-tight text-center sm:text-left mt-0 sm:mt-7">
         {/* join se dono words ek hi line me — bottom cards jaisa */}
         {card.title.join(" ")}
       </h3>
-    </motion.div>
+    </div>
   );
 }
 
 function ServiceCard({ card, index }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.5, delay: 0.3 + index * 0.1, ease: "easeOut" }}
-      whileHover={{ y: -4 }}
-      className="relative flex flex-col justify-center sm:justify-between bg-white rounded-3xl p-6 sm:p-7 min-h-[190px] sm:min-h-[180px] overflow-hidden
-        shadow-[0_2px_16px_rgba(0,0,0,0.03)] hover:shadow-[0_10px_32px_rgba(0,0,0,0.08)]
-        transition-shadow duration-300"
+    <div
+      className={`reveal reveal-lg ${DELAY_CLASS[index + 3]} relative flex flex-col justify-center sm:justify-between bg-white rounded-3xl p-6 sm:p-7 min-h-[190px] sm:min-h-[180px] overflow-hidden
+        shadow-[0_2px_16px_rgba(0,0,0,0.03)] transition-all duration-300
+        hover:-translate-y-1 hover:shadow-[0_10px_32px_rgba(0,0,0,0.08)]`}
     >
       {/* decorative blurred circle */}
       <div
@@ -195,25 +177,14 @@ function ServiceCard({ card, index }) {
       />
 
       <div className="flex items-center justify-center sm:justify-start mb-4 sm:mb-0">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.7 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{
-            duration: 0.4,
-            delay: 0.3 + index * 0.1 + 0.1,
-            ease: "easeOut",
-          }}
+        <GlassBadge
+          iconBg={card.iconBg}
+          accent={card.accent}
+          sizeClass={BADGE_SIZE}
+          radiusClass={BADGE_RADIUS}
         >
-          <GlassBadge
-            iconBg={card.iconBg}
-            accent={card.accent}
-            sizeClass={BADGE_SIZE}
-            radiusClass={BADGE_RADIUS}
-          >
-            {card.icon}
-          </GlassBadge>
-        </motion.div>
+          {card.icon}
+        </GlassBadge>
       </div>
 
       <h3 className="text-2xl font-medium text-[#15140F] leading-tight mt-0 sm:mt-7 text-center sm:text-left">
@@ -222,39 +193,29 @@ function ServiceCard({ card, index }) {
         <br className="hidden sm:inline" />
         <span className="text-black/40">{card.title[1]}</span>
       </h3>
-    </motion.div>
+    </div>
   );
 }
 
 function Home4() {
+  const groupRef = useRevealGroup();
+
   return (
-    <section className="w-full bg-[#F4F2ED] py-16 sm:py-20 px-6">
+    <section ref={groupRef} className="w-full bg-[#F4F2ED] py-16 sm:py-20 px-6">
       <div className="max-w-5xl mx-auto">
         {/* ---- Header ---- */}
         <div className="text-center mb-10 sm:mb-12">
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="flex justify-center mb-5"
-          >
+          <div className="reveal flex justify-center mb-5">
             <span className="inline-flex items-center rounded-lg border border-black/20 hover:bg-black hover:text-[#D6ff01] transition-all duration-300 cursor-pointer px-4 py-1.5 text-xs font-semibold tracking-wide text-black/70">
               SERVICES WE OFFER
             </span>
-          </motion.div>
+          </div>
 
-          <motion.h2
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-            className="text-4xl sm:text-5xl font-bold text-[#15140F] leading-[1.1]"
-          >
+          <h2 className="reveal reveal-d1 text-4xl sm:text-5xl font-bold text-[#15140F] leading-[1.1]">
             Everything you need
             <br />
             for views
-          </motion.h2>
+          </h2>
         </div>
 
         {/* ---- Top row: 3 platform cards ---- */}

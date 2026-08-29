@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useRevealGroup } from "../useReveal";
 
 const FAQS = [
   {
     question: "What does CirklX actually do?",
     answer:
       "We're a full-service social media marketing agency in Hisar. We plan, shoot, edit, and post content — Reels, Shorts & Posts — and manage your entire social media presence so your brand grows consistently.",
-  },  
+  },
 
   {
     question: "Which platforms do you manage?",
@@ -43,10 +43,10 @@ const FAQS = [
 
 function PlusIcon({ isOpen }) {
   return (
-    <motion.div
-      animate={{ rotate: isOpen ? 45 : 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className="flex-shrink-0 flex items-center justify-center w-6 h-6"
+    <div
+      className={`flex-shrink-0 flex items-center justify-center w-6 h-6 transition-transform duration-300 ease-out ${
+        isOpen ? "rotate-45" : ""
+      }`}
     >
       <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
         <path
@@ -56,21 +56,16 @@ function PlusIcon({ isOpen }) {
           strokeLinecap="round"
         />
       </svg>
-    </motion.div>
+    </div>
   );
 }
 
 function FaqItem({ item, isOpen, onToggle }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-      className="bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.03)] overflow-hidden"
-    >
+    <div className="reveal bg-white rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.03)] overflow-hidden">
       <button
         onClick={onToggle}
+        aria-expanded={isOpen}
         className="w-full flex items-center justify-between gap-4 px-6 sm:px-7 py-5 sm:py-6 text-left cursor-pointer"
       >
         <span className="text-sm sm:text-base font-medium text-[#15140F]">
@@ -79,22 +74,17 @@ function FaqItem({ item, isOpen, onToggle }) {
         <PlusIcon isOpen={isOpen} />
       </button>
 
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="overflow-hidden"
-          >
-            <p className="px-6 sm:px-7 pb-5 sm:pb-6 text-sm text-black/55 leading-relaxed">
-              {item.answer}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+      {/* Panel hamesha DOM me rehta hai — sirf grid row 0fr/1fr hoti hai.
+          Isse mount/unmount ka kaam bhi bachta hai aur animation CSS par
+          chalti hai (pehle AnimatePresence + height:auto tha). */}
+      <div className={`acc-panel ${isOpen ? "is-open" : ""}`}>
+        <div>
+          <p className="px-6 sm:px-7 pb-5 sm:pb-6 text-sm text-black/55 leading-relaxed">
+            {item.answer}
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -103,43 +93,36 @@ function Home6() {
   // of a per-item boolean means setting a new index automatically closes
   // whichever one was open before.
   const [openIndex, setOpenIndex] = useState(null);
+  const groupRef = useRevealGroup();
 
   const handleToggle = (index) => {
     setOpenIndex((prev) => (prev === index ? null : index));
   };
 
   return (
-    <section className="w-full bg-[#F4F2ED] py-20 sm:py-24 px-6">
+    <section
+      ref={groupRef}
+      className="w-full bg-[#F4F2ED] py-20 sm:py-24 px-6"
+    >
       <div className="max-w-2xl mx-auto">
         {/* ---- Header ---- */}
         <div className="text-center mb-12">
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="flex justify-center mb-6"
-          >
+          <div className="reveal flex justify-center mb-6">
             <span className="inline-flex items-center rounded-lg border border-black/20 hover:bg-black hover:text-[#D6ff01] cursor-pointer duration-300 transition-all px-4 py-1.5 text-xs font-semibold tracking-wide text-black/70">
               FREQUENTLY ASKED QUESTION
             </span>
-          </motion.div>
+          </div>
 
-          <motion.h2
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-            className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#15140F] leading-tight"
-          >
+          <h2 className="reveal reveal-d1 text-3xl sm:text-4xl md:text-5xl font-bold text-[#15140F] leading-tight">
             Everything You{" "}
-            <br/><span
+            <br />
+            <span
               className="italic font-light text-[#FF5722]"
               style={{ fontFamily: "'Instrument Serif', serif" }}
             >
               Need to Know
             </span>
-          </motion.h2>
+          </h2>
         </div>
 
         {/* ---- Accordion list ---- */}

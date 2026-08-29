@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { useRevealGroup } from "../useReveal";
 
 const STEPS = [
   {
@@ -21,31 +21,21 @@ const STEPS = [
   },
 ];
 
+// Har card ka stagger — pehle framer ka `delay: index * 0.15` tha,
+// ab CSS transition-delay class se.
+const DELAY_CLASS = ["", "reveal-d2", "reveal-d4"];
+
 function StepCard({ step, index, isLast }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.55, delay: index * 0.15, ease: "easeOut" }}
-      className={`relative flex flex-col px-8 sm:px-16 py-2 ${
+    <div
+      className={`reveal reveal-lg ${DELAY_CLASS[index]} relative flex flex-col px-8 sm:px-16 py-2 ${
         !isLast ? "sm:border-r sm:border-black/10" : ""
       } ${index > 0 ? "border-t sm:border-t-0 border-black/10 pt-10 sm:pt-2" : ""}`}
     >
       {step.number && (
-        <motion.span
-          initial={{ opacity: 0, scale: 0.7 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{
-            duration: 0.4,
-            delay: index * 0.15 + 0.1,
-            ease: "easeOut",
-          }}
-          className="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-black/15 text-sm font-semibold text-black/70 mb-5"
-        >
+        <span className="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-black/15 text-sm font-semibold text-black/70 mb-5">
           {step.number}
-        </motion.span>
+        </span>
       )}
 
       <h3 className="text-2xl sm:text-[1.7rem] font-bold text-[#15140F] leading-tight mb-4 max-w-[280px]">
@@ -56,18 +46,11 @@ function StepCard({ step, index, isLast }) {
         {step.desc}
       </p>
 
-      <motion.div
-        initial={{ opacity: 0, scale: 0.96 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true, margin: "-40px" }}
-        transition={{
-          duration: 0.5,
-          delay: index * 0.15 + 0.2,
-          ease: "easeOut",
-        }}
-        whileHover={{ y: -4 }}
+      {/* hover:-translate-y-1 — pehle framer ka whileHover={{ y: -4 }} tha */}
+      <div
         className="w-full max-w-[280px] aspect-[4/3] rounded-2xl overflow-hidden bg-black/5
-          shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-shadow duration-300 hover:shadow-[0_10px_28px_rgba(0,0,0,0.12)]"
+          shadow-[0_4px_20px_rgba(0,0,0,0.06)] transition-all duration-300
+          hover:-translate-y-1 hover:shadow-[0_10px_28px_rgba(0,0,0,0.12)]"
       >
         <img
           src={step.image}
@@ -75,27 +58,22 @@ function StepCard({ step, index, isLast }) {
           className="w-full h-full object-cover"
           draggable={false}
         />
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }
 
 function Home2() {
+  const groupRef = useRevealGroup();
+
   return (
-    <section className="w-full bg-[#F4F2ED] py-16 sm:py-20 px-6">
+    <section ref={groupRef} className="w-full bg-[#F4F2ED] py-16 sm:py-20 px-6">
       <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
-          className="flex justify-center mb-8"
-        >
-          <span className="inline-flex items-center rounded-lg border border-black/20 hover:bg-black hover:text-[#D6ff01] transition-all duration-300   cursor-pointer px-4 py-1.5 text-xs font-semibold tracking-wide text-black/70">
+        <div className="reveal flex justify-center mb-8">
+          <span className="inline-flex items-center rounded-lg border border-black/20 hover:bg-black hover:text-[#D6ff01] transition-all duration-300 cursor-pointer px-4 py-1.5 text-xs font-semibold tracking-wide text-black/70">
             OUR PROCESS
           </span>
-        </motion.div>
-
+        </div>
       </div>
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-2 mt-12 sm:mt-16">

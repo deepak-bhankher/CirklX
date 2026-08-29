@@ -22,3 +22,86 @@ body {
   font-style: italic;
 }
 
+
+
+@keyframes marquee-x {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Compositor par chalta hai — main thread bilkul free rehta hai.
+   framer-motion ka infinite animate har frame JS execute karta tha. */
+.marquee-track {
+  animation: marquee-x 20s linear infinite;
+  will-change: transform;
+}
+
+
+
+
+
+
+/* Scroll-reveal animations — pehle ye framer-motion se hote the.
+   Wahi effect, par browser khud handle karta hai (GPU par), JS ko
+   haath nahi lagana padta. IntersectionObserver .is-visible class
+   lagata hai jab element screen par aata hai. */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Neeche se zyada distance chahiye to ye */
+.reveal-lg {
+  transform: translateY(30px);
+}
+
+/* Stagger — ek ke baad ek aane ke liye */
+.reveal-d1 { transition-delay: 0.08s; }
+.reveal-d2 { transition-delay: 0.16s; }
+.reveal-d3 { transition-delay: 0.24s; }
+.reveal-d4 { transition-delay: 0.32s; }
+
+/* Jinhone motion kam karne ki setting on ki hai, unke liye animation off */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Accordion open/close — CSS se height:auto animate karne ke liye grid trick.
+   grid-template-rows 0fr se 1fr par jaati hai, jo content ki asli height tak
+   smoothly khulti hai. framer ke AnimatePresence + height:auto ka replacement. */
+.acc-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease-in-out;
+}
+
+.acc-panel.is-open {  
+  grid-template-rows: 1fr;
+}
+
+.acc-panel > div {
+  overflow: hidden;
+}
+
+
+@theme {
+  --animate-brand-marquee: brand-marquee 45s linear infinite;
+}
+
+@keyframes brand-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}

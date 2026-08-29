@@ -29,14 +29,18 @@ const DESTINATIONS = [
   { id: 15, name: "Burger Wings", image: "/work15.webp" },
   { id: 16, name: "BSM Uniex salon", image: "/work16.webp" },
   { id: 18, name: "Hydra Facial", image: "/work18.webp" },
+
+  { id: 26, name: "HOB", image: "/work26.jpeg" },
   { id: 20, name: "Kavya", image: "/work20.webp" },
-   { id: 24, name: "CirklX", image: "/work24.webp" },
-   { id: 19, name: "Jewellery Box", image: "/work19.webp" },
+  { id: 24, name: "CirklX", image: "/work24.webp" },
+  { id: 19, name: "Jewellery Box", image: "/work19.webp" },
+  { id: 25, name: "HOB", image: "/work25.jpeg" },
   { id: 22, name: "Tsuki", image: "/work22.webp" },
   { id: 23, name: "Hisar Collage", image: "/work23.webp" },
   { id: 21, name: "Tsuki", image: "/work21.webp" },
   { id: 17, name: "Haircut & Beard", image: "/work17.webp" },
- 
+
+  { id: 27, name: "HOB", image: "/work27.jpeg" },
 ];
 
 /* ── Single Card — image only + small username below ────────── */

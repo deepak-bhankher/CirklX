@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import { useRevealGroup } from "../useReveal";
+import { useEffect, useRef } from "react";
 
 const ACCENT = "#D6ff01";
 
@@ -9,6 +9,7 @@ const SECTIONS = [
     id: "product",
     label: "Product",
     desc: "Stunning product visuals that convert",
+    marquee: true,
     items: [
       {
         name: "Minimal Watch",
@@ -36,49 +37,26 @@ const SECTIONS = [
     id: "logo",
     label: "Logo",
     desc: "Brand marks that leave a lasting impression",
+    marquee: true,
     items: [
-      {
-        name: "Command",
-        img: "logo22.jpeg",
-        tag: "Command",
-      },
-      {
-        name: "Mangal",
-        img: "logo23.jpeg",
-        tag: "Mangal",
-      },
-      {
-        name: "Burger Wings.",
-        img: "logo24.jpeg",
-        tag: "Burger Wings",
-      },
+      { name: "Command", img: "logo22.jpeg", tag: "Command" },
+      { name: "Mangal", img: "logo23.jpeg", tag: "Mangal" },
+      { name: "Burger Wings.", img: "logo24.jpeg", tag: "Burger Wings" },
     ],
-  },  
+  },
   {
     id: "branding",
     label: "Branding",
     desc: "Complete identity systems built to scale",
+    // Ye section marquee me chalta hai, grid me nahi.
+    marquee: true,
     items: [
-      {
-        name: "Luxe Packaging",
-        img: "https://images.unsplash.com/photo-1586495777744-4e6232bf2f9a?q=70&w=500&auto=format&fit=crop",
-        tag: "Packaging",
-      },
-      {
-        name: "Brand Guide",
-        img: "https://images.unsplash.com/photo-1600132806370-bf17e65e942f?q=70&w=500&auto=format&fit=crop",
-        tag: "Guidelines",
-      },
-      {
-        name: "Stationery Set",
-        img: "https://images.unsplash.com/photo-1568667256549-094345857637?q=70&w=500&auto=format&fit=crop",
-        tag: "Print",
-      },
-      {
-        name: "Brand Identity",
-        img: "https://images.unsplash.com/photo-1572044162444-ad60f128bdea?q=70&w=500&auto=format&fit=crop",
-        tag: "Full Identity",
-      },
+      { img: "brand1.png", tag: "DJ Mirchi" },
+      { img: "brand2.png", tag: "Jeera Lemon" },
+      { img: "brand3.png", tag: "Burger Wings" },
+      { img: "brand4.png", tag: "Burger Wings" },
+      { img: "brand5.png", tag: "Mangal" },
+      { img: "brand6.png", tag: "Jeera Lemon" },
     ],
   },
 ];
@@ -91,95 +69,157 @@ function gridClass(count) {
     : "grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5";
 }
 
-function ItemCard({ item, isBranding, isGraphics }) {
-  if (isGraphics) {
-    return (
-      <motion.div
-        whileHover={{ y: -4 }}
-        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        className="group relative overflow-hidden rounded-[28px] cursor-pointer"
-        style={{
-          height: "380px",
-          boxShadow:
-            "0 12px 32px -12px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.05)",
-        }}
+// Branding ka card — sirf image aur tag. Neeche wali white patti aur arrow
+// hata diye, isliye image poori dikhti hai.
+function BrandCard({ item }) {
+  return (
+    <div
+      className="group relative shrink-0 w-[240px] sm:w-[320px] h-[180px] sm:h-[240px] rounded-[20px] overflow-hidden"
+      style={{ boxShadow: "0 8px 28px -10px rgba(0,0,0,0.15)" }}
+    >
+      <img
+        src={item.img}
+        alt={item.tag}
+        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        loading="lazy"
+        decoding="async"
+        draggable={false}
+      />
+      <span
+        className="absolute top-3 left-3 text-[9px] font-bold tracking-[0.18em] uppercase px-2.5 py-1 rounded-full text-black"
+        style={{ background: ACCENT }}
       >
-        <img
-          src={item.img}
-          alt={item.name}
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-          loading="lazy"
-          decoding="async"
-        />
-        {/* Gradient image ke upar hai, isliye ye dono light theme me bhi
-            dark hi rehte hain — warna white text image par padh nahi aata. */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-        <span className="absolute top-4 left-4 text-[9px] font-semibold tracking-widest uppercase px-2.5 py-1 rounded-full text-white bg-black/60 backdrop-blur-sm">
-          {item.tag}
-        </span>
-        <div className="absolute inset-x-0 bottom-0 p-5">
-          <h3 className="text-xl font-bold text-white tracking-tight leading-none mb-4">
-            {item.name}
-          </h3>
-          <div className="flex items-center justify-between rounded-2xl pl-4 pr-1.5 py-1.5 border border-white/15 bg-white/10 backdrop-blur-md transition-colors duration-300 group-hover:bg-white/20">
-            <span className="text-xs font-semibold text-white">
-              Explore Now
-            </span>
-            <span
-              className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 group-hover:rounded-2xl"
-              style={{ background: ACCENT, color: "#000" }}
-            >
-              <ArrowUpRight size={13} strokeWidth={2.5} />
-            </span>
-          </div>
-        </div>
-      </motion.div>
-    );
-  }
+        {item.tag}
+      </span>
+    </div>
+  );
+}
 
-  if (isBranding) {
-    return (
-      <motion.div
-        whileHover={{ y: -4 }}
-        transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        className="group relative rounded-[20px] overflow-hidden border border-black/[0.06] bg-white cursor-pointer"
-        style={{ boxShadow: "0 8px 28px -10px rgba(0,0,0,0.15)" }}
-      >
-        <div className="relative h-44 overflow-hidden">
-          <img
-            src={item.img}
-            alt={item.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
-            decoding="async"
-          />
-          <span
-            className="absolute top-3 left-3 text-[9px] font-bold tracking-[0.18em] uppercase px-2.5 py-1 rounded-full text-black"
-            style={{ background: ACCENT }}
-          >
-            {item.tag}
-          </span>
-        </div>
-        <div className="p-4 flex items-center justify-between">
-          <span className="text-sm font-semibold text-[#15140F]">
-            {item.name}
-          </span>
-          <span
-            className="w-7 h-7 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            style={{ background: ACCENT, color: "#000" }}
-          >
-            <ArrowUpRight size={13} strokeWidth={2.5} />
-          </span>
-        </div>
-      </motion.div>
-    );
-  }
+const BRAND_SPEED = 40; // px per second
+
+function BrandMarquee({ items, speed = BRAND_SPEED, reverse = false }) {
+  const scrollRef = useRef(null);
+  const pausedRef = useRef(false);
+
+  // 3 copies — hum hamesha beech wali copy me rehte hain, isliye user dono
+  // taraf kheench sakta hai aur kabhi kinara nahi aata.
+const copies = items.length >= 6 ? 3 : items.length >= 4 ? 5 : 9;
+  const track = Array.from({ length: copies }, () => items).flat();
+
+    useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    // scrollWidth se divide karna galat tha — images load hone se pehle wo
+    // chhota hota hai, aur wrap galat jagah reset kar deta tha. Ab ek copy
+    // ki width seedha cards se naapte hain, jinki width CSS se fixed hai.
+    const measure = () => {
+      const kids = el.firstElementChild?.children;
+      if (!kids || kids.length <= items.length) return 0;
+      return kids[items.length].offsetLeft - kids[0].offsetLeft;
+    };
+
+    let w = measure();
+    if (!w) return;
+
+    const mid = w * Math.floor(copies / 2);
+    el.scrollLeft = mid;
+
+    let visible = false;
+    let last = performance.now();
+    let raf;
+
+    const io = new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      // Tab wapas aane par dt bahut bada na ho jaaye.
+      last = performance.now();
+    });
+    io.observe(el);
+
+    const ro = new ResizeObserver(() => {
+      const next = measure();
+      if (next) w = next;
+    });
+    ro.observe(el);
+
+    const step = (now) => {
+      const dt = Math.min(now - last, 50); // tab switch par bada jump na ho
+      last = now;
+
+      if (visible && !pausedRef.current) {
+        el.scrollLeft += (speed * dt) / 1000;
+      }
+
+      // Wrap dono taraf. Copies identical hain isliye ye jump dikhta hi nahi.
+      const m = w * Math.floor(copies / 2);
+      if (el.scrollLeft >= m + w) el.scrollLeft -= w;
+      else if (el.scrollLeft < m - w) el.scrollLeft += w;
+
+      raf = requestAnimationFrame(step);
+    };
+
+    raf = requestAnimationFrame(step);
+    return () => {
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      ro.disconnect();
+    };
+  }, [copies, speed, items.length]);
+
+  const pause = () => (pausedRef.current = true);
+  const resume = () => (pausedRef.current = false);
+
+  // Desktop par mouse se pakad ke kheenchne ke liye. Touch par browser ka
+  // apna native scroll pehle se chalta hai, isliye wahan ye skip karte hain.
+  const dragRef = useRef(null);
+
+  const handlePointerDown = (e) => {
+    pause();
+    if (e.pointerType === "touch") return;
+    dragRef.current = { x: e.clientX, left: scrollRef.current.scrollLeft };
+    scrollRef.current.setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e) => {
+    if (!dragRef.current) return;
+    const dx = e.clientX - dragRef.current.x;
+    scrollRef.current.scrollLeft = dragRef.current.left - dx;
+  };
+
+  const handlePointerUp = () => {
+    dragRef.current = null;
+    resume();
+  };
 
   return (
-    <motion.div
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-      className="group relative rounded-[20px] overflow-hidden cursor-pointer"
+    // overflow-x-auto = native touch drag + momentum, sab browser handle karta hai.
+    // Scrollbar chhupa di hai; overscroll-x-contain se page ka back gesture nahi chalta.
+    <div
+      ref={scrollRef}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+      onMouseEnter={pause}
+      onMouseLeave={handlePointerUp}
+      className="relative overflow-x-auto overflow-y-hidden overscroll-x-contain -mx-5 sm:-mx-10
+        [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden
+        cursor-grab active:cursor-grabbing"
+    >
+      <div className="flex w-max gap-4 sm:gap-5 py-2 px-5 sm:px-10">
+        {track.map((item, i) => (
+          <BrandCard key={i} item={item} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ItemCard({ item }) {
+  return (
+    <div
+      className="group relative rounded-[20px] overflow-hidden cursor-pointer transition-transform duration-300 hover:-translate-y-1"
       style={{ boxShadow: "0 8px 28px -10px rgba(0,0,0,0.15)" }}
     >
       <div className="relative h-52 overflow-hidden">
@@ -204,14 +244,13 @@ function ItemCard({ item, isBranding, isGraphics }) {
           </span>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
-// Ab ye section hamesha page par rehta hai — na koi toggle button, na Close.
-// Isliye `onClose` prop, entry/exit animation aur AnimatePresence sab hata diye.
-// Sections ke scroll-reveal animations waise ke waise hain.
 export default function DestinationsGrid() {
+  const groupRef = useRevealGroup();
+
   useEffect(() => {
     // Navbar apne dark/light detection ke liye sections dobara naapta hai.
     window.dispatchEvent(new Event("sections-updated"));
@@ -219,7 +258,10 @@ export default function DestinationsGrid() {
 
   return (
     // data-theme="dark" hata diya — ab navbar is section par black text dikhata hai.
-        <section className="relative w-full bg-[#F4F2ED] pt-24 sm:pt-28 pb-20 sm:pb-28 overflow-hidden">
+    <section
+      ref={groupRef}
+      className="relative w-full bg-[#F4F2ED] pt-24 sm:pt-28 pb-20 sm:pb-28 overflow-hidden"
+    >
       {/* subtle top border */}
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px"
@@ -229,61 +271,28 @@ export default function DestinationsGrid() {
       />
 
       <div className="relative max-w-[1320px] mx-auto px-5 sm:px-10">
-        {/* 4 Sections */}
         <div className="flex flex-col gap-20 sm:gap-28">
           {SECTIONS.map((section, si) => (
-            <motion.div
-              key={section.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{
-                duration: 0.6,
-                delay: si * 0.05,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-            >
-              {/* Section header */}
-              <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8 sm:mb-10">
-                <div>
-                  <div className="flex items-center gap-3 mb-2">
-                    <span
-                      className="text-[9px] font-black tracking-[0.2em] uppercase px-2.5 py-1 rounded-full text-black"
-                      style={{ background: ACCENT }}
-                    >
-                      0{si + 1}
-                    </span>
-                    <h3 className="text-2xl sm:text-3xl font-bold text-[#15140F] tracking-tight">
-                      {section.label}
-                    </h3>
-                  </div>
-                  <p className="text-sm text-black/45 ml-10">{section.desc}</p>
-                </div>
+            <div key={section.id} className="reveal reveal-lg">
+                           <div
+                className={`mb-8 sm:mb-10 ${section.marquee ? "text-center" : ""}`}
+              >
+                <h3 className="text-2xl sm:text-3xl font-bold text-[#15140F] tracking-tight mb-2">
+                  {section.label}
+                </h3>
+                <p className="text-sm text-black/45">{section.desc}</p>
               </div>
 
-              {/* Cards grid — column count item count se aata hai */}
-              <div className={gridClass(section.items.length)}>
-                {section.items.map((item, ii) => (
-                  <motion.div
-                    key={item.name}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{
-                      duration: 0.45,
-                      delay: ii * 0.07,
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
-                  >
-                    <ItemCard
-                      item={item}
-                      isBranding={section.id === "branding"}
-                      isGraphics={section.id === "graphics"}
-                    />
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+                           {section.marquee ? (
+                <BrandMarquee items={section.items} />
+              ) : (
+                <div className={gridClass(section.items.length)}>
+                  {section.items.map((item) => (
+                    <ItemCard key={item.name} item={item} />
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </div>
       </div>
