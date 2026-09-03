@@ -1,41 +1,33 @@
-import { AiOutlineYoutube } from "react-icons/ai";
-import { AiOutlineInstagram } from "react-icons/ai";
-import { TbBrandAdobePhotoshop } from "react-icons/tb";
 import { useRevealGroup } from "../useReveal";
 
-// Saare icons ab ek hi responsive size use karte hain — mobile par bada,
-// sm+ par chhota. react-icons ke `size` prop ki jagah Tailwind w/h classes,
-// kyunki attribute fixed hota hai aur breakpoint par badal nahi sakta.
-const ICON_CLASS = "w-[32px] h-[32px] sm:w-[26px] sm:h-[26px]";
+// Ab koi gradient/glass badge nahi — bas image seedha dikhegi.
+// src me apni original icon/image ka path daal dena (Instagram, Youtube, Photoshop, etc).
+const ICON_CLASS = "w-20 h-20 sm:w-14 sm:h-14 object-contain";
 
 // First 3 cards: platform icon + 2-line title.
-// Each card carries an `accent` rgba used for the glow shadow under the
-// glass sheen, tone-matched to the icon's own gradient.
 const PLATFORM_CARDS = [
   {
     title: ["Instagram", "Reels"],
-    iconBg: "bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400",
-    accent: "rgba(236,72,153,0.45)",
-    icon: <AiOutlineInstagram className={`${ICON_CLASS} text-white`} />,
+    icon: <img src="icon3.png" alt="Instagram" className={ICON_CLASS} />,
   },
   {
     title: ["Youtube", "Shots"],
-    iconBg: "bg-gradient-to-br from-red-500 to-red-700",
-    accent: "rgba(220,38,38,0.45)",
-    icon: <AiOutlineYoutube className={`${ICON_CLASS} text-white`} />,
+    // Youtube ke PNG me apne aap extra white padding hai isliye box
+    // ke andar chhota dikhta hai — scale-150 se sirf isi image ko
+    // bada kiya hai taaki Photoshop/Illustrator jaise hi dikhe.
+    icon: (
+      <img
+        src="icon4.png"
+        alt="Youtube"
+        className={`${ICON_CLASS} scale-150`}
+      />
+    ),
   },
   {
     title: ["Graphic", "Design"],
-    iconBg: "bg-gradient-to-br from-[#001E36] via-[#002B4F] to-[#31A8FF]",
-    accent: "rgba(49,168,255,0.35)",
-    icon: <TbBrandAdobePhotoshop className={`${ICON_CLASS} text-[#31A8FF]`} />,
+    icon: <img src="icon5.png" alt="Photoshop" className={ICON_CLASS} />,
   },
 ];
-
-// Badge size/radius dono rows me ek jaisa — mobile par bada centered,
-// sm+ par chhota top-left.
-const BADGE_SIZE = "w-20 h-20 sm:w-14 sm:h-14";
-const BADGE_RADIUS = "rounded-3xl sm:rounded-2xl";
 
 // Stagger delays — pehle framer ke `delay: index * 0.1` se aate the.
 const DELAY_CLASS = ["", "reveal-d1", "reveal-d2", "reveal-d3", "reveal-d4"];
@@ -43,99 +35,13 @@ const DELAY_CLASS = ["", "reveal-d1", "reveal-d2", "reveal-d3", "reveal-d4"];
 const SERVICE_CARDS = [
   {
     title: ["Video Edits"],
-    iconBg: "bg-gradient-to-br from-violet-500 to-indigo-600",
-    accent: "rgba(109,40,217,0.4)",
-    icon: (
-      <svg viewBox="0 0 24 24" className={ICON_CLASS} fill="none">
-        <rect
-          x="2"
-          y="5"
-          width="15"
-          height="14"
-          rx="2.5"
-          stroke="white"
-          strokeWidth="1.7"
-        />
-        <path
-          d="M17 9.5 22 7v10l-5-2.5"
-          stroke="white"
-          strokeWidth="1.7"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M6 10h6M6 14h4"
-          stroke="white"
-          strokeWidth="1.4"
-          strokeLinecap="round"
-        />
-      </svg>
-    ),
+    icon: <img src="icon1.png" alt="Video Edits" className={ICON_CLASS} />,
   },
   {
     title: ["Motion Graphics"],
-    iconBg: "bg-gradient-to-br from-emerald-400 to-teal-600",
-    accent: "rgba(16,185,129,0.4)",
-    icon: (
-      <svg viewBox="0 0 24 24" className={ICON_CLASS} fill="none">
-        <circle cx="12" cy="12" r="3" fill="white" />
-        <path
-          d="M12 3v3M12 18v3M3 12h3M18 12h3"
-          stroke="white"
-          strokeWidth="1.7"
-          strokeLinecap="round"
-        />
-        <path
-          d="M6.34 6.34l2.12 2.12M15.54 15.54l2.12 2.12M6.34 17.66l2.12-2.12M15.54 8.46l2.12-2.12"
-          stroke="white"
-          strokeWidth="1.4"
-          strokeLinecap="round"
-        />
-      </svg>
-    ),
+    icon: <img src="icon2.png" alt="Motion Graphics" className={ICON_CLASS} />,
   },
 ];
-
-function GlassBadge({ children, iconBg, accent, sizeClass, radiusClass }) {
-  return (
-    <div
-      className={`relative flex items-center justify-center overflow-hidden ${sizeClass} ${radiusClass} ${iconBg}`}
-      style={{
-        boxShadow: `0 10px 28px ${accent}, 0 2px 6px rgba(0,0,0,0.15)`,
-      }}
-    >
-      {/* top rim glow, tinted to the icon's own accent */}
-      <div
-        className="absolute inset-x-0 top-0 h-1/2 pointer-events-none"
-        style={{
-          background: `radial-gradient(60% 90% at 50% -10%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.15) 45%, transparent 75%)`,
-        }}
-      />
-      {/* diagonal glass sheen */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.08) 45%, transparent 70%)",
-          mixBlendMode: "screen",
-        }}
-      />
-      {/* thin glass border for edge definition */}
-      <div
-        className={`absolute inset-0 pointer-events-none ${radiusClass}`}
-        style={{ border: "1px solid rgba(255,255,255,0.35)" }}
-      />
-      {/* icon */}
-      <div className="relative z-10">{children}</div>
-      {/* soft bottom dark fade for depth */}
-      <div
-        className="absolute inset-x-0 bottom-0 h-1/2 pointer-events-none"
-        style={{
-          background: "linear-gradient(to top, rgba(0,0,0,0.22), transparent)",
-        }}
-      />
-    </div>
-  );
-}
 
 function PlatformCard({ card, index }) {
   return (
@@ -144,16 +50,9 @@ function PlatformCard({ card, index }) {
         shadow-[0_2px_16px_rgba(0,0,0,0.03)] transition-all duration-300
         hover:-translate-y-1 hover:shadow-[0_10px_32px_rgba(0,0,0,0.08)]`}
     >
-      {/* Mobile: badge centered. sm+: top-left, service cards jaisa. */}
+      {/* Mobile: image centered. sm+: top-left, service cards jaisa. */}
       <div className="flex items-center justify-center sm:justify-start mb-4 sm:mb-0">
-        <GlassBadge
-          iconBg={card.iconBg}
-          accent={card.accent}
-          sizeClass={BADGE_SIZE}
-          radiusClass={BADGE_RADIUS}
-        >
-          {card.icon}
-        </GlassBadge>
+        {card.icon}
       </div>
 
       <h3 className="text-2xl sm:text-[1.6rem] font-medium text-[#15140F] leading-tight text-center sm:text-left mt-0 sm:mt-7">
@@ -171,20 +70,8 @@ function ServiceCard({ card, index }) {
         shadow-[0_2px_16px_rgba(0,0,0,0.03)] transition-all duration-300
         hover:-translate-y-1 hover:shadow-[0_10px_32px_rgba(0,0,0,0.08)]`}
     >
-      {/* decorative blurred circle */}
-      <div
-        className={`absolute -top-8 -right-8 w-36 h-36 rounded-full opacity-[0.07] ${card.iconBg}`}
-      />
-
       <div className="flex items-center justify-center sm:justify-start mb-4 sm:mb-0">
-        <GlassBadge
-          iconBg={card.iconBg}
-          accent={card.accent}
-          sizeClass={BADGE_SIZE}
-          radiusClass={BADGE_RADIUS}
-        >
-          {card.icon}
-        </GlassBadge>
+        {card.icon}
       </div>
 
       <h3 className="text-2xl font-medium text-[#15140F] leading-tight mt-0 sm:mt-7 text-center sm:text-left">
