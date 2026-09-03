@@ -16,7 +16,7 @@ const SERVICE_ID = "service_7qtps0b";
 const TEMPLATE_ID = "template_fksv2e8";
 const PUBLIC_KEY = "lyPkEMppL8Us1JDY2";
 
-function FormField({ label, placeholder, type = "text", textarea = false, name, value, onChange }) {
+function FormField({ label, placeholder, type = "text", textarea = false, name, value, onChange, required }) {
   const [focused, setFocused] = useState(false);
 
   const baseClasses =
@@ -33,6 +33,7 @@ function FormField({ label, placeholder, type = "text", textarea = false, name, 
           name={name}
           value={value}
           onChange={onChange}
+          required={required}
           placeholder={placeholder}
           rows={4}
           onFocus={() => setFocused(true)}
@@ -45,6 +46,7 @@ function FormField({ label, placeholder, type = "text", textarea = false, name, 
           name={name}
           value={value}
           onChange={onChange}
+          required={required}
           placeholder={placeholder}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
@@ -129,6 +131,14 @@ function Contact1() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const isEmpty = Object.values(formData).some((v) => v.trim() === "");
+    if (isEmpty) {
+      setStatus("validation");
+      setTimeout(() => setStatus("idle"), 3000);
+      return;
+    }
+
     setStatus("sending");
 
     emailjs
@@ -216,6 +226,7 @@ function Contact1() {
             name="name"
             value={formData.name}
             onChange={handleChange}
+            required
           />
           <FormField
             label="Email Address"
@@ -224,6 +235,7 @@ function Contact1() {
             name="email"
             value={formData.email}
             onChange={handleChange}
+            required
           />
           <FormField
             label="Subject"
@@ -231,6 +243,7 @@ function Contact1() {
             name="subject"
             value={formData.subject}
             onChange={handleChange}
+            required
           />
           <FormField
             label="How may we assist you?"
@@ -239,10 +252,11 @@ function Contact1() {
             name="message"
             value={formData.message}
             onChange={handleChange}
+            required
           />
           <SendButton status={status} />
 
-          {(status === "sent" || status === "error") && (
+          {(status === "sent" || status === "error" || status === "validation") && (
             <motion.div
               initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
@@ -282,6 +296,8 @@ function Contact1() {
               </div>
               {status === "sent"
                 ? "Thanks! Your message has been sent — we'll get back to you soon."
+                : status === "validation"
+                ? "Please fill in all fields before sending."
                 : "Something went wrong. Please try again in a moment."}
             </motion.div>
           )}

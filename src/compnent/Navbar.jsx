@@ -13,10 +13,6 @@ const NAV_LINKS = [
   { name: "Contact", path: "/contact" },
 ];
 
-const WHATSAPP_NUMBER = "+918053200325"; // <-- apna number daal
-
-const WHATSAPP_MSG = "Hi CirklX! I want to book a free meeting.";
-
 function useDarkSection() {
   const [isDark, setIsDark] = useState(true);
   const { pathname } = useLocation();
@@ -135,48 +131,45 @@ function NavItem({ label, path, isDark }) {
 function CtaButton() {
   const [hovered, setHovered] = useState(false);
 
-  // encodeURIComponent zaruri hai — warna space aur ! wale characters
-  // URL me toot jaate hain aur message adhoora khulta hai.
-  const waLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MSG)}`;
-
   return (
-    <motion.a
-      href={waLink}
-      target="_blank"
-      rel="noopener noreferrer"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+    <motion.div
       whileHover={{ scale: 1.04, y: -1 }}
       whileTap={{ scale: 0.97 }}
-      className="px-5 py-2 flex gap-1.5 items-center rounded-lg text-sm font-semibold text-black cursor-pointer
-        bg-[#D6ff01] border border-black/10
-        hover:bg-black hover:text-[#D6ff01] hover:border-[#D6ff01]
-        hover:shadow-[0_0_22px_rgba(214,255,1,0.5)]
-        transition-all duration-300"
     >
-      Book A Free Meeting
+      <Link
+        to="/contact"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        className="px-5 py-2 flex gap-1.5 items-center rounded-lg text-sm font-semibold text-black cursor-pointer
+          bg-[#D6ff01] border border-black/10
+          hover:bg-black hover:text-[#D6ff01] hover:border-[#D6ff01]
+          hover:shadow-[0_0_22px_rgba(214,255,1,0.5)]
+          transition-all duration-300"
+      >
+        Book A Free Meeting
 
-      <div className="relative w-[17px] h-[17px] overflow-hidden">
-        <motion.span
-          className="absolute inset-0 flex items-center justify-center"
-          animate={
-            hovered ? { x: 17, y: -17, opacity: 0 } : { x: 0, y: 0, opacity: 1 }
-          }
-          transition={{ duration: 0.2, ease: "easeInOut" }}
-        >
-          <MdArrowOutward size={17} />
-        </motion.span>
-        <motion.span
-          className="absolute inset-0 flex items-center justify-center"
-          animate={
-            hovered ? { x: 0, y: 0, opacity: 1 } : { x: -17, y: 17, opacity: 0 }
-          }
-          transition={{ duration: 0.2, ease: "easeInOut" }}
-        >
-          <MdArrowOutward size={17} />
-        </motion.span>
-      </div>
-    </motion.a>
+        <div className="relative w-[17px] h-[17px] overflow-hidden">
+          <motion.span
+            className="absolute inset-0 flex items-center justify-center"
+            animate={
+              hovered ? { x: 17, y: -17, opacity: 0 } : { x: 0, y: 0, opacity: 1 }
+            }
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+          >
+            <MdArrowOutward size={17} />
+          </motion.span>
+          <motion.span
+            className="absolute inset-0 flex items-center justify-center"
+            animate={
+              hovered ? { x: 0, y: 0, opacity: 1 } : { x: -17, y: 17, opacity: 0 }
+            }
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+          >
+            <MdArrowOutward size={17} />
+          </motion.span>
+        </div>
+      </Link>
+    </motion.div>
   );
 }
 
