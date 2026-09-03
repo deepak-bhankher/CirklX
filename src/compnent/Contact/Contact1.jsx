@@ -1,8 +1,22 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { MdArrowOutward } from "react-icons/md";
+import emailjs from "@emailjs/browser";
 
-function FormField({ label, placeholder, type = "text", textarea = false }) {
+// ---- EmailJS config ----
+// 1) npm install @emailjs/browser
+// 2) EmailJS.com pe free account bana, ek Email Service connect kar
+//    (Gmail se cirklx.agency@gmail.com connect kar sakta hai).
+// 3) Ek Email Template bana jisme {{name}}, {{email}}, {{subject}},
+//    {{message}} variables ho, aur template ke "To Email" field me
+//    cirklx.agency@gmail.com daal de — bas isi wajah se saara form
+//    ka data seedha isi email pe aayega.
+// 4) Neeche teeno IDs apne EmailJS dashboard se copy karke daal de.
+const SERVICE_ID = "service_7qtps0b";
+const TEMPLATE_ID = "template_fksv2e8";
+const PUBLIC_KEY = "lyPkEMppL8Us1JDY2";
+
+function FormField({ label, placeholder, type = "text", textarea = false, name, value, onChange }) {
   const [focused, setFocused] = useState(false);
 
   const baseClasses =
@@ -16,6 +30,9 @@ function FormField({ label, placeholder, type = "text", textarea = false }) {
       <label className="text-sm font-medium text-black/70">{label}</label>
       {textarea ? (
         <textarea
+          name={name}
+          value={value}
+          onChange={onChange}
           placeholder={placeholder}
           rows={4}
           onFocus={() => setFocused(true)}
@@ -25,6 +42,9 @@ function FormField({ label, placeholder, type = "text", textarea = false }) {
       ) : (
         <input
           type={type}
+          name={name}
+          value={value}
+          onChange={onChange}
           placeholder={placeholder}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
@@ -35,10 +55,16 @@ function FormField({ label, placeholder, type = "text", textarea = false }) {
   );
 }
 
-function SendButton() {
+function SendButton({ status }) {
   const [hovered, setHovered] = useState(false);
+
+  const label =
+    status === "sending" ? "Sending..." : status === "sent" ? "Message Sent" : "Send Message";
+
   return (
     <motion.button
+      type="submit"
+      disabled={status === "sending"}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       whileHover={{ scale: 1.03, y: -2 }}
@@ -50,9 +76,10 @@ function SendButton() {
         hover:bg-black hover:text-[#D6ff01] hover:border-[#D6ff01]
         hover:shadow-[0_6px_0_rgba(0,0,0,0.3),0_10px_20px_rgba(0,0,0,0.15)]
         active:translate-y-[3px] active:shadow-[0_1px_0_rgba(0,0,0,0.2)]
-        transition-all duration-200"
+        transition-all duration-200
+        disabled:opacity-60 disabled:cursor-not-allowed"
     >
-      Send Message
+      {label}
       <div className="relative w-[16px] h-[16px] overflow-hidden">
         <motion.span
           className="absolute inset-0 flex items-center justify-center"
@@ -88,6 +115,46 @@ function IconBadge({ children, size = "w-12 h-12" }) {
 }
 
 function Contact1() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [status, setStatus] = useState("idle"); // idle | sending | sent | error
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setStatus("sending");
+
+    emailjs
+      .send(
+        SERVICE_ID,
+        TEMPLATE_ID,
+        {
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message,
+        },
+        PUBLIC_KEY
+      )
+      .then(() => {
+        setStatus("sent");
+        setFormData({ name: "", email: "", subject: "", message: "" });
+        setTimeout(() => setStatus("idle"), 3000);
+      })
+      .catch((err) => {
+        console.error("EmailJS error:", err);
+        setStatus("error");
+        setTimeout(() => setStatus("idle"), 3000);
+      });
+  };
+
   return (
     <section className="w-full bg-[#F4F2ED] pt-28 sm:pt-32 md:pt-36 pb-16 sm:pb-20 md:pb-24 px-4 sm:px-6">
       {/* Header */}
@@ -134,7 +201,8 @@ function Contact1() {
       {/* Body */}
       <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-5 sm:gap-6">
         {/* Left: form */}
-        <motion.div
+        <motion.form
+          onSubmit={handleSubmit}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
@@ -142,20 +210,82 @@ function Contact1() {
           className="rounded-3xl bg-white border border-black/8 p-6 sm:p-8 flex flex-col gap-5
             shadow-[0_4px_24px_rgba(0,0,0,0.05)]"
         >
-          <FormField label="Full Name" placeholder="Johan Robin" />
+          <FormField
+            label="Full Name"
+            placeholder="Johan Robin"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+          />
           <FormField
             label="Email Address"
             placeholder="hello@cirklx.com"
             type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
           />
-          <FormField label="Subject" placeholder="Regarding Project" />
+          <FormField
+            label="Subject"
+            placeholder="Regarding Project"
+            name="subject"
+            value={formData.subject}
+            onChange={handleChange}
+          />
           <FormField
             label="How may we assist you?"
             placeholder="Tell us more..."
             textarea
+            name="message"
+            value={formData.message}
+            onChange={handleChange}
           />
-          <SendButton />
-        </motion.div>
+          <SendButton status={status} />
+
+          {(status === "sent" || status === "error") && (
+            <motion.div
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium ${
+                status === "sent"
+                  ? "bg-black text-[#D6ff01]"
+                  : "bg-red-50 text-red-700 border border-red-200"
+              }`}
+            >
+              <div
+                className={`flex items-center justify-center w-6 h-6 rounded-full flex-shrink-0 ${
+                  status === "sent" ? "bg-[#D6ff01]" : "bg-red-500"
+                }`}
+              >
+                {status === "sent" ? (
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
+                    <path
+                      d="M5 12.5l4.5 4.5L19 7"
+                      stroke="#000000"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
+                    <path
+                      d="M12 8v5M12 16.5h.01"
+                      stroke="#ffffff"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                )}
+              </div>
+              {status === "sent"
+                ? "Thanks! Your message has been sent — we'll get back to you soon."
+                : "Something went wrong. Please try again in a moment."}
+            </motion.div>
+          )}
+        </motion.form>
 
         {/* Right: info cards */}
         <div className="flex flex-col gap-5">
