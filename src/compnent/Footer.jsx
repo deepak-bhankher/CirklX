@@ -3,20 +3,17 @@ import { Link } from "react-router-dom";
 import { FaInstagram, FaFacebookF, FaTiktok, FaYoutube } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
-const WHATSAPP_NUMBER = "918053200325";
-const WHATSAPP_MSG = "Hi CirklX! I want to book a free meeting.";
-const WA_LINK = `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}?text=${encodeURIComponent(WHATSAPP_MSG)}`;
-
 // tel: link — click karte hi phone ka dialer number ke saath khul jaata hai.
 const PHONE_LINK = "tel:+918053200325";
 
 // `compact` sirf mobile par button ko chhota karta hai, taaki wo social
 // icons ke saath ek hi row me fit ho jaaye. sm+ par size bilkul same rehta hai.
-// `href` default WhatsApp hai, par caller alag link bhej sakta hai (jaise tel:).
+// `href` default ab "/contact" hai (internal route) — koi bhi doosra
+// external/tel/mailto link caller pass kar sakta hai.
 function PrimaryCta({
   children = "Book A Free Meeting",
   compact = false,
-  href = WA_LINK,
+  href = "/contact",
   solid = false, // true = lime bg, koi hover color change nahi
 }) {
   const sizing = compact
@@ -28,24 +25,18 @@ function PrimaryCta({
     ? "bg-[#D6FF01] text-[#15140F]"
     : "bg-[#000000] text-[#D6FF01] hover:bg-[#D6FF01] hover:text-[#000000]";
 
+  const isInternal = href.startsWith("/");
   // tel:/mailto: same tab me khulne chahiye, sirf http links naye tab me.
   const isExternal = href.startsWith("http");
 
-  return (
-    <motion.a
-      href={href}
-      target={isExternal ? "_blank" : undefined}
-      rel={isExternal ? "noopener noreferrer" : undefined}
-      whileHover={{ scale: 1.04, y: -2 }}
-      whileTap={{ scale: 0.97 }}
-      transition={{ duration: 0.22, ease: "easeOut" }}
-      className={`inline-flex items-center gap-2 sm:gap-2.5 rounded-lg ${colors} ${sizing} font-bold cursor-pointer whitespace-nowrap
-        shadow-[0_8px_28px_rgba(214,255,1,0.25)]
-        hover:shadow-[0_12px_36px_rgba(214,255,1,0.4)]
-        transition-shadow duration-300`}
-    >
-      {children}
+  const className = `inline-flex items-center gap-2 sm:gap-2.5 rounded-lg ${colors} ${sizing} font-bold cursor-pointer whitespace-nowrap
+    shadow-[0_8px_28px_rgba(214,255,1,0.25)]
+    hover:shadow-[0_12px_36px_rgba(214,255,1,0.4)]
+    transition-shadow duration-300`;
 
+  const inner = (
+    <>
+      {children}
       <span
         className={`flex items-center justify-center ${arrowBox} rounded-full bg-[#15140F]`}
       >
@@ -59,6 +50,35 @@ function PrimaryCta({
           />
         </svg>
       </span>
+    </>
+  );
+
+  if (isInternal) {
+    return (
+      <motion.div
+        whileHover={{ scale: 1.04, y: -2 }}
+        whileTap={{ scale: 0.97 }}
+        transition={{ duration: 0.22, ease: "easeOut" }}
+        className="inline-block"
+      >
+        <Link to={href} className={className}>
+          {inner}
+        </Link>
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.a
+      href={href}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
+      whileHover={{ scale: 1.04, y: -2 }}
+      whileTap={{ scale: 0.97 }}
+      transition={{ duration: 0.22, ease: "easeOut" }}
+      className={className}
+    >
+      {inner}
     </motion.a>
   );
 }
