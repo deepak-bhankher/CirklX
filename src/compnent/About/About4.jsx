@@ -3,21 +3,21 @@ import { motion } from "framer-motion";
 const teamMembers = [
   {
     id: 1,
-    image: "/team3.jpeg",
-    name: "Govind Sharma",
-    role: "Creative Director",
+    image: "/team1.jpeg",
+    name: " Krishan Bansal",
+    role: "  Client Success ",
   },
   {
     id: 2,
-    image: "/team2.jpeg",
-    name: "Naveen Nagar",
-    role: "  Lead Editor",
+    image: "/team3.jpeg",
+    name: "Govind Sharma",
+    role: "Creative Director ",
   },
   {
     id: 3,
-    image: "/team1.jpeg",
-    name: " Krishan Bansal",
-    role: "Client Success",
+    image: "/team2.jpeg",
+    name: " Naveen Nagar ",
+    role: "Lead Editor",
   
   },
 ];
