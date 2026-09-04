@@ -55,7 +55,7 @@ function CountUp({ to, prefix = "", suffix = "", duration = 1.6 }) {
 
 function Home3() {
   return (
-    <section className="w-full bg-[#F4F2ED] py-16 sm:py-20 px-6">
+    <section className="w-full bg-[#F4F2ED] py-10 sm:py-20 px-6">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}

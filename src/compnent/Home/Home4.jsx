@@ -88,7 +88,7 @@ function Home4() {
   const groupRef = useRevealGroup();
 
   return (
-    <section ref={groupRef} className="w-full bg-[#F4F2ED] py-16 sm:py-20 px-6">
+    <section ref={groupRef} className="w-full bg-[#F4F2ED] pt-8 pb-16 sm:py-20 px-6">
       <div className="max-w-5xl mx-auto">
         {/* ---- Header ---- */}
         <div className="text-center mb-10 sm:mb-12">

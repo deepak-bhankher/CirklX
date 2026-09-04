@@ -129,7 +129,7 @@ function Footer() {
            data-theme="dark" yahan nahi hai, isliye navbar is hisse par
            black text dikhata hai. ---- */}
       <div className="relative z-10 bg-[#F4F2ED]">
-        <div className="max-w-2xl mx-auto text-center px-6 pt-20 sm:pt-24 pb-16 sm:pb-20">
+        <div className="max-w-2xl mx-auto text-center px-6 pt-10 sm:pt-24 pb-16 sm:pb-20">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
