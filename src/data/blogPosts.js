@@ -2,131 +2,112 @@
 // dono isi array se data uthate hain. Naya blog add karna ho to bas yaha
 // ek naya object add karo, list aur detail page dono automatically update ho jayenge.
 //
-// content blocks: { type: "p" | "h" | "quote", text }
-//   p     -> normal paragraph
-//   h     -> sub-heading inside the article
-//   quote -> pulled-quote styled in lime italic
+// content blocks: { type, ... }
+//   p     -> normal paragraph            { text }
+//   h     -> sub-heading inside article  { text }
+//   quote -> pulled-quote (lime italic)  { text }
+//   img   -> inline image                { src, alt, caption? }
+//   list  -> bullet points               { items: [] }
+//
+// Paragraph text me **bold** likha ho to wo bold render hota hai.
+//
+// SEO fields (Google ke liye):
+//   metaTitle       -> browser tab + search result ka title (60 char tak)
+//   metaDescription -> search result ke neeche wali line (155 char tak)
+//   keyword         -> focus keyword
+//   faqs            -> [{ q, a }] — inse Google me FAQ rich result banta hai
 
 export const blogPosts = [
   {
     id: 1,
-    slug: "hooks-that-stop-the-scroll",
-    title: "The Anatomy of a Hook That Stops the Scroll",
+    slug: "social-media-marketing-trends-2026",
+    title: "Top 10 Social Media Marketing Trends in 2026 (And How to Actually Use Them)",
+    metaTitle: "Top 10 Social Media Marketing Trends 2026 | CirklX Agency",
+    metaDescription:
+      "Discover the top social media marketing trends 2026 brands can't ignore — from AI content to social commerce — and see how CirklX turns these trends into growth.",
+    keyword: "social media marketing trends 2026",
     excerpt:
-      "The first 1.5 seconds decide everything. Here's the exact structure we use before we even open the timeline.",
-    category: "Editing Tips",
-    date: "2026-08-02",
-    
-    author: { name: "Ritika Sharma", role: "Lead Editor" },
-    cover: "https://picsum.photos/id/96/1200/800",
-    content: [
-      { type: "p", text: "Every reel lives or dies in the first second and a half. Before a single cut is made, we already know what the opening frame has to do — interrupt the thumb." },
-      { type: "h", text: "Start mid-motion, never mid-sentence" },
-      { type: "p", text: "Talking-head intros where someone says 'hey guys' lose almost half the audience before the point even lands. We open on action already in progress — a hand reaching for something, a reaction already happening — so the eye has no choice but to follow." },
-      { type: "quote", text: "If the first frame could be the tenth frame of a boring video, it's the wrong first frame." },
-      { type: "h", text: "Text on screen earns its place" },
-      { type: "p", text: "We only put text over the hook when it adds a question the viewer wants answered, not a caption of what's already visible. 'Wait for it' is dead. A specific, oddly precise claim works better every time." },
-      { type: "p", text: "Once the hook is locked, the rest of the edit gets easier — pacing, music, and cuts all exist to protect that first promise, not distract from it." },
-    ],
-  },
-  {
-    id: 2,
-    slug: "0-to-2-million-in-90-days",
-    title: "0 to 2 Million Followers in 90 Days: A Case Study",
-    excerpt:
-      "How a fitness creator with almost no audience became one of the fastest-growing pages in the niche — without going viral once.",
-    category: "Case Study",
-    date: "2026-07-18",
-   
-    author: { name: "Aman Verma", role: "Growth Strategist" },
-    cover: "https://picsum.photos/id/1074/1200/800",
-    content: [
-      { type: "p", text: "When this creator came to us, he had 4,200 followers and a folder of gym footage nobody was watching. Ninety days later he crossed two million. No single video went mega-viral — the growth came from a system." },
-      { type: "h", text: "The problem wasn't the content" },
-      { type: "p", text: "His workouts were genuinely good. The footage just wasn't shaped into anything a stranger would stop for. We didn't change what he filmed — we changed how it got assembled." },
-      { type: "h", text: "The three-edit rule" },
-      { type: "p", text: "Every raw clip got cut into three completely different reels: one built around the hook, one built around a transformation moment, and one built around a single useful tip. Same footage, three different reasons to watch." },
-      { type: "quote", text: "Volume without variation is just noise repeated. Variation is what compounds." },
-      { type: "p", text: "By week six, the account had enough data for us to see exactly which format his specific audience rewatched — and we doubled down hard on that shape for the next month." },
-    ],
-  },
-  {
-    id: 3,
-    slug: "color-grading-that-doesnt-scream",
-    title: "Behind the Cut: Color Grading That Doesn't Scream 'Filter'",
-    excerpt:
-      "The best grade is the one nobody notices. A look at the subtle adjustments we run on every single project before export.",
-    category: "Behind The Scenes",
-    date: "2026-07-02",
-  
-    author: { name: "Zara Khan", role: "Colorist" },
-    cover: "https://picsum.photos/id/1050/1200/800",
-    content: [
-      { type: "p", text: "A grade that looks like a grade has already failed. The goal is footage that feels like it was shot in better light than it actually was — not footage wrapped in a preset." },
-      { type: "h", text: "Skin first, everything else second" },
-      { type: "p", text: "We isolate skin tones before touching anything else in the frame. If a preset shifts skin even slightly warm or grey, the rest of the correction gets built to compensate — which is exactly backwards." },
-      { type: "h", text: "Contrast does more than saturation" },
-      { type: "p", text: "Most rough-looking phone footage isn't undersaturated, it's flat. A small, controlled contrast curve fixes more perceived 'quality' than pushing vibrance ever will, and it ages a lot better on a small screen." },
-      { type: "p", text: "We finish every grade by watching it at thumbnail size before final export — if it doesn't read at that size, it doesn't matter how it looks full-screen." },
-    ],
-  },
-  {
-    id: 4,
-    slug: "2026-short-form-trends",
-    title: "5 Short-Form Trends Worth Your Attention in 2026",
-    excerpt:
-      "Not every trend is worth chasing. Here's what's actually moving the needle right now — and what's already fading.",
+      "AI content, social search, shoppable posts — here's what's actually moving revenue in 2026, and which trends you can safely ignore.",
     category: "Trends",
-    date: "2026-06-20",
-  
-    author: { name: "Ritika Sharma", role: "Lead Editor" },
-    cover: "https://picsum.photos/id/180/1200/800",
-    content: [
-      { type: "p", text: "Trend-chasing burns creators out fast. We track dozens of formats every month so we can tell our clients which ones are worth the shoot day — and which ones peaked two months ago." },
-      { type: "h", text: "Longer hooks, shorter payoffs" },
-      { type: "p", text: "Audiences are more patient with a two- to three-second setup than they were a year ago, as long as the payoff lands fast once it arrives. The pendulum on ultra-fast cuts is swinging back slightly." },
-      { type: "h", text: "Native captions over designed text" },
-      { type: "p", text: "Platform-generated caption styles are outperforming heavily designed text overlays in a lot of niches — they read as more authentic and load faster on the eye." },
-      { type: "quote", text: "The trend is never the format. The trend is what the format lets the audience feel." },
-      { type: "p", text: "Treat every trend as a tool, not a template — the ones that work best are the ones bent to fit a creator's existing voice, not the other way around." },
-    ],
-  },
-  {
-    id: 5,
-    slug: "sound-design-nobody-notices",
-    title: "The Sound Design Nobody Notices (And Why That's the Point)",
-    excerpt:
-      "Whooshes and clicks aren't decoration. They're doing structural work in the edit — most viewers just never realize it.",
-    category: "Editing Tips",
-    date: "2026-06-05",
-
-    author: { name: "Dev Malhotra", role: "Sound Editor" },
-    cover: "https://picsum.photos/id/1011/1200/800",
-    content: [
-      { type: "p", text: "Take the sound design out of a well-cut reel and the pacing suddenly feels off, even though nothing visual has changed. That's because most of the perceived rhythm is coming from audio, not the cuts themselves." },
-      { type: "h", text: "Every hard cut needs a reason to exist" },
-      { type: "p", text: "A whoosh or a click under a cut tells the brain the change was intentional. Without it, fast cuts can read as jarring or accidental instead of energetic." },
-      { type: "p", text: "We build a layered sound bed under almost every edit — ambient texture, a couple of accent hits, and music that's ducked at exactly the right syllables. None of it is meant to be consciously heard. It's meant to be felt." },
-    ],
-  },
-  {
-    id: 6,
-    slug: "brief-that-saves-a-shoot-day",
-    title: "The One-Page Brief That Saves an Entire Shoot Day",
-    excerpt:
-      "Most wasted footage isn't a filming problem — it's a planning problem. Here's the brief format we send every client before we roll camera.",
-    category: "Behind The Scenes",
-    date: "2026-05-22",
-   
+    date: "2026-01-15",
     author: { name: "Aman Verma", role: "Growth Strategist" },
-    cover: "https://picsum.photos/id/60/1200/800",
+        cover: "/social-commerce-shoppable-posts.webp",
     content: [
-      { type: "p", text: "The most expensive mistake in content creation isn't a bad edit — it's a shoot day that comes back without the footage the edit actually needed." },
-      { type: "h", text: "Shot list by outcome, not by scene" },
-      { type: "p", text: "Instead of listing scenes, we list the specific edit moments we need: a reaction shot, a close-up detail insert, a clean wide for the hook. Whoever's filming knows exactly what each clip is for before they hit record." },
-      { type: "h", text: "One page, not ten" },
-      { type: "p", text: "A brief that's too long doesn't get read on set. Ours fits on one page — hook idea, must-have shots, and the one thing that would make the day a failure if it's missing." },
-      { type: "quote", text: "Clarity before the shoot is cheaper than coverage after it." },
+      { type: "p", text: "Ever feel like the moment you finally understand a social media platform, it changes on you? You're not imagining it. Between AI-generated content, disappearing algorithms, and audiences who can now smell a \"marketing post\" from a mile away, keeping up with **social media marketing trends 2026** has become a full-time job in itself." },
+      { type: "p", text: "So here's a fair question: are you supposed to chase every trend, or focus on the ones that actually move revenue?" },
+      { type: "p", text: "That's exactly what we're unpacking in this guide. At **CirklX Agency**, we live inside these platforms every day, managing social media strategy, content, and paid campaigns for brands who don't have the bandwidth to test every new feature themselves." },
+
+      { type: "h", text: "1. Social Search Is Quietly Replacing Traditional Search" },
+     
+      { type: "p", text: "Nearly a third of consumers are skipping Google altogether and searching directly on TikTok, Instagram, and YouTube instead. That means your captions, on-screen text, and video scripts now function like landing pages — they need to answer a real question, not just look good." },
+      { type: "p", text: "**What this means for your brand:** if someone types \"best skincare for winter\" into TikTok's search bar and your content doesn't show up, a competitor's will. This is **social search optimization**, and it's arguably the single biggest shift in how discovery works right now." },
+      { type: "p", text: "**How CirklX helps:** our team builds keyword-rich, search-friendly captions and scripts as part of every social media content strategy we run — so your posts aren't just pretty, they're findable." },
+
+      { type: "h", text: "2. AI-Powered Content Creation (With a Human Still in the Chair)" },
+            { type: "img", src: "/social-search-optimization.webp", alt: "AI-powered content creation for social media marketing" },
+      { type: "p", text: "AI is now baked into ideation, visuals, captions, and even performance optimization. The brands winning with **AI in social media marketing** aren't the ones removing humans from the process — they're the ones using AI to move faster while keeping a real strategist reviewing tone, brand voice, and quality control." },
+      { type: "quote", text: "The line between 'AI-assisted' and 'AI clearly wrote this' is usually the line between a post that converts and one that gets scrolled past." },
+      { type: "p", text: "**How CirklX helps:** we use AI tools to speed up production, but every piece of content is shaped and approved by a strategist who understands your brand — not a script running on autopilot." },
+
+      { type: "h", text: "3. Niche Communities Are Beating Mass Reach" },
+      { type: "p", text: "Forget chasing follower counts. Brands are now building smaller, high-value communities that generate real loyalty and repeat customers, instead of broad audiences that never convert. This is **community-driven marketing**, and it's proving to have a far better return than vanity metrics ever did." },
+      { type: "p", text: "Ask yourself: would you rather have 100,000 passive followers, or 5,000 people who actually buy, engage, and refer others?" },
+
+      { type: "h", text: "4. Social Media ROI Finally Has Real Numbers Behind It" },
+            { type: "img", src: "/community-management-strategy.webp", alt: "Social media ROI measurement and revenue attribution dashboard" },
+      { type: "p", text: "For years, marketers struggled to prove social media's impact on revenue. In 2026, **social media ROI measurement** and integrated attribution tools are closing that gap, connecting specific posts and campaigns to actual sales." },
+      { type: "p", text: "**How CirklX helps:** every social media marketing service we offer comes with transparent reporting tied to real business outcomes — leads, sales, and traffic, not just likes." },
+
+      { type: "h", text: "5. Conversational AI Is Handling Customer Service on Social" },
+      { type: "p", text: "AI chatbots and automated replies are now managing routine questions on social platforms, freeing up human teams for more complex, high-touch conversations. Done right, this improves response time without making your brand feel robotic." },
+
+      { type: "h", text: "6. Users Are Curating Their Own Algorithms" },
+            { type: "img", src: "/social-media-marketing-trends-2026.webp", alt: "User-curated algorithms and personalized content feeds" },
+      { type: "p", text: "Platforms like Instagram now let users choose what they see more (or less) of. That means the era of \"going viral to everyone\" is fading, replaced by **hyper-personalized content targeting** aimed at smaller, more relevant segments." },
+
+      { type: "h", text: "7. Raw, Unpolished Content Is Outperforming Polished Ads" },
+      { type: "p", text: "Audiences are fatigued by overly produced, obviously corporate content. Lo-fi, authentic, behind-the-scenes posts — mobile-shot footage and natural lighting — are consistently outperforming high-budget ads. This is one of the clearest examples of **authentic content marketing** winning over perfection." },
+
+      { type: "h", text: "8. Social Commerce Is Now Built Into the Scroll" },
+      { type: "p", text: "The line between discovering a product and buying it has basically disappeared. Shoppable videos on TikTok and Instagram let users purchase without ever leaving the app. If your brand isn't set up for **social commerce strategy** in 2026, you're leaving sales on the table." },
+
+      { type: "h", text: "9. Community Management Is Having a Comeback" },
+      { type: "p", text: "Responding to comments and DMs isn't a nice-to-have anymore — it's a retention strategy. Most users say they'll switch to a competitor if a brand doesn't respond at all. **Community management** is being treated as a core growth function, not an afterthought." },
+
+      { type: "h", text: "10. Platform Diversification: LinkedIn and Substack Are Rising" },
+            { type: "img", src: "/ai-content-creation-social-media.webp", alt: "Platform diversification across LinkedIn, Substack and social channels" },
+      { type: "p", text: "While TikTok and Instagram still dominate attention, **LinkedIn marketing** and Substack are seeing renewed interest thanks to younger audiences and new video features. Diversifying beyond the usual platforms is becoming a smart hedge against algorithm volatility on any single app." },
+
+      { type: "h", text: "So, Which Trend Should You Actually Focus On First?" },
+      { type: "p", text: "Honestly? It depends on where your brand is right now:" },
+      {
+        type: "list",
+        items: [
+          "Not ranking in social search? That's your starting point.",
+          "Engagement high but sales flat? Social commerce and attribution tracking matter more.",
+          "Team stretched thin? Community management and content automation come first.",
+        ],
+      },
+      { type: "quote", text: "It's not about doing all ten at once. It's about knowing which two or three will actually move the needle for your business." },
+      { type: "p", text: "This is where working with a social media marketing agency pays for itself. Instead of guessing which trend applies to you, our team audits your current presence, benchmarks it against your competitors, and builds a strategy around the trends that will actually drive growth." },
+    ],
+    faqs: [
+      {
+        q: "What are the biggest social media marketing trends for 2026?",
+        a: "The top trends include social search optimization, AI-assisted content creation, niche community building, social commerce, improved ROI attribution, and a return to raw, authentic content over polished ads.",
+      },
+      {
+        q: "Do small businesses need to follow every social media trend?",
+        a: "No. Small businesses see the best results by focusing on 2–3 trends most relevant to their audience and goals, rather than spreading resources across every emerging tactic.",
+      },
+      {
+        q: "How much does it cost to hire a social media marketing agency?",
+        a: "Costs vary based on scope — platform management, content creation, paid ads, and reporting all factor in. CirklX builds custom packages based on your goals rather than one-size-fits-all pricing.",
+      },
+      {
+        q: "Is AI replacing social media managers?",
+        a: "Not yet, and not fully. AI speeds up production and analysis, but brand voice, strategy, community management, and judgment calls still need a human.",
+      },
     ],
   },
 ];
