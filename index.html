@@ -6,6 +6,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <!-- Hero poster is the LCP element but was only discoverable after React
+         mounted (JS parse -> render -> <video poster> attribute read). This
+         preload lets the browser fetch it immediately, in parallel with the
+         JS bundle download, instead of waiting for the full render pipeline. -->
+    <link rel="preload" as="image" href="/hero-poster.webp" fetchpriority="high" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CirklX</title>
   </head>

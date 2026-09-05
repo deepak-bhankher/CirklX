@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaInstagram,
@@ -88,6 +88,43 @@ function useIsDesktop() {
   }, []);
 
   return isDesktop;
+}
+
+// Measures a DOM node's pixel size and keeps it updated on resize.
+// Used to convert the FlowingIcons curve points (defined as % of this
+// container) into pixel x/y offsets, so the animation can drive `transform`
+// instead of `left`/`top` (see FlowingIcons below for why that matters).
+//
+// This is a CALLBACK ref (returns a function, not a ref object) on purpose.
+// The desktop/mobile curve containers only mount once `isDesktop` resolves
+// (it starts false and flips after an effect on mount), so a plain object
+// ref + a `useEffect(() => {...}, [ref])` would run once too early, see
+// `ref.current` as null, and never re-check it once the node actually
+// mounts later. A callback ref re-fires every time React attaches (or
+// detaches) the DOM node, so it measures correctly no matter when that is.
+function useElementSize() {
+  const [size, setSize] = useState({ width: 0, height: 0 });
+  const [node, setNode] = useState(null);
+
+  const ref = useCallback((el) => {
+    setNode(el);
+  }, []);
+
+  useEffect(() => {
+    if (!node) return;
+
+    const update = () => {
+      const rect = node.getBoundingClientRect();
+      setSize({ width: rect.width, height: rect.height });
+    };
+    update();
+
+    const ro = new ResizeObserver(update);
+    ro.observe(node);
+    return () => ro.disconnect();
+  }, [node]);
+
+  return [ref, size];
 }
 
 const CURVE_POINTS = [
@@ -215,9 +252,14 @@ function GlassIconCard({
       <div
         className="absolute inset-0 rounded-2xl"
         style={{
+          // backdropFilter blur removed here on purpose: this layer sits
+          // directly on top of the opaque solid backing div above, so it was
+          // blurring a flat color — visually identical to no blur at all,
+          // but this icon moves continuously (60fps) and backdrop-filter is
+          // one of the most expensive things a browser can repaint per
+          // frame. Pure wasted main-thread/compositor cost, zero visible
+          // difference — safe to drop.
           background: `linear-gradient(160deg, rgba(255,255,255,0.32) 0%, ${toneStyles.tint} 45%, rgba(255,255,255,0.06) 100%)`,
-          backdropFilter: "blur(10px)",
-          WebkitBackdropFilter: "blur(10px)",
           border: `1px solid ${toneStyles.accent2}`,
           boxShadow:
             depth > 0
@@ -274,11 +316,17 @@ function GlassIconCard({
  */
 function FlowingIcons({
   points,
+  width,
+  height,
   boxSize,
   glyphSize = 18,
   duration = 7,
   fadeZone = 5,
 }) {
+  // Container not measured yet (first paint) — skip rendering rather than
+  // animating against a 0x0 box. useElementSize fills this in a tick later.
+  if (!width || !height) return null;
+
   const icons = [
     {
       tone: "pinterest",
@@ -334,6 +382,18 @@ function FlowingIcons({
     return 1;
   });
 
+  // Convert each curve point (% of the container) into a pixel x/y offset
+  // ONCE up front. Animating `x`/`y` lets Framer Motion drive this purely
+  // through `transform: translate3d()`, which the browser hands straight to
+  // the compositor/GPU thread. The previous version animated `left`/`top`,
+  // which are layout properties — every single frame of this infinite,
+  // multi-second loop forced a synchronous main-thread layout recalculation.
+  // That was the direct cause of the Lighthouse "Forced reflow" and
+  // "Avoid non-composited animations" warnings, and the biggest single
+  // contributor to the 13.5s of main-thread work / 990ms blocking time.
+  const xFrames = pts.map((p) => (parseFloat(p.left) / 100) * width);
+  const yFrames = pts.map((p) => (parseFloat(p.top) / 100) * height);
+
   return icons.map((it, iconIdx) => {
     // Evenly space every icon around the loop instead of a fixed
     // 1.2s step — with a fixed step, adding a 5th icon (youtube)
@@ -346,10 +406,10 @@ function FlowingIcons({
       <motion.div
         key={it.tone}
         className="absolute left-0 top-0"
-        initial={{ opacity: 0 }}
+        initial={{ x: xFrames[0], y: yFrames[0], opacity: 0 }}
         animate={{
-          left: pts.map((p) => p.left),
-          top: pts.map((p) => p.top),
+          x: xFrames,
+          y: yFrames,
           opacity: opacityFrames,
         }}
         transition={{
@@ -360,19 +420,23 @@ function FlowingIcons({
           delay,
         }}
         style={{
-          transform: "translate(-50%, -50%) translateZ(0)",
-          willChange: "transform, left, top, opacity",
+          willChange: "transform, opacity",
           zIndex: 30,
         }}
       >
-        <GlassIconCard
-          icon={it.icon}
-          tone={it.tone}
-          size={boxSize}
-          depth={iconIdx % 2 === 0 ? 1 : 0}
-          opacity={1}
-          rotate={0}
-        />
+        {/* Fixed-size positioning box — GlassIconCard centers itself inside
+            this with its own translate(-50%,-50%), so the icon's visual
+            center lands exactly on the animated (x, y) point. */}
+        <div style={{ position: "relative", width: boxSize, height: boxSize }}>
+          <GlassIconCard
+            icon={it.icon}
+            tone={it.tone}
+            size={boxSize}
+            depth={iconIdx % 2 === 0 ? 1 : 0}
+            opacity={1}
+            rotate={0}
+          />
+        </div>
       </motion.div>
     );
   });
@@ -522,6 +586,11 @@ export default function Home1() {
 
   const CurrentHeadlineIcon = HEADLINE_ICONS[headlineIconIndex].Icon;
 
+  // Measure the two curve containers so FlowingIcons can convert its %
+  // points into pixel x/y for a transform-based (compositor-only) animation.
+  const [desktopCurveRef, desktopCurveSize] = useElementSize();
+  const [mobileCurveRef, mobileCurveSize] = useElementSize();
+
   return (
     <section
       data-theme="dark"
@@ -552,7 +621,7 @@ export default function Home1() {
       {/* ===== DESKTOP / TABLET (md and up) — untouched ===== */}
    {isDesktop && (
       <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-[380px] sm:top-[240px] md:top-[260px] lg:top-[220px] xl:top-[190px] w-full max-w-[95vw] sm:max-w-[110vw] md:w-[1100px] md:max-w-[150vw] lg:w-[1320px] lg:max-w-[92vw] xl:w-[1480px] xl:max-w-[95vw] h-[220px] sm:h-[630px] md:h-[660px] lg:h-[760px] xl:h-[840px] overflow-hidden pointer-events-none">
-        <div className="absolute top-[16px] sm:top-[-120px] md:top-[-150px] lg:top-[-180px] xl:top-[-200px] left-0 w-full h-[190px] sm:h-[650px] md:h-[650px] lg:h-[760px] xl:h-[840px]">
+        <div ref={desktopCurveRef} className="absolute top-[16px] sm:top-[-120px] md:top-[-150px] lg:top-[-180px] xl:top-[-200px] left-0 w-full h-[190px] sm:h-[650px] md:h-[650px] lg:h-[760px] xl:h-[840px]">
           <svg
             className="absolute inset-0 w-full h-full opacity-60"
             viewBox="0 0 1100 650"
@@ -582,6 +651,8 @@ export default function Home1() {
               ek dum se gayab hone jaisa na lage. */}
           <FlowingIcons
             points={CURVE_POINTS}
+            width={desktopCurveSize.width}
+            height={desktopCurveSize.height}
             boxSize={iconSize}
             glyphSize={18}
             duration={7}
@@ -726,6 +797,7 @@ export default function Home1() {
               jaata hai, jaisa reference screenshot me dikh raha hai. */}
      {!isDesktop && (
           <motion.div
+            ref={mobileCurveRef}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.7 }}
@@ -763,6 +835,8 @@ export default function Home1() {
 
             <FlowingIcons
               points={MOBILE_CURVE_POINTS}
+              width={mobileCurveSize.width}
+              height={mobileCurveSize.height}
               boxSize={iconSize}
               glyphSize={15}
               duration={8}
