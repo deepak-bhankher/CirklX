@@ -222,7 +222,7 @@ function Contact1() {
         >
           <FormField
             label="Full Name"
-            placeholder="Johan Robin"
+            placeholder="cirklX"
             name="name"
             value={formData.name}
             onChange={handleChange}
