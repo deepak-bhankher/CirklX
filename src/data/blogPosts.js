@@ -30,7 +30,7 @@ export const blogPosts = [
       "AI content, social search, shoppable posts — here's what's actually moving revenue in 2026, and which trends you can safely ignore.",
     category: "Trends",
     date: "2026-01-15",
-    author: { name: "Aman Verma", role: "Growth Strategist" },
+    author: { name: "CirklX", role: "Growth Strategist" },
         cover: "/social-commerce-shoppable-posts.webp",
     content: [
       { type: "p", text: "Ever feel like the moment you finally understand a social media platform, it changes on you? You're not imagining it. Between AI-generated content, disappearing algorithms, and audiences who can now smell a \"marketing post\" from a mile away, keeping up with **social media marketing trends 2026** has become a full-time job in itself." },
