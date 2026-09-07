@@ -2,7 +2,7 @@ import { useRevealGroup } from "../useReveal";
 
 // Ab koi gradient/glass badge nahi — bas image seedha dikhegi.
 // src me apni original icon/image ka path daal dena (Instagram, Youtube, Photoshop, etc).
-const ICON_CLASS = "w-20 h-20 sm:w-14 sm:h-14 object-contain";
+const ICON_CLASS = "w-12 h-12 sm:w-14 sm:h-14 object-contain";
 
 // First 3 cards: platform icon + 2-line title.
 const PLATFORM_CARDS = [
