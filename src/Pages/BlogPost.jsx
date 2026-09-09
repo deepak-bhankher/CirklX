@@ -174,7 +174,7 @@ function BlogPost() {
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#15140F] text-[10px] font-semibold uppercase tracking-wider text-[#D6FF01] mb-5">
             {post.category}
           </span>
-
+    
           {/* Page par sirf ek h1 — SEO ke liye zaruri */}
           <h1 className="font-extrabold text-[#15140F] leading-[1.12] text-3xl sm:text-4xl md:text-[2.75rem]">
             {post.title}

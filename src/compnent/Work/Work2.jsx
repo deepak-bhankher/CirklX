@@ -322,7 +322,7 @@ function Work2() {
   const draggingRef = useRef(false);
   const dragMovedRef = useRef(false);
 
-  const [passWidth, setPassWidth] = useState(0);
+  const   [passWidth, setPassWidth] = useState(0);
   const [inView, setInView] = useState(false);
 
   const track = Array.from({ length: COPIES }, () => REELS).flat();

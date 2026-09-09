@@ -8,13 +8,13 @@ const ICON_CLASS = "w-12 h-12 sm:w-14 sm:h-14 object-contain";
 const PLATFORM_CARDS = [
   {
     title: ["Instagram", "Reels"],
-    icon: <img src="icon3.png" alt="Instagram" className={ICON_CLASS} />,
+    icon: <img src="instaIcon.png" alt="Instagram" className={ICON_CLASS} />,
   },
   {
     title: ["Youtube", "Shots"],
     // Youtube ke PNG me apne aap extra white padding hai isliye box
     // ke andar chhota dikhta hai — scale-150 se sirf isi image ko
-    // bada kiya hai taaki Photoshop/Illustrator jaise hi dikhe.
+    // bada kiya hai taaki Photoshop/Illust rator jaise hi dikhe.
     icon: (
       <img
         src="icon4.png"

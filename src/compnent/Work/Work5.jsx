@@ -29,7 +29,6 @@ const DESTINATIONS = [
   { id: 15, name: "Burger Wings", image: "/work15.webp" },
   { id: 16, name: "BSM Uniex salon", image: "/work16.webp" },
   { id: 18, name: "Hydra Facial", image: "/work18.webp" },
-
   { id: 26, name: "HOB", image: "/work26.jpeg" },
   { id: 20, name: "Kavya", image: "/work20.webp" },
   { id: 24, name: "CirklX", image: "/work24.webp" },
